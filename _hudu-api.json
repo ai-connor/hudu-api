@@ -7499,7 +7499,8 @@
                 "public_photos": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "type": "object",
+                        "$ref": "#/definitions/PublicPhoto"
                     },
                     "description": "A list of public photos."
                 }

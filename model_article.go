@@ -47,7 +47,7 @@ type Article struct {
 	// The date and time when the article was last updated.
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	// A list of public photos.
-	PublicPhotos         []string `json:"public_photos,omitempty"`
+	PublicPhotos         []PublicPhoto `json:"public_photos,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -487,9 +487,9 @@ func (o *Article) SetUpdatedAt(v time.Time) {
 }
 
 // GetPublicPhotos returns the PublicPhotos field value if set, zero value otherwise.
-func (o *Article) GetPublicPhotos() []string {
+func (o *Article) GetPublicPhotos() []PublicPhoto {
 	if o == nil || IsNil(o.PublicPhotos) {
-		var ret []string
+		var ret []PublicPhoto
 		return ret
 	}
 	return o.PublicPhotos
@@ -497,7 +497,7 @@ func (o *Article) GetPublicPhotos() []string {
 
 // GetPublicPhotosOk returns a tuple with the PublicPhotos field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Article) GetPublicPhotosOk() ([]string, bool) {
+func (o *Article) GetPublicPhotosOk() ([]PublicPhoto, bool) {
 	if o == nil || IsNil(o.PublicPhotos) {
 		return nil, false
 	}
@@ -513,8 +513,8 @@ func (o *Article) HasPublicPhotos() bool {
 	return false
 }
 
-// SetPublicPhotos gets a reference to the given []string and assigns it to the PublicPhotos field.
-func (o *Article) SetPublicPhotos(v []string) {
+// SetPublicPhotos gets a reference to the given []PublicPhoto and assigns it to the PublicPhotos field.
+func (o *Article) SetPublicPhotos(v []PublicPhoto) {
 	o.PublicPhotos = v
 }
 

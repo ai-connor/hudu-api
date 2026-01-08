@@ -4680,8 +4680,16 @@ components:
         draft: true
         name: name
         public_photos:
-        - public_photos
-        - public_photos
+        - record_id: 5
+          numeric_id: 5
+          id: id
+          url: https://openapi-generator.tech
+          record_type: record_type
+        - record_id: 5
+          numeric_id: 5
+          id: id
+          url: https://openapi-generator.tech
+          record_type: record_type
         id: 0
         folder_id: 6
         slug: slug
@@ -4733,7 +4741,7 @@ components:
         public_photos:
           description: A list of public photos.
           items:
-            type: string
+            $ref: "#/components/schemas/PublicPhoto"
           type: array
       type: object
     Asset:
@@ -6006,8 +6014,8 @@ components:
         \ The original numeric ID is available in the `numeric_id` field for backward\
         \ compatibility."
       example:
-        record_id: 6
-        numeric_id: 0
+        record_id: 5
+        numeric_id: 5
         id: id
         url: https://openapi-generator.tech
         record_type: record_type
@@ -6665,8 +6673,16 @@ components:
           draft: true
           name: name
           public_photos:
-          - public_photos
-          - public_photos
+          - record_id: 5
+            numeric_id: 5
+            id: id
+            url: https://openapi-generator.tech
+            record_type: record_type
+          - record_id: 5
+            numeric_id: 5
+            id: id
+            url: https://openapi-generator.tech
+            record_type: record_type
           id: 0
           folder_id: 6
           slug: slug
@@ -6681,8 +6697,16 @@ components:
           draft: true
           name: name
           public_photos:
-          - public_photos
-          - public_photos
+          - record_id: 5
+            numeric_id: 5
+            id: id
+            url: https://openapi-generator.tech
+            record_type: record_type
+          - record_id: 5
+            numeric_id: 5
+            id: id
+            url: https://openapi-generator.tech
+            record_type: record_type
           id: 0
           folder_id: 6
           slug: slug
@@ -6725,8 +6749,16 @@ components:
           draft: true
           name: name
           public_photos:
-          - public_photos
-          - public_photos
+          - record_id: 5
+            numeric_id: 5
+            id: id
+            url: https://openapi-generator.tech
+            record_type: record_type
+          - record_id: 5
+            numeric_id: 5
+            id: id
+            url: https://openapi-generator.tech
+            record_type: record_type
           id: 0
           folder_id: 6
           slug: slug
@@ -8169,13 +8201,13 @@ components:
     getPublicPhotos_200_response:
       example:
         public_photos:
-        - record_id: 6
-          numeric_id: 0
+        - record_id: 5
+          numeric_id: 5
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
-        - record_id: 6
-          numeric_id: 0
+        - record_id: 5
+          numeric_id: 5
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
@@ -8221,8 +8253,8 @@ components:
     updatePublicPhoto_200_response:
       example:
         public_photo:
-          record_id: 6
-          numeric_id: 0
+          record_id: 5
+          numeric_id: 5
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
