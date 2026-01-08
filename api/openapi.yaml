@@ -6236,12 +6236,12 @@ components:
       example:
         ext: ext
         size: size
-        archived_at: 2000-01-23T04:56:07.000+00:00
+        archived_at: archived_at
         uploadable_id: 6
         mime: mime
         name: name
         id: 0
-        created_date: 2000-01-23T04:56:07.000+00:00
+        created_date: created_date
         uploadable_type: uploadable_type
         url: url
       properties:
@@ -6265,11 +6265,9 @@ components:
           type: string
         created_date:
           description: Date when the file was uploaded
-          format: date-time
           type: string
         archived_at:
           description: Date when the file was archived. Null if the file is not archived.
-          format: date-time
           type: string
         uploadable_id:
           description: ID of the object the file is associated with
