@@ -1040,7 +1040,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Asset"
+                $ref: "#/components/schemas/GetAssetResponse"
           description: The requested Asset
         "401":
           content: {}
@@ -4743,6 +4743,57 @@ components:
           items:
             $ref: "#/components/schemas/PublicPhoto"
           type: array
+      type: object
+    GetAssetResponse:
+      example:
+        asset:
+          cards:
+          - data: "{}"
+            sync_type: sync_type
+            sync_identifier: sync_identifier
+            link: link
+            integrator_name: integrator_name
+            id: 2
+            sync_id: 9
+            integrator_id: 7
+            primary_field: primary_field
+          - data: "{}"
+            sync_type: sync_type
+            sync_identifier: sync_identifier
+            link: link
+            integrator_name: integrator_name
+            id: 2
+            sync_id: 9
+            integrator_id: 7
+            primary_field: primary_field
+          company_id: 6.027456183070403
+          object_type: object_type
+          primary_mail: primary_mail
+          created_at: 2000-01-23T04:56:07.000+00:00
+          primary_manufacturer: primary_manufacturer
+          asset_layout_id: 1.4658129805029452
+          url: url
+          archived: true
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          company_name: company_name
+          name: name
+          asset_type: asset_type
+          primary_serial: primary_serial
+          id: 0.8008281904610115
+          primary_model: primary_model
+          fields:
+          - id: 5.962133916683182
+            label: label
+            position: 5.637376656633329
+            value: value
+          - id: 5.962133916683182
+            label: label
+            position: 5.637376656633329
+            value: value
+          slug: slug
+      properties:
+        asset:
+          $ref: "#/components/schemas/Asset"
       type: object
     Asset:
       example:

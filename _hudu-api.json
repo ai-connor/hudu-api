@@ -1617,7 +1617,7 @@
                     "200": {
                         "description": "The requested Asset",
                         "schema": {
-                            "$ref": "#/definitions/Asset"
+                            "$ref": "#/definitions/GetAssetResponse"
                         }
                     },
                     "401": {
@@ -7503,6 +7503,15 @@
                         "$ref": "#/definitions/PublicPhoto"
                     },
                     "description": "A list of public photos."
+                }
+            }
+        },
+        "GetAssetResponse": {
+            "type": "object",
+            "properties": {
+                "asset": {
+                    "type":"object",
+                    "$ref": "#/definitions/Asset"
                 }
             }
         },

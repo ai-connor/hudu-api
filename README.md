@@ -295,6 +295,7 @@ Class | Method | HTTP request | Description
  - [GetArticlesId200Response](docs/GetArticlesId200Response.md)
  - [GetAssetLayouts200Response](docs/GetAssetLayouts200Response.md)
  - [GetAssetPasswords200Response](docs/GetAssetPasswords200Response.md)
+ - [GetAssetResponse](docs/GetAssetResponse.md)
  - [GetAssets200Response](docs/GetAssets200Response.md)
  - [GetCardsLookup200Response](docs/GetCardsLookup200Response.md)
  - [GetCompanies200Response](docs/GetCompanies200Response.md)

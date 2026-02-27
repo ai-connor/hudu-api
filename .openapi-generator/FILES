@@ -64,6 +64,7 @@ model_get_articles_200_response.go
 model_get_articles_id_200_response.go
 model_get_asset_layouts_200_response.go
 model_get_asset_passwords_200_response.go
+model_get_asset_response.go
 model_get_assets_200_response.go
 model_get_cards_lookup_200_response.go
 model_get_companies_200_response.go
