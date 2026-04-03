@@ -15,60 +15,88 @@ import (
 	"fmt"
 )
 
-// checks if the PostWebsitesRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostWebsitesRequest{}
+// checks if the UpdateMagicDashPositionsRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateMagicDashPositionsRequest{}
 
-// PostWebsitesRequest struct for PostWebsitesRequest
-type PostWebsitesRequest struct {
-	Website              PostWebsitesRequestWebsite `json:"website"`
+// UpdateMagicDashPositionsRequest struct for UpdateMagicDashPositionsRequest
+type UpdateMagicDashPositionsRequest struct {
+	// The ID of the company whose Magic Dash Items are being reordered
+	CompanyId int64 `json:"company_id"`
+	// An array of Magic Dash Item IDs with their new positions (must include at least 2 items)
+	Positions            []UpdateMagicDashPositionsRequestPositionsInner `json:"positions"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostWebsitesRequest PostWebsitesRequest
+type _UpdateMagicDashPositionsRequest UpdateMagicDashPositionsRequest
 
-// NewPostWebsitesRequest instantiates a new PostWebsitesRequest object
+// NewUpdateMagicDashPositionsRequest instantiates a new UpdateMagicDashPositionsRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostWebsitesRequest(website PostWebsitesRequestWebsite) *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
-	this.Website = website
+func NewUpdateMagicDashPositionsRequest(companyId int64, positions []UpdateMagicDashPositionsRequestPositionsInner) *UpdateMagicDashPositionsRequest {
+	this := UpdateMagicDashPositionsRequest{}
+	this.CompanyId = companyId
+	this.Positions = positions
 	return &this
 }
 
-// NewPostWebsitesRequestWithDefaults instantiates a new PostWebsitesRequest object
+// NewUpdateMagicDashPositionsRequestWithDefaults instantiates a new UpdateMagicDashPositionsRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostWebsitesRequestWithDefaults() *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewUpdateMagicDashPositionsRequestWithDefaults() *UpdateMagicDashPositionsRequest {
+	this := UpdateMagicDashPositionsRequest{}
 	return &this
 }
 
-// GetWebsite returns the Website field value
-func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
+// GetCompanyId returns the CompanyId field value
+func (o *UpdateMagicDashPositionsRequest) GetCompanyId() int64 {
 	if o == nil {
-		var ret PostWebsitesRequestWebsite
+		var ret int64
 		return ret
 	}
 
-	return o.Website
+	return o.CompanyId
 }
 
-// GetWebsiteOk returns a tuple with the Website field value
+// GetCompanyIdOk returns a tuple with the CompanyId field value
 // and a boolean to check if the value has been set.
-func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool) {
+func (o *UpdateMagicDashPositionsRequest) GetCompanyIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Website, true
+	return &o.CompanyId, true
 }
 
-// SetWebsite sets field value
-func (o *PostWebsitesRequest) SetWebsite(v PostWebsitesRequestWebsite) {
-	o.Website = v
+// SetCompanyId sets field value
+func (o *UpdateMagicDashPositionsRequest) SetCompanyId(v int64) {
+	o.CompanyId = v
 }
 
-func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
+// GetPositions returns the Positions field value
+func (o *UpdateMagicDashPositionsRequest) GetPositions() []UpdateMagicDashPositionsRequestPositionsInner {
+	if o == nil {
+		var ret []UpdateMagicDashPositionsRequestPositionsInner
+		return ret
+	}
+
+	return o.Positions
+}
+
+// GetPositionsOk returns a tuple with the Positions field value
+// and a boolean to check if the value has been set.
+func (o *UpdateMagicDashPositionsRequest) GetPositionsOk() ([]UpdateMagicDashPositionsRequestPositionsInner, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Positions, true
+}
+
+// SetPositions sets field value
+func (o *UpdateMagicDashPositionsRequest) SetPositions(v []UpdateMagicDashPositionsRequestPositionsInner) {
+	o.Positions = v
+}
+
+func (o UpdateMagicDashPositionsRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,9 +104,10 @@ func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
+func (o UpdateMagicDashPositionsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["website"] = o.Website
+	toSerialize["company_id"] = o.CompanyId
+	toSerialize["positions"] = o.Positions
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -87,12 +116,13 @@ func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
+func (o *UpdateMagicDashPositionsRequest) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"website",
+		"company_id",
+		"positions",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -109,58 +139,59 @@ func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varPostWebsitesRequest := _PostWebsitesRequest{}
+	varUpdateMagicDashPositionsRequest := _UpdateMagicDashPositionsRequest{}
 
-	err = json.Unmarshal(data, &varPostWebsitesRequest)
+	err = json.Unmarshal(data, &varUpdateMagicDashPositionsRequest)
 
 	if err != nil {
 		return err
 	}
 
-	*o = PostWebsitesRequest(varPostWebsitesRequest)
+	*o = UpdateMagicDashPositionsRequest(varUpdateMagicDashPositionsRequest)
 
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "website")
+		delete(additionalProperties, "company_id")
+		delete(additionalProperties, "positions")
 		o.AdditionalProperties = additionalProperties
 	}
 
 	return err
 }
 
-type NullablePostWebsitesRequest struct {
-	value *PostWebsitesRequest
+type NullableUpdateMagicDashPositionsRequest struct {
+	value *UpdateMagicDashPositionsRequest
 	isSet bool
 }
 
-func (v NullablePostWebsitesRequest) Get() *PostWebsitesRequest {
+func (v NullableUpdateMagicDashPositionsRequest) Get() *UpdateMagicDashPositionsRequest {
 	return v.value
 }
 
-func (v *NullablePostWebsitesRequest) Set(val *PostWebsitesRequest) {
+func (v *NullableUpdateMagicDashPositionsRequest) Set(val *UpdateMagicDashPositionsRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostWebsitesRequest) IsSet() bool {
+func (v NullableUpdateMagicDashPositionsRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostWebsitesRequest) Unset() {
+func (v *NullableUpdateMagicDashPositionsRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostWebsitesRequest(val *PostWebsitesRequest) *NullablePostWebsitesRequest {
-	return &NullablePostWebsitesRequest{value: val, isSet: true}
+func NewNullableUpdateMagicDashPositionsRequest(val *UpdateMagicDashPositionsRequest) *NullableUpdateMagicDashPositionsRequest {
+	return &NullableUpdateMagicDashPositionsRequest{value: val, isSet: true}
 }
 
-func (v NullablePostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (v NullableUpdateMagicDashPositionsRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostWebsitesRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableUpdateMagicDashPositionsRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -68,6 +68,10 @@ type APIClient struct {
 
 	ExportsAPI *ExportsAPIService
 
+	FlagTypesAPI *FlagTypesAPIService
+
+	FlagsAPI *FlagsAPIService
+
 	FoldersAPI *FoldersAPIService
 
 	GroupsAPI *GroupsAPIService
@@ -135,6 +139,8 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.CompaniesAPI = (*CompaniesAPIService)(&c.common)
 	c.ExpirationsAPI = (*ExpirationsAPIService)(&c.common)
 	c.ExportsAPI = (*ExportsAPIService)(&c.common)
+	c.FlagTypesAPI = (*FlagTypesAPIService)(&c.common)
+	c.FlagsAPI = (*FlagsAPIService)(&c.common)
 	c.FoldersAPI = (*FoldersAPIService)(&c.common)
 	c.GroupsAPI = (*GroupsAPIService)(&c.common)
 	c.IPAddressesAPI = (*IPAddressesAPIService)(&c.common)

@@ -16,10 +16,117 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // ExpirationsAPIService ExpirationsAPI service
 type ExpirationsAPIService service
+
+type ApiDeleteExpirationRequest struct {
+	ctx        context.Context
+	ApiService *ExpirationsAPIService
+	id         int64
+}
+
+func (r ApiDeleteExpirationRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeleteExpirationExecute(r)
+}
+
+/*
+DeleteExpiration Delete an expiration
+
+Deletes an expiration permanently.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the expiration to delete
+	@return ApiDeleteExpirationRequest
+*/
+func (a *ExpirationsAPIService) DeleteExpiration(ctx context.Context, id int64) ApiDeleteExpirationRequest {
+	return ApiDeleteExpirationRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+func (a *ExpirationsAPIService) DeleteExpirationExecute(r ApiDeleteExpirationRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExpirationsAPIService.DeleteExpiration")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/expirations/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
 
 type ApiGetExpirationsRequest struct {
 	ctx            context.Context
@@ -29,6 +136,7 @@ type ApiGetExpirationsRequest struct {
 	expirationType *string
 	resourceId     *int64
 	resourceType   *string
+	archived       *bool
 	pageSize       *int32
 }
 
@@ -59,6 +167,12 @@ func (r ApiGetExpirationsRequest) ResourceId(resourceId int64) ApiGetExpirations
 // Filter logs by resource type (Asset, AssetPassword, Company, Article, etc.); must be coupled with resource_id
 func (r ApiGetExpirationsRequest) ResourceType(resourceType string) ApiGetExpirationsRequest {
 	r.resourceType = &resourceType
+	return r
+}
+
+// Filter by archived status (true for archived, false for active). Defaults to false (active only).
+func (r ApiGetExpirationsRequest) Archived(archived bool) ApiGetExpirationsRequest {
+	r.archived = &archived
 	return r
 }
 
@@ -124,6 +238,9 @@ func (a *ExpirationsAPIService) GetExpirationsExecute(r ApiGetExpirationsRequest
 	if r.resourceType != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "resource_type", r.resourceType, "", "")
 	}
+	if r.archived != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "archived", r.archived, "", "")
+	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "", "")
 	}
@@ -144,6 +261,135 @@ func (a *ExpirationsAPIService) GetExpirationsExecute(r ApiGetExpirationsRequest
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdateExpirationRequest struct {
+	ctx        context.Context
+	ApiService *ExpirationsAPIService
+	id         int64
+	body       *UpdateExpirationRequest
+}
+
+func (r ApiUpdateExpirationRequest) Body(body UpdateExpirationRequest) ApiUpdateExpirationRequest {
+	r.body = &body
+	return r
+}
+
+func (r ApiUpdateExpirationRequest) Execute() (*Expiration, *http.Response, error) {
+	return r.ApiService.UpdateExpirationExecute(r)
+}
+
+/*
+UpdateExpiration Update an expiration
+
+Updates an expiration's archived status.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the expiration to update
+	@return ApiUpdateExpirationRequest
+*/
+func (a *ExpirationsAPIService) UpdateExpiration(ctx context.Context, id int64) ApiUpdateExpirationRequest {
+	return ApiUpdateExpirationRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+//
+//	@return Expiration
+func (a *ExpirationsAPIService) UpdateExpirationExecute(r ApiUpdateExpirationRequest) (*Expiration, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Expiration
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExpirationsAPIService.UpdateExpiration")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/expirations/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.body
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

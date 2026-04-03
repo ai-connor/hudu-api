@@ -15,60 +15,60 @@ import (
 	"fmt"
 )
 
-// checks if the PostWebsitesRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostWebsitesRequest{}
+// checks if the PutRackStorageItemsIdRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PutRackStorageItemsIdRequest{}
 
-// PostWebsitesRequest struct for PostWebsitesRequest
-type PostWebsitesRequest struct {
-	Website              PostWebsitesRequestWebsite `json:"website"`
+// PutRackStorageItemsIdRequest struct for PutRackStorageItemsIdRequest
+type PutRackStorageItemsIdRequest struct {
+	RackStorageItem      RackStorageItem `json:"rack_storage_item"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostWebsitesRequest PostWebsitesRequest
+type _PutRackStorageItemsIdRequest PutRackStorageItemsIdRequest
 
-// NewPostWebsitesRequest instantiates a new PostWebsitesRequest object
+// NewPutRackStorageItemsIdRequest instantiates a new PutRackStorageItemsIdRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostWebsitesRequest(website PostWebsitesRequestWebsite) *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
-	this.Website = website
+func NewPutRackStorageItemsIdRequest(rackStorageItem RackStorageItem) *PutRackStorageItemsIdRequest {
+	this := PutRackStorageItemsIdRequest{}
+	this.RackStorageItem = rackStorageItem
 	return &this
 }
 
-// NewPostWebsitesRequestWithDefaults instantiates a new PostWebsitesRequest object
+// NewPutRackStorageItemsIdRequestWithDefaults instantiates a new PutRackStorageItemsIdRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostWebsitesRequestWithDefaults() *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewPutRackStorageItemsIdRequestWithDefaults() *PutRackStorageItemsIdRequest {
+	this := PutRackStorageItemsIdRequest{}
 	return &this
 }
 
-// GetWebsite returns the Website field value
-func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
+// GetRackStorageItem returns the RackStorageItem field value
+func (o *PutRackStorageItemsIdRequest) GetRackStorageItem() RackStorageItem {
 	if o == nil {
-		var ret PostWebsitesRequestWebsite
+		var ret RackStorageItem
 		return ret
 	}
 
-	return o.Website
+	return o.RackStorageItem
 }
 
-// GetWebsiteOk returns a tuple with the Website field value
+// GetRackStorageItemOk returns a tuple with the RackStorageItem field value
 // and a boolean to check if the value has been set.
-func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool) {
+func (o *PutRackStorageItemsIdRequest) GetRackStorageItemOk() (*RackStorageItem, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Website, true
+	return &o.RackStorageItem, true
 }
 
-// SetWebsite sets field value
-func (o *PostWebsitesRequest) SetWebsite(v PostWebsitesRequestWebsite) {
-	o.Website = v
+// SetRackStorageItem sets field value
+func (o *PutRackStorageItemsIdRequest) SetRackStorageItem(v RackStorageItem) {
+	o.RackStorageItem = v
 }
 
-func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (o PutRackStorageItemsIdRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,9 +76,9 @@ func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
+func (o PutRackStorageItemsIdRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["website"] = o.Website
+	toSerialize["rack_storage_item"] = o.RackStorageItem
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -87,12 +87,12 @@ func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
+func (o *PutRackStorageItemsIdRequest) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"website",
+		"rack_storage_item",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -109,58 +109,58 @@ func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varPostWebsitesRequest := _PostWebsitesRequest{}
+	varPutRackStorageItemsIdRequest := _PutRackStorageItemsIdRequest{}
 
-	err = json.Unmarshal(data, &varPostWebsitesRequest)
+	err = json.Unmarshal(data, &varPutRackStorageItemsIdRequest)
 
 	if err != nil {
 		return err
 	}
 
-	*o = PostWebsitesRequest(varPostWebsitesRequest)
+	*o = PutRackStorageItemsIdRequest(varPutRackStorageItemsIdRequest)
 
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "website")
+		delete(additionalProperties, "rack_storage_item")
 		o.AdditionalProperties = additionalProperties
 	}
 
 	return err
 }
 
-type NullablePostWebsitesRequest struct {
-	value *PostWebsitesRequest
+type NullablePutRackStorageItemsIdRequest struct {
+	value *PutRackStorageItemsIdRequest
 	isSet bool
 }
 
-func (v NullablePostWebsitesRequest) Get() *PostWebsitesRequest {
+func (v NullablePutRackStorageItemsIdRequest) Get() *PutRackStorageItemsIdRequest {
 	return v.value
 }
 
-func (v *NullablePostWebsitesRequest) Set(val *PostWebsitesRequest) {
+func (v *NullablePutRackStorageItemsIdRequest) Set(val *PutRackStorageItemsIdRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostWebsitesRequest) IsSet() bool {
+func (v NullablePutRackStorageItemsIdRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostWebsitesRequest) Unset() {
+func (v *NullablePutRackStorageItemsIdRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostWebsitesRequest(val *PostWebsitesRequest) *NullablePostWebsitesRequest {
-	return &NullablePostWebsitesRequest{value: val, isSet: true}
+func NewNullablePutRackStorageItemsIdRequest(val *PutRackStorageItemsIdRequest) *NullablePutRackStorageItemsIdRequest {
+	return &NullablePutRackStorageItemsIdRequest{value: val, isSet: true}
 }
 
-func (v NullablePostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (v NullablePutRackStorageItemsIdRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostWebsitesRequest) UnmarshalJSON(src []byte) error {
+func (v *NullablePutRackStorageItemsIdRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

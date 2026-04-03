@@ -505,7 +505,7 @@ type ApiGetCompaniesCompanyIdAssetsIdRequest struct {
 	companyId  float32
 }
 
-func (r ApiGetCompaniesCompanyIdAssetsIdRequest) Execute() (*GetAssetResponse, *http.Response, error) {
+func (r ApiGetCompaniesCompanyIdAssetsIdRequest) Execute() (*Asset, *http.Response, error) {
 	return r.ApiService.GetCompaniesCompanyIdAssetsIdExecute(r)
 }
 
@@ -528,13 +528,13 @@ func (a *AssetsAPIService) GetCompaniesCompanyIdAssetsId(ctx context.Context, id
 
 // Execute executes the request
 //
-//	@return GetAssetResponse
-func (a *AssetsAPIService) GetCompaniesCompanyIdAssetsIdExecute(r ApiGetCompaniesCompanyIdAssetsIdRequest) (*GetAssetResponse, *http.Response, error) {
+//	@return Asset
+func (a *AssetsAPIService) GetCompaniesCompanyIdAssetsIdExecute(r ApiGetCompaniesCompanyIdAssetsIdRequest) (*Asset, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *GetAssetResponse
+		localVarReturnValue *Asset
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetsAPIService.GetCompaniesCompanyIdAssetsId")

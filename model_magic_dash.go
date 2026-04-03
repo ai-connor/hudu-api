@@ -39,7 +39,9 @@ type MagicDash struct {
 	// The unique identifier of the associated company
 	CompanyId int64 `json:"company_id"`
 	// The name of the associated company
-	CompanyName          string `json:"company_name"`
+	CompanyName string `json:"company_name"`
+	// The position/order of the Magic Dash Item
+	Position             *int32 `json:"position,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -347,6 +349,38 @@ func (o *MagicDash) SetCompanyName(v string) {
 	o.CompanyName = v
 }
 
+// GetPosition returns the Position field value if set, zero value otherwise.
+func (o *MagicDash) GetPosition() int32 {
+	if o == nil || IsNil(o.Position) {
+		var ret int32
+		return ret
+	}
+	return *o.Position
+}
+
+// GetPositionOk returns a tuple with the Position field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MagicDash) GetPositionOk() (*int32, bool) {
+	if o == nil || IsNil(o.Position) {
+		return nil, false
+	}
+	return o.Position, true
+}
+
+// HasPosition returns a boolean if a field has been set.
+func (o *MagicDash) HasPosition() bool {
+	if o != nil && !IsNil(o.Position) {
+		return true
+	}
+
+	return false
+}
+
+// SetPosition gets a reference to the given int32 and assigns it to the Position field.
+func (o *MagicDash) SetPosition(v int32) {
+	o.Position = &v
+}
+
 func (o MagicDash) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -377,6 +411,9 @@ func (o MagicDash) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["company_id"] = o.CompanyId
 	toSerialize["company_name"] = o.CompanyName
+	if !IsNil(o.Position) {
+		toSerialize["position"] = o.Position
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -434,6 +471,7 @@ func (o *MagicDash) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "image_url")
 		delete(additionalProperties, "company_id")
 		delete(additionalProperties, "company_name")
+		delete(additionalProperties, "position")
 		o.AdditionalProperties = additionalProperties
 	}
 

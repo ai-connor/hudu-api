@@ -29,12 +29,16 @@ type AssetLayoutField struct {
 	// Can be null.
 	Min *int64 `json:"min,omitempty"`
 	// Can be null.
-	Max                  *int64  `json:"max,omitempty"`
-	LinkableId           *int64  `json:"linkable_id,omitempty"`
-	Expiration           *bool   `json:"expiration,omitempty"`
-	Options              *string `json:"options,omitempty"`
-	Position             *int32  `json:"position,omitempty"`
-	IsDestroyed          *bool   `json:"is_destroyed,omitempty"`
+	Max         *int64  `json:"max,omitempty"`
+	LinkableId  *int64  `json:"linkable_id,omitempty"`
+	Expiration  *bool   `json:"expiration,omitempty"`
+	Options     *string `json:"options,omitempty"`
+	Position    *int32  `json:"position,omitempty"`
+	IsDestroyed *bool   `json:"is_destroyed,omitempty"`
+	// ID of the List to pull values from. Required for ListSelect field type. Can be updated to change the associated list. WARNING: Changing this value will clear all existing asset field values for this field.
+	ListId *int64 `json:"list_id,omitempty"`
+	// Whether to allow multiple options for ListSelect fields
+	MultipleOptions      *bool `json:"multiple_options,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -473,6 +477,70 @@ func (o *AssetLayoutField) SetIsDestroyed(v bool) {
 	o.IsDestroyed = &v
 }
 
+// GetListId returns the ListId field value if set, zero value otherwise.
+func (o *AssetLayoutField) GetListId() int64 {
+	if o == nil || IsNil(o.ListId) {
+		var ret int64
+		return ret
+	}
+	return *o.ListId
+}
+
+// GetListIdOk returns a tuple with the ListId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssetLayoutField) GetListIdOk() (*int64, bool) {
+	if o == nil || IsNil(o.ListId) {
+		return nil, false
+	}
+	return o.ListId, true
+}
+
+// HasListId returns a boolean if a field has been set.
+func (o *AssetLayoutField) HasListId() bool {
+	if o != nil && !IsNil(o.ListId) {
+		return true
+	}
+
+	return false
+}
+
+// SetListId gets a reference to the given int64 and assigns it to the ListId field.
+func (o *AssetLayoutField) SetListId(v int64) {
+	o.ListId = &v
+}
+
+// GetMultipleOptions returns the MultipleOptions field value if set, zero value otherwise.
+func (o *AssetLayoutField) GetMultipleOptions() bool {
+	if o == nil || IsNil(o.MultipleOptions) {
+		var ret bool
+		return ret
+	}
+	return *o.MultipleOptions
+}
+
+// GetMultipleOptionsOk returns a tuple with the MultipleOptions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssetLayoutField) GetMultipleOptionsOk() (*bool, bool) {
+	if o == nil || IsNil(o.MultipleOptions) {
+		return nil, false
+	}
+	return o.MultipleOptions, true
+}
+
+// HasMultipleOptions returns a boolean if a field has been set.
+func (o *AssetLayoutField) HasMultipleOptions() bool {
+	if o != nil && !IsNil(o.MultipleOptions) {
+		return true
+	}
+
+	return false
+}
+
+// SetMultipleOptions gets a reference to the given bool and assigns it to the MultipleOptions field.
+func (o *AssetLayoutField) SetMultipleOptions(v bool) {
+	o.MultipleOptions = &v
+}
+
 func (o AssetLayoutField) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -522,6 +590,12 @@ func (o AssetLayoutField) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsDestroyed) {
 		toSerialize["is_destroyed"] = o.IsDestroyed
 	}
+	if !IsNil(o.ListId) {
+		toSerialize["list_id"] = o.ListId
+	}
+	if !IsNil(o.MultipleOptions) {
+		toSerialize["multiple_options"] = o.MultipleOptions
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -557,6 +631,8 @@ func (o *AssetLayoutField) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "options")
 		delete(additionalProperties, "position")
 		delete(additionalProperties, "is_destroyed")
+		delete(additionalProperties, "list_id")
+		delete(additionalProperties, "multiple_options")
 		o.AdditionalProperties = additionalProperties
 	}
 

@@ -572,11 +572,11 @@ type ApiPutArticlesIdRequest struct {
 	ctx        context.Context
 	ApiService *ArticlesAPIService
 	id         int32
-	article    *PostArticlesRequest
+	article    *PutArticlesIdRequest
 }
 
 // Article object that needs to be updated
-func (r ApiPutArticlesIdRequest) Article(article PostArticlesRequest) ApiPutArticlesIdRequest {
+func (r ApiPutArticlesIdRequest) Article(article PutArticlesIdRequest) ApiPutArticlesIdRequest {
 	r.article = &article
 	return r
 }

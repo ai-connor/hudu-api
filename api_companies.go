@@ -486,7 +486,7 @@ type ApiGetCompaniesJumpRequest struct {
 	integrationSlug *string
 }
 
-// Identifier of the external integration (e.g., &#39;cw_manage
+// Identifier of the external integration (e.g., &#39;cw_manage&#39;)
 func (r ApiGetCompaniesJumpRequest) IntegrationSlug(integrationSlug string) ApiGetCompaniesJumpRequest {
 	r.integrationSlug = &integrationSlug
 	return r

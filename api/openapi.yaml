@@ -345,7 +345,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/post_articles_request"
+              $ref: "#/components/schemas/put_articles_id_request"
         description: Article object that needs to be updated
         required: true
       responses:
@@ -542,6 +542,10 @@ paths:
       tags:
       - Asset Layouts
     put:
+      description: "Update an Asset Layout including its fields. To update existing\
+        \ fields, include the field 'id' in the fields array. NOTE: If you change\
+        \ the 'list_id' value of a ListSelect field, this will automatically clear\
+        \ all existing asset data for that specific field across all assets."
       operationId: put_asset_layouts_id
       parameters:
       - description: ID of the Asset Layout to be updated
@@ -1040,7 +1044,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/GetAssetResponse"
+                $ref: "#/components/schemas/Asset"
           description: The requested Asset
         "401":
           content: {}
@@ -1603,7 +1607,7 @@ paths:
         \ integrations to Hudu."
       operationId: get_companies_jump
       parameters:
-      - description: "Identifier of the external integration (e.g., 'cw_manage"
+      - description: "Identifier of the external integration (e.g., 'cw_manage')"
         in: query
         name: integration_slug
         required: true
@@ -1661,6 +1665,12 @@ paths:
         name: resource_type
         schema:
           type: string
+      - description: "Filter by archived status (true for archived, false for active).\
+          \ Defaults to false (active only)."
+        in: query
+        name: archived
+        schema:
+          type: boolean
       - description: The number of results to return per page
         in: query
         name: page_size
@@ -1685,9 +1695,98 @@ paths:
       summary: Retrieve expirations for the account
       tags:
       - Expirations
+  /expirations/{id}:
+    delete:
+      description: Deletes an expiration permanently.
+      operationId: delete_expiration
+      parameters:
+      - description: ID of the expiration to delete
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "204":
+          content: {}
+          description: Expiration deleted successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Expiration not found
+        "422":
+          content: {}
+          description: Could not delete expiration
+      summary: Delete an expiration
+      tags:
+      - Expirations
+    put:
+      description: Updates an expiration's archived status.
+      operationId: update_expiration
+      parameters:
+      - description: ID of the expiration to update
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_expiration_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Expiration"
+          description: The updated expiration
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Expiration not found
+        "422":
+          content: {}
+          description: Could not update expiration
+      summary: Update an expiration
+      tags:
+      - Expirations
+      x-codegen-request-body-name: body
   /exports:
+    get:
+      description: Retrieve a list of available export files from the last 24 hours.
+        Returns export metadata along with download URLs for each file.
+      operationId: get_exports
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                items:
+                  $ref: "#/components/schemas/get_exports_200_response_inner"
+                type: array
+          description: List of available exports retrieved successfully
+        "401":
+          content: {}
+          description: Unauthorized
+      summary: Get available exports for download
+      tags:
+      - Exports
     post:
-      description: Initiate an export of a company with specified settings and filters.
+      description: |-
+        Initiate an export of a single company in PDF or CSV format. For S3 exports, use the /s3_exports endpoint instead.
+
+        **PDF Export:** Generates a formatted PDF document. Supports filtering by asset layouts and controlling which content types to include (passwords, websites, articles, and archived items). Optional parameters default to false if not provided.
+
+        **CSV Export:** Generates a CSV file containing raw data. Note: The include_articles, include_archived_*, and asset_layout_ids parameters are not currently supported for CSV exports.
       operationId: post_exports
       requestBody:
         content:
@@ -1709,6 +1808,63 @@ paths:
       tags:
       - Exports
       x-codegen-request-body-name: export
+  /exports/{id}:
+    get:
+      description: Get export metadata or download the actual export file (PDF or
+        CSV). Use the 'download' parameter to download the file. Files are only available
+        for 24 hours after creation.
+      operationId: get_export
+      parameters:
+      - description: Export ID
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Set to true to download the file instead of returning metadata
+        in: query
+        name: download
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/get_exports_200_response_inner"
+            application/pdf:
+              schema:
+                $ref: "#/components/schemas/get_exports_200_response_inner"
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/get_exports_200_response_inner"
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/get_exports_200_response_inner"
+          description: Export details retrieved successfully (when download=false)
+            or file downloaded successfully (when download=true)
+          headers:
+            Content-Disposition:
+              description: Attachment header with filename (only when download=true)
+              schema:
+                type: string
+            Content-Type:
+              description: MIME type of the export file (only when download=true)
+              schema:
+                type: string
+        "302":
+          content: {}
+          description: "Redirect to file URL (for cloud storage, when download=true)"
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: "Export not found, file not available, or file has expired"
+      summary: Get export details or download export file
+      tags:
+      - Exports
   /s3_exports:
     post:
       description: Initiate a s3 export. You must configure your S3-compatible credentials
@@ -1727,6 +1883,355 @@ paths:
       summary: Initiate a s3 export.
       tags:
       - S3 Exports
+  /flag_types:
+    get:
+      operationId: get_flag_types
+      parameters:
+      - description: Filter by exact flag type name
+        in: query
+        name: name
+        schema:
+          type: string
+      - description: "Filter by exact color value (e.g., #FF0000)"
+        in: query
+        name: color
+        schema:
+          type: string
+      - description: Filter by exact slug value
+        in: query
+        name: slug
+        schema:
+          type: string
+      - description: Filter by creation date (YYYY-MM-DD or ISO datetime)
+        in: query
+        name: created_at
+        schema:
+          type: string
+      - description: Filter by update date (YYYY-MM-DD or ISO datetime)
+        in: query
+        name: updated_at
+        schema:
+          type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        schema:
+          type: integer
+      - description: "Number of results per page (1-1000, default: 25)"
+        in: query
+        name: page_size
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/get_flag_types_200_response"
+          description: Successful operation
+        "401":
+          content: {}
+          description: Unauthorized
+        "422":
+          content: {}
+          description: Unprocessable Entity
+      summary: Get a list of Flag Types
+      tags:
+      - Flag Types
+    post:
+      operationId: create_flag_type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_flag_type_request"
+        required: true
+      responses:
+        "201":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_flag_type_201_response"
+          description: Flag type created successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "422":
+          content: {}
+          description: Validation failed
+      summary: Create a new Flag Type
+      tags:
+      - Flag Types
+      x-codegen-request-body-name: body
+  /flag_types/{id}:
+    delete:
+      operationId: delete_flag_type
+      parameters:
+      - description: ID of the Flag Type to delete
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "204":
+          content: {}
+          description: Flag type deleted successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Flag type not found
+        "422":
+          content: {}
+          description: Error deleting flag type
+      summary: Delete a Flag Type
+      tags:
+      - Flag Types
+    get:
+      operationId: get_flag_type
+      parameters:
+      - description: ID of the Flag Type to retrieve
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_flag_type_201_response"
+          description: Successful operation
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Flag type not found
+        "422":
+          content: {}
+          description: Unprocessable Entity
+      summary: Get a specific Flag Type
+      tags:
+      - Flag Types
+    put:
+      operationId: update_flag_type
+      parameters:
+      - description: ID of the Flag Type to update
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_flag_type_request"
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_flag_type_201_response"
+          description: Flag type updated successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Flag type not found
+        "422":
+          content: {}
+          description: Validation failed
+      summary: Update a Flag Type
+      tags:
+      - Flag Types
+      x-codegen-request-body-name: body
+  /flags:
+    get:
+      operationId: get_flags
+      parameters:
+      - description: Filter by flag type ID
+        in: query
+        name: flag_type_id
+        schema:
+          type: integer
+      - description: "Filter by flagable type (Asset, Website, Article, AssetPassword,\
+          \ Company, Procedure, RackStorage, Network, IpAddress, Vlan, VlanZone)"
+        in: query
+        name: flagable_type
+        schema:
+          type: string
+      - description: Filter by flagable record ID
+        in: query
+        name: flagable_id
+        schema:
+          type: integer
+      - description: Filter by description
+        in: query
+        name: description
+        schema:
+          type: string
+      - description: Filter by creation date (YYYY-MM-DD or ISO datetime)
+        in: query
+        name: created_at
+        schema:
+          type: string
+      - description: Filter by update date (YYYY-MM-DD or ISO datetime)
+        in: query
+        name: updated_at
+        schema:
+          type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        schema:
+          type: integer
+      - description: "Number of results per page (1-1000, default: 25)"
+        in: query
+        name: page_size
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/get_flags_200_response"
+          description: Successful operation
+        "401":
+          content: {}
+          description: Unauthorized
+        "422":
+          content: {}
+          description: Unprocessable Entity
+      summary: Get a list of Flags
+      tags:
+      - Flags
+    post:
+      description: "Creates a flag for a specific record. The flagable_type must be\
+        \ one of: Asset, Website, Article, AssetPassword, Company, Procedure, RackStorage,\
+        \ Network, IpAddress, Vlan, VlanZone. The flagable record must exist."
+      operationId: create_flag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_flag_request"
+        required: true
+      responses:
+        "201":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_flag_201_response"
+          description: Flag created successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "422":
+          content: {}
+          description: Validation failed or invalid flagable type/record
+      summary: Create a new Flag
+      tags:
+      - Flags
+      x-codegen-request-body-name: body
+  /flags/{id}:
+    delete:
+      operationId: delete_flag
+      parameters:
+      - description: ID of the Flag to delete
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "204":
+          content: {}
+          description: Flag deleted successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Flag not found
+        "422":
+          content: {}
+          description: Error deleting flag
+      summary: Delete a Flag
+      tags:
+      - Flags
+    get:
+      operationId: get_flag
+      parameters:
+      - description: ID of the Flag to retrieve
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_flag_201_response"
+          description: Successful operation
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Flag not found
+        "422":
+          content: {}
+          description: Unprocessable Entity
+      summary: Get a specific Flag
+      tags:
+      - Flags
+    put:
+      description: "Updates a flag. If updating the flagable association, the flagable_type\
+        \ must be valid and the record must exist."
+      operationId: update_flag
+      parameters:
+      - description: ID of the Flag to update
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_flag_request"
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_flag_201_response"
+          description: Flag updated successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Flag not found
+        "422":
+          content: {}
+          description: Validation failed or invalid flagable type/record
+      summary: Update a Flag
+      tags:
+      - Flags
+      x-codegen-request-body-name: body
   /folders:
     get:
       operationId: get_folders
@@ -2444,6 +2949,35 @@ paths:
       summary: Delete a Magic Dash item with the specified ID
       tags:
       - Magic Dash
+  /magic_dash/update_positions:
+    put:
+      operationId: updateMagicDashPositions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateMagicDashPositions_request"
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/updateMagicDashPositions_200_response"
+          description: Positions updated successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "422":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/updateMagicDashPositions_422_response"
+          description: Validation failed or request could not be processed
+      summary: Update positions of multiple Magic Dash Items
+      tags:
+      - Magic Dash
+      x-codegen-request-body-name: body
   /matchers:
     get:
       description: Retrieve a list of matchers for a specific integration based on
@@ -3580,7 +4114,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RackStorageItem"
+              $ref: "#/components/schemas/post_rack_storage_items_request"
         description: Rack Storage Item object that needs to be added to the store
         required: true
       responses:
@@ -3658,7 +4192,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RackStorageItem"
+              $ref: "#/components/schemas/put_rack_storage_items_id_request"
         description: Rack Storage Item object that needs to be updated
         required: true
       responses:
@@ -4561,10 +5095,7 @@ paths:
       operationId: post_websites
       requestBody:
         content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: "#/components/schemas/post_websites_request"
-          multipart/form-data:
+          application/json:
             schema:
               $ref: "#/components/schemas/post_websites_request"
         required: true
@@ -4581,7 +5112,7 @@ paths:
       summary: Create a Website
       tags:
       - Websites
-      x-codegen-request-body-name: website
+      x-codegen-request-body-name: body
   /websites/{id}:
     delete:
       operationId: delete_websites_id
@@ -4643,7 +5174,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/post_websites_request"
+              $ref: "#/components/schemas/put_websites_id_request"
         required: true
       responses:
         "200":
@@ -4664,7 +5195,7 @@ paths:
       summary: Update a Website
       tags:
       - Websites
-      x-codegen-request-body-name: website
+      x-codegen-request-body-name: body
 components:
   schemas:
     Article:
@@ -4680,16 +5211,8 @@ components:
         draft: true
         name: name
         public_photos:
-        - record_id: 5
-          numeric_id: 5
-          id: id
-          url: https://openapi-generator.tech
-          record_type: record_type
-        - record_id: 5
-          numeric_id: 5
-          id: id
-          url: https://openapi-generator.tech
-          record_type: record_type
+        - public_photos
+        - public_photos
         id: 0
         folder_id: 6
         slug: slug
@@ -4741,81 +5264,44 @@ components:
         public_photos:
           description: A list of public photos.
           items:
-            $ref: "#/components/schemas/PublicPhoto"
+            type: string
           type: array
-      type: object
-    GetAssetResponse:
-      example:
-        asset:
-          cards:
-          - data: "{}"
-            sync_type: sync_type
-            sync_identifier: sync_identifier
-            link: link
-            integrator_name: integrator_name
-            id: 2
-            sync_id: 9
-            integrator_id: 7
-            primary_field: primary_field
-          - data: "{}"
-            sync_type: sync_type
-            sync_identifier: sync_identifier
-            link: link
-            integrator_name: integrator_name
-            id: 2
-            sync_id: 9
-            integrator_id: 7
-            primary_field: primary_field
-          company_id: 6.027456183070403
-          object_type: object_type
-          primary_mail: primary_mail
-          created_at: 2000-01-23T04:56:07.000+00:00
-          primary_manufacturer: primary_manufacturer
-          asset_layout_id: 1.4658129805029452
-          url: url
-          archived: true
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          company_name: company_name
-          name: name
-          asset_type: asset_type
-          primary_serial: primary_serial
-          id: 0.8008281904610115
-          primary_model: primary_model
-          fields:
-          - id: 5.962133916683182
-            label: label
-            position: 5.637376656633329
-            value: value
-          - id: 5.962133916683182
-            label: label
-            position: 5.637376656633329
-            value: value
-          slug: slug
-      properties:
-        asset:
-          $ref: "#/components/schemas/Asset"
       type: object
     Asset:
       example:
         cards:
         - data: "{}"
           sync_type: sync_type
+          onedrive_license_assign_date: 2000-01-23
           sync_identifier: sync_identifier
           link: link
           integrator_name: integrator_name
+          primary_field: primary_field
+          skype_for_business_license_assign_date: 2000-01-23
+          sharepoint_license_assign_date: 2000-01-23
           id: 2
           sync_id: 9
+          exchange_license_assign_date: 2000-01-23
+          office_365_assigned_products:
+          - office_365_assigned_products
+          - office_365_assigned_products
           integrator_id: 7
-          primary_field: primary_field
         - data: "{}"
           sync_type: sync_type
+          onedrive_license_assign_date: 2000-01-23
           sync_identifier: sync_identifier
           link: link
           integrator_name: integrator_name
+          primary_field: primary_field
+          skype_for_business_license_assign_date: 2000-01-23
+          sharepoint_license_assign_date: 2000-01-23
           id: 2
           sync_id: 9
+          exchange_license_assign_date: 2000-01-23
+          office_365_assigned_products:
+          - office_365_assigned_products
+          - office_365_assigned_products
           integrator_id: 7
-          primary_field: primary_field
         company_id: 6.027456183070403
         object_type: object_type
         primary_mail: primary_mail
@@ -4919,7 +5405,9 @@ components:
         id: 0
         include_files: true
         fields:
-        - is_destroyed: true
+        - multiple_options: true
+          is_destroyed: true
+          list_id: 9
           max: 5
           show_in_list: true
           label: label
@@ -4932,7 +5420,9 @@ components:
           position: 7
           field_type: field_type
           linkable_id: 2
-        - is_destroyed: true
+        - multiple_options: true
+          is_destroyed: true
+          list_id: 9
           max: 5
           show_in_list: true
           label: label
@@ -4987,7 +5477,9 @@ components:
       type: object
     Asset_Layout_Field:
       example:
+        multiple_options: true
         is_destroyed: true
+        list_id: 9
         max: 5
         show_in_list: true
         label: label
@@ -5034,6 +5526,15 @@ components:
           format: int32
           type: integer
         is_destroyed:
+          type: boolean
+        list_id:
+          description: "ID of the List to pull values from. Required for ListSelect\
+            \ field type. Can be updated to change the associated list. WARNING: Changing\
+            \ this value will clear all existing asset field values for this field."
+          format: int64
+          type: integer
+        multiple_options:
+          description: Whether to allow multiple options for ListSelect fields
           type: boolean
       type: object
     Asset_Password:
@@ -5317,11 +5818,11 @@ components:
       example:
         date: 2000-01-23
         company_id: 5.962133916683182
+        archived_at: 2000-01-23T04:56:07.000+00:00
         created_at: 2000-01-23T04:56:07.000+00:00
         expirationable_type: expirationable_type
         expiration_type: expiration_type
         account_id: 1.4658129805029452
-        discarded_at: 2000-01-23T04:56:07.000+00:00
         updated_at: 2000-01-23T04:56:07.000+00:00
         asset_field_id: 7.061401241503109
         expirationable_id: 6.027456183070403
@@ -5356,8 +5857,8 @@ components:
           description: The sync ID associated with the expiration (if any). Can be
             null
           type: number
-        discarded_at:
-          description: The timestamp when the expiration was discarded (if any). Can
+        archived_at:
+          description: The timestamp when the expiration was archived (if any). Can
             be null.
           format: date-time
           type: string
@@ -5384,6 +5885,92 @@ components:
       - expirationable_id
       - expirationable_type
       - id
+      type: object
+    Flag:
+      example:
+        flagable_type: flagable_type
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        flag_type_id: 6
+        flagable_id: 1
+      properties:
+        id:
+          description: The unique ID of the flag.
+          format: int64
+          type: integer
+        flag_type_id:
+          description: The ID of the flag type this flag belongs to.
+          format: int64
+          type: integer
+        description:
+          description: An optional description for the flag.
+          type: string
+        flagable_type:
+          description: "The type of record this flag is attached to (Asset, Website,\
+            \ Article, AssetPassword, Company, Procedure, RackStorage, Network, IpAddress,\
+            \ Vlan, VlanZone)."
+          type: string
+        flagable_id:
+          description: The ID of the record this flag is attached to.
+          format: int64
+          type: integer
+        created_at:
+          description: The date and time when the flag was created.
+          format: date-time
+          type: string
+        updated_at:
+          description: The date and time when the flag was last updated.
+          format: date-time
+          type: string
+      type: object
+    FlagType:
+      example:
+        color: Red
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        slug: slug
+      properties:
+        id:
+          description: The unique ID of the flag type.
+          format: int64
+          type: integer
+        name:
+          description: The name of the flag type.
+          type: string
+        color:
+          description: The color name for the flag type. Must be one of the predefined
+            color options.
+          enum:
+          - Red
+          - Blue
+          - Green
+          - Yellow
+          - Purple
+          - Orange
+          - LightPink
+          - LightBlue
+          - LightGreen
+          - LightPurple
+          - LightOrange
+          - LightYellow
+          - White
+          - Grey
+          type: string
+        slug:
+          description: The URL-friendly slug for the flag type.
+          type: string
+        created_at:
+          description: The date and time when the flag type was created.
+          format: date-time
+          type: string
+        updated_at:
+          description: The date and time when the flag type was last updated.
+          format: date-time
+          type: string
       type: object
     Folder:
       example:
@@ -5524,13 +6111,20 @@ components:
       example:
         data: "{}"
         sync_type: sync_type
+        onedrive_license_assign_date: 2000-01-23
         sync_identifier: sync_identifier
         link: link
         integrator_name: integrator_name
+        primary_field: primary_field
+        skype_for_business_license_assign_date: 2000-01-23
+        sharepoint_license_assign_date: 2000-01-23
         id: 2
         sync_id: 9
+        exchange_license_assign_date: 2000-01-23
+        office_365_assigned_products:
+        - office_365_assigned_products
+        - office_365_assigned_products
         integrator_id: 7
-        primary_field: primary_field
       properties:
         id:
           description: The unique identifier of the Integrator Card.
@@ -5555,6 +6149,31 @@ components:
             entity.
           properties: {}
           type: object
+        office_365_assigned_products:
+          description: A list of Office 365 products assigned to the user or entity.
+          items:
+            type: string
+          type: array
+        exchange_license_assign_date:
+          description: "The date when the Exchange license was assigned, formatted\
+            \ as 'Mon DD, YYYY'."
+          format: date
+          type: string
+        onedrive_license_assign_date:
+          description: "The date when the OneDrive license was assigned, formatted\
+            \ as 'Mon DD, YYYY'."
+          format: date
+          type: string
+        sharepoint_license_assign_date:
+          description: "The date when the SharePoint license was assigned, formatted\
+            \ as 'Mon DD, YYYY'."
+          format: date
+          type: string
+        skype_for_business_license_assign_date:
+          description: "The date when the Skype for Business license was assigned,\
+            \ formatted as 'Mon DD, YYYY'."
+          format: date
+          type: string
         sync_type:
           description: The type of synchronization with the external system.
           type: string
@@ -5669,6 +6288,7 @@ components:
         shade: shade
         icon: icon
         id: 0
+        position: 1
         title: title
         message: message
         content: content
@@ -5709,6 +6329,9 @@ components:
         company_name:
           description: The name of the associated company
           type: string
+        position:
+          description: The position/order of the Magic Dash Item
+          type: integer
       required:
       - company_id
       - company_name
@@ -6065,8 +6688,8 @@ components:
         \ The original numeric ID is available in the `numeric_id` field for backward\
         \ compatibility."
       example:
-        record_id: 5
-        numeric_id: 5
+        record_id: 6
+        numeric_id: 0
         id: id
         url: https://openapi-generator.tech
         record_type: record_type
@@ -6287,12 +6910,12 @@ components:
       example:
         ext: ext
         size: size
-        archived_at: archived_at
+        archived_at: 2000-01-23T04:56:07.000+00:00
         uploadable_id: 6
         mime: mime
         name: name
         id: 0
-        created_date: created_date
+        created_date: 2000-01-23T04:56:07.000+00:00
         uploadable_type: uploadable_type
         url: url
       properties:
@@ -6316,9 +6939,11 @@ components:
           type: string
         created_date:
           description: Date when the file was uploaded
+          format: date-time
           type: string
         archived_at:
           description: Date when the file was archived. Null if the file is not archived.
+          format: date-time
           type: string
         uploadable_id:
           description: ID of the object the file is associated with
@@ -6722,16 +7347,8 @@ components:
           draft: true
           name: name
           public_photos:
-          - record_id: 5
-            numeric_id: 5
-            id: id
-            url: https://openapi-generator.tech
-            record_type: record_type
-          - record_id: 5
-            numeric_id: 5
-            id: id
-            url: https://openapi-generator.tech
-            record_type: record_type
+          - public_photos
+          - public_photos
           id: 0
           folder_id: 6
           slug: slug
@@ -6746,16 +7363,8 @@ components:
           draft: true
           name: name
           public_photos:
-          - record_id: 5
-            numeric_id: 5
-            id: id
-            url: https://openapi-generator.tech
-            record_type: record_type
-          - record_id: 5
-            numeric_id: 5
-            id: id
-            url: https://openapi-generator.tech
-            record_type: record_type
+          - public_photos
+          - public_photos
           id: 0
           folder_id: 6
           slug: slug
@@ -6766,6 +7375,13 @@ components:
           type: array
       type: object
     post_articles_request:
+      example:
+        article:
+          name: Example Article
+          content: Lorem Ipsum ...
+          enable_sharing: true
+          folder_id: 0
+          company_id: 0
       properties:
         content:
           description: Article content
@@ -6798,22 +7414,33 @@ components:
           draft: true
           name: name
           public_photos:
-          - record_id: 5
-            numeric_id: 5
-            id: id
-            url: https://openapi-generator.tech
-            record_type: record_type
-          - record_id: 5
-            numeric_id: 5
-            id: id
-            url: https://openapi-generator.tech
-            record_type: record_type
+          - public_photos
+          - public_photos
           id: 0
           folder_id: 6
           slug: slug
       properties:
         article:
           $ref: "#/components/schemas/Article"
+      type: object
+    put_articles_id_request:
+      properties:
+        content:
+          description: Article content
+          type: string
+        name:
+          description: Article name
+          type: string
+        enable_sharing:
+          description: "When true, the article has a public URL for non-authenticated\
+            \ users to view"
+          type: boolean
+        folder_id:
+          description: Used to associate article with a folder
+          type: integer
+        company_id:
+          description: Used to associate article with a company
+          type: integer
       type: object
     get_asset_layouts_200_response:
       example:
@@ -6832,7 +7459,9 @@ components:
           id: 0
           include_files: true
           fields:
-          - is_destroyed: true
+          - multiple_options: true
+            is_destroyed: true
+            list_id: 9
             max: 5
             show_in_list: true
             label: label
@@ -6845,7 +7474,9 @@ components:
             position: 7
             field_type: field_type
             linkable_id: 2
-          - is_destroyed: true
+          - multiple_options: true
+            is_destroyed: true
+            list_id: 9
             max: 5
             show_in_list: true
             label: label
@@ -6873,7 +7504,9 @@ components:
           id: 0
           include_files: true
           fields:
-          - is_destroyed: true
+          - multiple_options: true
+            is_destroyed: true
+            list_id: 9
             max: 5
             show_in_list: true
             label: label
@@ -6886,7 +7519,9 @@ components:
             position: 7
             field_type: field_type
             linkable_id: 2
-          - is_destroyed: true
+          - multiple_options: true
+            is_destroyed: true
+            list_id: 9
             max: 5
             show_in_list: true
             label: label
@@ -6995,7 +7630,9 @@ components:
           id: 0
           include_files: true
           fields:
-          - is_destroyed: true
+          - multiple_options: true
+            is_destroyed: true
+            list_id: 9
             max: 5
             show_in_list: true
             label: label
@@ -7008,7 +7645,9 @@ components:
             position: 7
             field_type: field_type
             linkable_id: 2
-          - is_destroyed: true
+          - multiple_options: true
+            is_destroyed: true
+            list_id: 9
             max: 5
             show_in_list: true
             label: label
@@ -7025,6 +7664,53 @@ components:
       properties:
         asset_layout:
           $ref: "#/components/schemas/Asset_Layout"
+      type: object
+    put_asset_layouts_id_request_fields_inner:
+      properties:
+        id:
+          description: ID of existing field (required for updates)
+          type: integer
+        label:
+          description: Label (used as name) of input
+          type: string
+        field_type:
+          description: "Type of field (Text, RichText, ListSelect, etc.)"
+          type: string
+        required:
+          description: Whether this field is required
+          type: boolean
+        show_in_list:
+          description: Whether to show this value in list view
+          type: boolean
+        position:
+          description: Position of the field
+          type: integer
+        hint:
+          description: Hint shown below input
+          type: string
+        min:
+          description: Minimum value (for Number fields)
+          type: integer
+        max:
+          description: Maximum value (for Number fields)
+          type: integer
+        options:
+          description: "List of options for dropdown, separated with new line characters"
+          type: string
+        expiration:
+          description: Whether this field adds to Expiration List
+          type: boolean
+        linkable_id:
+          description: ID of Asset Layout to pull values from
+          type: integer
+        multiple_options:
+          description: Whether to allow multiple options for ListSelect fields
+          type: boolean
+        list_id:
+          description: "ID of List to pull values from. Required for ListSelect field\
+            \ type. Can be updated to change the associated list. WARNING: Changing\
+            \ this value will clear all existing asset field values for this field."
+          type: integer
       type: object
     put_asset_layouts_id_request:
       example:
@@ -7054,26 +7740,21 @@ components:
             multiple_options: true
             position: 2
       properties:
-        fields:
-          description: An array of field names for the Asset Layout
-          items:
-            type: string
-          type: array
-        active:
-          description: "If true, the Asset Layout is active"
-          type: boolean
-        icon_color:
-          description: Hex code for the icon color
-          type: string
-        color:
-          description: Hex code for the background color
+        name:
+          description: Name of the Asset Layout
           type: string
         icon:
           description: Icon class name
           type: string
-        name:
-          description: Name of the Asset Layout
+        color:
+          description: Hex code for the background color
           type: string
+        icon_color:
+          description: Hex code for the icon color
+          type: string
+        active:
+          description: "If true, the Asset Layout is active"
+          type: boolean
         include_passwords:
           description: "If true, include passwords in the Asset Layout"
           type: boolean
@@ -7089,6 +7770,14 @@ components:
         password_types:
           description: "List of password types, separated with new line characters"
           type: string
+        fields:
+          description: "An array of fields for the Asset Layout. To update existing\
+            \ fields, include the field 'id'. For ListSelect fields, you can update\
+            \ the list_id to change the associated list (this will clear all existing\
+            \ values for that field across all assets)."
+          items:
+            $ref: "#/components/schemas/put_asset_layouts_id_request_fields_inner"
+          type: array
       type: object
     get_asset_passwords_200_response:
       example:
@@ -7198,22 +7887,36 @@ components:
         - cards:
           - data: "{}"
             sync_type: sync_type
+            onedrive_license_assign_date: 2000-01-23
             sync_identifier: sync_identifier
             link: link
             integrator_name: integrator_name
+            primary_field: primary_field
+            skype_for_business_license_assign_date: 2000-01-23
+            sharepoint_license_assign_date: 2000-01-23
             id: 2
             sync_id: 9
+            exchange_license_assign_date: 2000-01-23
+            office_365_assigned_products:
+            - office_365_assigned_products
+            - office_365_assigned_products
             integrator_id: 7
-            primary_field: primary_field
           - data: "{}"
             sync_type: sync_type
+            onedrive_license_assign_date: 2000-01-23
             sync_identifier: sync_identifier
             link: link
             integrator_name: integrator_name
+            primary_field: primary_field
+            skype_for_business_license_assign_date: 2000-01-23
+            sharepoint_license_assign_date: 2000-01-23
             id: 2
             sync_id: 9
+            exchange_license_assign_date: 2000-01-23
+            office_365_assigned_products:
+            - office_365_assigned_products
+            - office_365_assigned_products
             integrator_id: 7
-            primary_field: primary_field
           company_id: 6.027456183070403
           object_type: object_type
           primary_mail: primary_mail
@@ -7242,22 +7945,36 @@ components:
         - cards:
           - data: "{}"
             sync_type: sync_type
+            onedrive_license_assign_date: 2000-01-23
             sync_identifier: sync_identifier
             link: link
             integrator_name: integrator_name
+            primary_field: primary_field
+            skype_for_business_license_assign_date: 2000-01-23
+            sharepoint_license_assign_date: 2000-01-23
             id: 2
             sync_id: 9
+            exchange_license_assign_date: 2000-01-23
+            office_365_assigned_products:
+            - office_365_assigned_products
+            - office_365_assigned_products
             integrator_id: 7
-            primary_field: primary_field
           - data: "{}"
             sync_type: sync_type
+            onedrive_license_assign_date: 2000-01-23
             sync_identifier: sync_identifier
             link: link
             integrator_name: integrator_name
+            primary_field: primary_field
+            skype_for_business_license_assign_date: 2000-01-23
+            sharepoint_license_assign_date: 2000-01-23
             id: 2
             sync_id: 9
+            exchange_license_assign_date: 2000-01-23
+            office_365_assigned_products:
+            - office_365_assigned_products
+            - office_365_assigned_products
             integrator_id: 7
-            primary_field: primary_field
           company_id: 6.027456183070403
           object_type: object_type
           primary_mail: primary_mail
@@ -7356,22 +8073,36 @@ components:
         integrator_cards:
         - data: "{}"
           sync_type: sync_type
+          onedrive_license_assign_date: 2000-01-23
           sync_identifier: sync_identifier
           link: link
           integrator_name: integrator_name
+          primary_field: primary_field
+          skype_for_business_license_assign_date: 2000-01-23
+          sharepoint_license_assign_date: 2000-01-23
           id: 2
           sync_id: 9
+          exchange_license_assign_date: 2000-01-23
+          office_365_assigned_products:
+          - office_365_assigned_products
+          - office_365_assigned_products
           integrator_id: 7
-          primary_field: primary_field
         - data: "{}"
           sync_type: sync_type
+          onedrive_license_assign_date: 2000-01-23
           sync_identifier: sync_identifier
           link: link
           integrator_name: integrator_name
+          primary_field: primary_field
+          skype_for_business_license_assign_date: 2000-01-23
+          sharepoint_license_assign_date: 2000-01-23
           id: 2
           sync_id: 9
+          exchange_license_assign_date: 2000-01-23
+          office_365_assigned_products:
+          - office_365_assigned_products
+          - office_365_assigned_products
           integrator_id: 7
-          primary_field: primary_field
       properties:
         integrator_cards:
           items:
@@ -7577,38 +8308,340 @@ components:
         company:
           $ref: "#/components/schemas/Company"
       type: object
-    post_exports_request_export:
+    update_expiration_request_expiration:
       properties:
-        include_websites:
-          description: True or False to indicate if websites should be included in
-            the export
+        archived:
+          description: Whether the expiration is archived
           type: boolean
-        include_passwords:
-          description: True or False to indicate if passwords should be included in
-            the export
-          type: boolean
-        company_id:
-          description: Specify the company to export
+      type: object
+    update_expiration_request:
+      properties:
+        expiration:
+          $ref: "#/components/schemas/update_expiration_request_expiration"
+      type: object
+    get_exports_200_response_inner:
+      example:
+        account_id: 6
+        is_pdf: true
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        file_name: file_name
+        download_url: download_url
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        file_size: 1
+        status: started
+      properties:
+        id:
+          description: The unique identifier of the export
           format: int64
           type: integer
+        account_id:
+          description: The account ID that owns this export
+          format: int64
+          type: integer
+        status:
+          description: The current status of the export
+          enum:
+          - started
+          - finished
+          type: string
+        is_pdf:
+          description: Whether this export is in PDF format
+          type: boolean
+        created_at:
+          description: When the export was created
+          format: date-time
+          type: string
+        updated_at:
+          description: When the export was last updated
+          format: date-time
+          type: string
+        download_url:
+          description: URL to download the export file
+          type: string
+        file_name:
+          description: Original filename of the export
+          type: string
+        file_size:
+          description: Size of the export file in bytes
+          type: integer
+      type: object
+    post_exports_request_export:
+      properties:
         format:
-          description: "Specify the export format: pdf, csv, or s3"
+          description: "Required. The export format: 'pdf' for formatted PDF document\
+            \ or 'csv' for raw data export."
           enum:
           - pdf
           - csv
-          - s3
           type: string
+        company_id:
+          description: Required. The ID of the company to export.
+          format: int64
+          type: integer
+        include_passwords:
+          description: Required. Whether to include passwords in the export.
+          type: boolean
+        include_websites:
+          description: Required. Whether to include websites in the export.
+          type: boolean
+        include_articles:
+          description: PDF only. Whether to include knowledge base articles. Defaults
+            to false if not provided.
+          type: boolean
+        include_archived_articles:
+          description: PDF only. Whether to include archived knowledge base articles.
+            Defaults to false if not provided.
+          type: boolean
+        include_archived_passwords:
+          description: PDF only. Whether to include archived passwords. Defaults to
+            false if not provided.
+          type: boolean
+        include_archived_websites:
+          description: PDF only. Whether to include archived websites. Defaults to
+            false if not provided.
+          type: boolean
+        include_archived_assets:
+          description: PDF only. Whether to include archived assets. Defaults to false
+            if not provided.
+          type: boolean
         asset_layout_ids:
-          description: Array of asset layout IDs to include in the export
+          description: "PDF only. Array of asset layout IDs to filter which asset\
+            \ types to include. If empty or not provided, all asset layouts are included."
           items:
             format: int64
             type: integer
           type: array
+      required:
+      - company_id
+      - format
+      - include_passwords
+      - include_websites
       type: object
     post_exports_request:
       properties:
         export:
           $ref: "#/components/schemas/post_exports_request_export"
+      type: object
+    get_flag_types_200_response:
+      example:
+        flag_types:
+        - color: Red
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          slug: slug
+        - color: Red
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          slug: slug
+      properties:
+        flag_types:
+          items:
+            $ref: "#/components/schemas/FlagType"
+          type: array
+      type: object
+    create_flag_type_request_flag_type:
+      properties:
+        name:
+          description: Name of the flag type
+          type: string
+        color:
+          description: Color name for the flag type. Must be one of the predefined
+            color options.
+          enum:
+          - Red
+          - Blue
+          - Green
+          - Yellow
+          - Purple
+          - Orange
+          - LightPink
+          - LightBlue
+          - LightGreen
+          - LightPurple
+          - LightOrange
+          - LightYellow
+          - White
+          - Grey
+          type: string
+      required:
+      - color
+      - name
+      type: object
+    create_flag_type_request:
+      example:
+        flag_type:
+          name: Critical Issue
+          color: Red
+      properties:
+        flag_type:
+          $ref: "#/components/schemas/create_flag_type_request_flag_type"
+      type: object
+    create_flag_type_201_response:
+      example:
+        flag_type:
+          color: Red
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          slug: slug
+      properties:
+        flag_type:
+          $ref: "#/components/schemas/FlagType"
+      type: object
+    update_flag_type_request_flag_type:
+      properties:
+        name:
+          description: Name of the flag type
+          type: string
+        color:
+          description: Color name for the flag type. Must be one of the predefined
+            color options.
+          enum:
+          - Red
+          - Blue
+          - Green
+          - Yellow
+          - Purple
+          - Orange
+          - LightPink
+          - LightBlue
+          - LightGreen
+          - LightPurple
+          - LightOrange
+          - LightYellow
+          - White
+          - Grey
+          type: string
+      type: object
+    update_flag_type_request:
+      example:
+        flag_type:
+          name: Updated Flag Type
+          color: Green
+      properties:
+        flag_type:
+          $ref: "#/components/schemas/update_flag_type_request_flag_type"
+      type: object
+    get_flags_200_response:
+      example:
+        flags:
+        - flagable_type: flagable_type
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          flag_type_id: 6
+          flagable_id: 1
+        - flagable_type: flagable_type
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          flag_type_id: 6
+          flagable_id: 1
+      properties:
+        flags:
+          items:
+            $ref: "#/components/schemas/Flag"
+          type: array
+      type: object
+    create_flag_request_flag:
+      properties:
+        flag_type_id:
+          description: ID of the flag type
+          type: integer
+        description:
+          description: Optional description for the flag
+          type: string
+        flagable_type:
+          description: The type of record being flagged
+          enum:
+          - Asset
+          - Website
+          - Article
+          - AssetPassword
+          - Company
+          - Procedure
+          - RackStorage
+          - Network
+          - IpAddress
+          - Vlan
+          - VlanZone
+          type: string
+        flagable_id:
+          description: The ID of the record being flagged
+          type: integer
+      required:
+      - flag_type_id
+      - flagable_id
+      - flagable_type
+      type: object
+    create_flag_request:
+      example:
+        flag:
+          flag_type_id: 1
+          description: This asset requires immediate attention
+          flagable_type: Asset
+          flagable_id: 123
+      properties:
+        flag:
+          $ref: "#/components/schemas/create_flag_request_flag"
+      type: object
+    create_flag_201_response:
+      example:
+        flag:
+          flagable_type: flagable_type
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          flag_type_id: 6
+          flagable_id: 1
+      properties:
+        flag:
+          $ref: "#/components/schemas/Flag"
+      type: object
+    update_flag_request_flag:
+      properties:
+        flag_type_id:
+          description: ID of the flag type
+          type: integer
+        description:
+          description: Description for the flag
+          type: string
+        flagable_type:
+          description: The type of record being flagged
+          enum:
+          - Asset
+          - Website
+          - Article
+          - AssetPassword
+          - Company
+          - Procedure
+          - RackStorage
+          - Network
+          - IpAddress
+          - Vlan
+          - VlanZone
+          type: string
+        flagable_id:
+          description: The ID of the record being flagged
+          type: integer
+      type: object
+    update_flag_request:
+      example:
+        flag:
+          description: Updated flag description
+          flag_type_id: 2
+      properties:
+        flag:
+          $ref: "#/components/schemas/update_flag_request_flag"
       type: object
     get_folders_200_response:
       example:
@@ -7786,6 +8819,62 @@ components:
       required:
       - company_name
       - title
+      type: object
+    updateMagicDashPositions_request_positions_inner:
+      properties:
+        id:
+          description: The ID of the Magic Dash Item
+          format: int64
+          type: integer
+        position:
+          description: The new position for the Magic Dash Item (starting at 1)
+          format: int32
+          minimum: 1
+          type: integer
+      required:
+      - id
+      - position
+      type: object
+    updateMagicDashPositions_request:
+      properties:
+        company_id:
+          description: The ID of the company whose Magic Dash Items are being reordered
+          format: int64
+          type: integer
+        positions:
+          description: An array of Magic Dash Item IDs with their new positions (must
+            include at least 2 items)
+          example:
+          - id: 1
+            position: 2
+          - id: 2
+            position: 1
+          items:
+            $ref: "#/components/schemas/updateMagicDashPositions_request_positions_inner"
+          minItems: 2
+          type: array
+      required:
+      - company_id
+      - positions
+      type: object
+    updateMagicDashPositions_200_response:
+      example:
+        success: true
+      properties:
+        success:
+          example: true
+          type: boolean
+      type: object
+    updateMagicDashPositions_422_response:
+      example:
+        success: false
+        error: error
+      properties:
+        success:
+          example: false
+          type: boolean
+        error:
+          type: string
       type: object
     getMatchers_200_response:
       example:
@@ -8250,13 +9339,13 @@ components:
     getPublicPhotos_200_response:
       example:
         public_photos:
-        - record_id: 5
-          numeric_id: 5
+        - record_id: 6
+          numeric_id: 0
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
-        - record_id: 5
-          numeric_id: 5
+        - record_id: 6
+          numeric_id: 0
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
@@ -8302,14 +9391,50 @@ components:
     updatePublicPhoto_200_response:
       example:
         public_photo:
-          record_id: 5
-          numeric_id: 5
+          record_id: 6
+          numeric_id: 0
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
       properties:
         public_photo:
           $ref: "#/components/schemas/PublicPhoto"
+      type: object
+    post_rack_storage_items_request:
+      example:
+        rack_storage_item:
+          rack_storage_role_id: 1
+          asset_id: 123
+          start_unit: 1
+          end_unit: 4
+          status: 0
+          side: 0
+          max_wattage: 500
+          power_draw: 250
+          reserved_message: Reserved for new server
+      properties:
+        rack_storage_item:
+          $ref: "#/components/schemas/RackStorageItem"
+      required:
+      - rack_storage_item
+      type: object
+    put_rack_storage_items_id_request:
+      example:
+        rack_storage_item:
+          rack_storage_role_id: 1
+          asset_id: 123
+          start_unit: 1
+          end_unit: 4
+          status: 0
+          side: 0
+          max_wattage: 500
+          power_draw: 250
+          reserved_message: Updated reservation message
+      properties:
+        rack_storage_item:
+          $ref: "#/components/schemas/RackStorageItem"
+      required:
+      - rack_storage_item
       type: object
     get_relations_200_response:
       example:
@@ -8393,8 +9518,8 @@ components:
           format: int32
           type: integer
         upload[uploadable_type]:
-          description: "Type of record to be attached to. (Asset, Website, Procedure,\
-            \ AssetPassword, Company, Article)"
+          description: "Type of record to be attached to. (Asset, Website, AssetPassword,\
+            \ Article)"
           type: string
       required:
       - file
@@ -8546,7 +9671,7 @@ components:
             \ active."
           type: boolean
       type: object
-    post_websites_request:
+    post_websites_request_website:
       properties:
         company_id:
           description: Used to associate website with company
@@ -8569,6 +9694,47 @@ components:
         disable_whois:
           description: "When true, WHOIS monitoring is paused"
           type: boolean
+      required:
+      - company_id
+      - name
+      type: object
+    post_websites_request:
+      properties:
+        website:
+          $ref: "#/components/schemas/post_websites_request_website"
+      required:
+      - website
+      type: object
+    put_websites_id_request_website:
+      properties:
+        company_id:
+          description: Used to associate website with company
+          type: integer
+        name:
+          description: The name or URL of the website
+          type: string
+        notes:
+          description: Add additional notes to a website
+          type: string
+        paused:
+          description: "When true, website monitoring is paused"
+          type: boolean
+        disable_dns:
+          description: "When true, DNS monitoring is paused"
+          type: boolean
+        disable_ssl:
+          description: "When true, SSL certificate monitoring is paused"
+          type: boolean
+        disable_whois:
+          description: "When true, WHOIS monitoring is paused"
+          type: boolean
+      type: object
+    put_websites_id_request:
+      properties:
+        website:
+          $ref: "#/components/schemas/put_websites_id_request_website"
+      required:
+      - website
       type: object
     Asset_fields_inner:
       example:

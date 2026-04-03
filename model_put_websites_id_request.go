@@ -15,39 +15,39 @@ import (
 	"fmt"
 )
 
-// checks if the PostWebsitesRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostWebsitesRequest{}
+// checks if the PutWebsitesIdRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PutWebsitesIdRequest{}
 
-// PostWebsitesRequest struct for PostWebsitesRequest
-type PostWebsitesRequest struct {
-	Website              PostWebsitesRequestWebsite `json:"website"`
+// PutWebsitesIdRequest struct for PutWebsitesIdRequest
+type PutWebsitesIdRequest struct {
+	Website              PutWebsitesIdRequestWebsite `json:"website"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostWebsitesRequest PostWebsitesRequest
+type _PutWebsitesIdRequest PutWebsitesIdRequest
 
-// NewPostWebsitesRequest instantiates a new PostWebsitesRequest object
+// NewPutWebsitesIdRequest instantiates a new PutWebsitesIdRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostWebsitesRequest(website PostWebsitesRequestWebsite) *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewPutWebsitesIdRequest(website PutWebsitesIdRequestWebsite) *PutWebsitesIdRequest {
+	this := PutWebsitesIdRequest{}
 	this.Website = website
 	return &this
 }
 
-// NewPostWebsitesRequestWithDefaults instantiates a new PostWebsitesRequest object
+// NewPutWebsitesIdRequestWithDefaults instantiates a new PutWebsitesIdRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostWebsitesRequestWithDefaults() *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewPutWebsitesIdRequestWithDefaults() *PutWebsitesIdRequest {
+	this := PutWebsitesIdRequest{}
 	return &this
 }
 
 // GetWebsite returns the Website field value
-func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
+func (o *PutWebsitesIdRequest) GetWebsite() PutWebsitesIdRequestWebsite {
 	if o == nil {
-		var ret PostWebsitesRequestWebsite
+		var ret PutWebsitesIdRequestWebsite
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
 
 // GetWebsiteOk returns a tuple with the Website field value
 // and a boolean to check if the value has been set.
-func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool) {
+func (o *PutWebsitesIdRequest) GetWebsiteOk() (*PutWebsitesIdRequestWebsite, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool)
 }
 
 // SetWebsite sets field value
-func (o *PostWebsitesRequest) SetWebsite(v PostWebsitesRequestWebsite) {
+func (o *PutWebsitesIdRequest) SetWebsite(v PutWebsitesIdRequestWebsite) {
 	o.Website = v
 }
 
-func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (o PutWebsitesIdRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,7 +76,7 @@ func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
+func (o PutWebsitesIdRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["website"] = o.Website
 
@@ -87,7 +87,7 @@ func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
+func (o *PutWebsitesIdRequest) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -109,15 +109,15 @@ func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varPostWebsitesRequest := _PostWebsitesRequest{}
+	varPutWebsitesIdRequest := _PutWebsitesIdRequest{}
 
-	err = json.Unmarshal(data, &varPostWebsitesRequest)
+	err = json.Unmarshal(data, &varPutWebsitesIdRequest)
 
 	if err != nil {
 		return err
 	}
 
-	*o = PostWebsitesRequest(varPostWebsitesRequest)
+	*o = PutWebsitesIdRequest(varPutWebsitesIdRequest)
 
 	additionalProperties := make(map[string]interface{})
 
@@ -129,38 +129,38 @@ func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
 	return err
 }
 
-type NullablePostWebsitesRequest struct {
-	value *PostWebsitesRequest
+type NullablePutWebsitesIdRequest struct {
+	value *PutWebsitesIdRequest
 	isSet bool
 }
 
-func (v NullablePostWebsitesRequest) Get() *PostWebsitesRequest {
+func (v NullablePutWebsitesIdRequest) Get() *PutWebsitesIdRequest {
 	return v.value
 }
 
-func (v *NullablePostWebsitesRequest) Set(val *PostWebsitesRequest) {
+func (v *NullablePutWebsitesIdRequest) Set(val *PutWebsitesIdRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostWebsitesRequest) IsSet() bool {
+func (v NullablePutWebsitesIdRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostWebsitesRequest) Unset() {
+func (v *NullablePutWebsitesIdRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostWebsitesRequest(val *PostWebsitesRequest) *NullablePostWebsitesRequest {
-	return &NullablePostWebsitesRequest{value: val, isSet: true}
+func NewNullablePutWebsitesIdRequest(val *PutWebsitesIdRequest) *NullablePutWebsitesIdRequest {
+	return &NullablePutWebsitesIdRequest{value: val, isSet: true}
 }
 
-func (v NullablePostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (v NullablePutWebsitesIdRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostWebsitesRequest) UnmarshalJSON(src []byte) error {
+func (v *NullablePutWebsitesIdRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

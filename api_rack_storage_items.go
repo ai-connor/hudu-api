@@ -437,11 +437,11 @@ func (a *RackStorageItemsAPIService) GetRackStorageItemsIdExecute(r ApiGetRackSt
 type ApiPostRackStorageItemsRequest struct {
 	ctx             context.Context
 	ApiService      *RackStorageItemsAPIService
-	rackStorageItem *RackStorageItem
+	rackStorageItem *PostRackStorageItemsRequest
 }
 
 // Rack Storage Item object that needs to be added to the store
-func (r ApiPostRackStorageItemsRequest) RackStorageItem(rackStorageItem RackStorageItem) ApiPostRackStorageItemsRequest {
+func (r ApiPostRackStorageItemsRequest) RackStorageItem(rackStorageItem PostRackStorageItemsRequest) ApiPostRackStorageItemsRequest {
 	r.rackStorageItem = &rackStorageItem
 	return r
 }
@@ -550,11 +550,11 @@ type ApiPutRackStorageItemsIdRequest struct {
 	ctx             context.Context
 	ApiService      *RackStorageItemsAPIService
 	id              int32
-	rackStorageItem *RackStorageItem
+	rackStorageItem *PutRackStorageItemsIdRequest
 }
 
 // Rack Storage Item object that needs to be updated
-func (r ApiPutRackStorageItemsIdRequest) RackStorageItem(rackStorageItem RackStorageItem) ApiPutRackStorageItemsIdRequest {
+func (r ApiPutRackStorageItemsIdRequest) RackStorageItem(rackStorageItem PutRackStorageItemsIdRequest) ApiPutRackStorageItemsIdRequest {
 	r.rackStorageItem = &rackStorageItem
 	return r
 }

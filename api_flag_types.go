@@ -19,63 +19,32 @@ import (
 	"strings"
 )
 
-// AssetLayoutsAPIService AssetLayoutsAPI service
-type AssetLayoutsAPIService service
+// FlagTypesAPIService FlagTypesAPI service
+type FlagTypesAPIService service
 
-type ApiGetAssetLayoutsRequest struct {
+type ApiCreateFlagTypeRequest struct {
 	ctx        context.Context
-	ApiService *AssetLayoutsAPIService
-	name       *string
-	page       *float32
-	slug       *string
-	active     *bool
-	updatedAt  *string
+	ApiService *FlagTypesAPIService
+	body       *CreateFlagTypeRequest
 }
 
-// Filter by the name of the Asset Layout
-func (r ApiGetAssetLayoutsRequest) Name(name string) ApiGetAssetLayoutsRequest {
-	r.name = &name
+func (r ApiCreateFlagTypeRequest) Body(body CreateFlagTypeRequest) ApiCreateFlagTypeRequest {
+	r.body = &body
 	return r
 }
 
-// Get the current page of results
-func (r ApiGetAssetLayoutsRequest) Page(page float32) ApiGetAssetLayoutsRequest {
-	r.page = &page
-	return r
-}
-
-// Filter by URL slug
-func (r ApiGetAssetLayoutsRequest) Slug(slug string) ApiGetAssetLayoutsRequest {
-	r.slug = &slug
-	return r
-}
-
-// If true, the Asset Layout is active
-func (r ApiGetAssetLayoutsRequest) Active(active bool) ApiGetAssetLayoutsRequest {
-	r.active = &active
-	return r
-}
-
-// Filter asset layouts updated within a range or at an exact time. Format: &#39;start_datetime,end_datetime&#39; for range, &#39;exact_datetime&#39; for exact match. Both &#39;start_datetime&#39; and &#39;end_datetime&#39; should be in ISO 8601 format. If &#39;start_datetime&#39; is provided and &#39;end_datetime&#39; is blank, it filters asset layouts updated from &#39;start_datetime&#39; until now. Example: &#39;2023-06-07T12:34:56Z,&#39; If &#39;end_datetime&#39; is provided and &#39;start_datetime&#39; is blank, it filters asset layouts updated from the past until &#39;end_datetime&#39;. Example: &#39;,2023-06-07T12:34:56Z&#39; If both &#39;start_datetime&#39; and &#39;end_datetime&#39; are provided, it filters asset layouts updated within that range. Example: &#39;2023-06-01T12:34:56Z,2023-06-07T12:34:56Z&#39;
-func (r ApiGetAssetLayoutsRequest) UpdatedAt(updatedAt string) ApiGetAssetLayoutsRequest {
-	r.updatedAt = &updatedAt
-	return r
-}
-
-func (r ApiGetAssetLayoutsRequest) Execute() (*GetAssetLayouts200Response, *http.Response, error) {
-	return r.ApiService.GetAssetLayoutsExecute(r)
+func (r ApiCreateFlagTypeRequest) Execute() (*CreateFlagType201Response, *http.Response, error) {
+	return r.ApiService.CreateFlagTypeExecute(r)
 }
 
 /*
-GetAssetLayouts Get a list of Asset Layouts
-
-Retrieve a list of available Asset Layouts.
+CreateFlagType Create a new Flag Type
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetAssetLayoutsRequest
+	@return ApiCreateFlagTypeRequest
 */
-func (a *AssetLayoutsAPIService) GetAssetLayouts(ctx context.Context) ApiGetAssetLayoutsRequest {
-	return ApiGetAssetLayoutsRequest{
+func (a *FlagTypesAPIService) CreateFlagType(ctx context.Context) ApiCreateFlagTypeRequest {
+	return ApiCreateFlagTypeRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -83,21 +52,407 @@ func (a *AssetLayoutsAPIService) GetAssetLayouts(ctx context.Context) ApiGetAsse
 
 // Execute executes the request
 //
-//	@return GetAssetLayouts200Response
-func (a *AssetLayoutsAPIService) GetAssetLayoutsExecute(r ApiGetAssetLayoutsRequest) (*GetAssetLayouts200Response, *http.Response, error) {
+//	@return CreateFlagType201Response
+func (a *FlagTypesAPIService) CreateFlagTypeExecute(r ApiCreateFlagTypeRequest) (*CreateFlagType201Response, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
+		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *GetAssetLayouts200Response
+		localVarReturnValue *CreateFlagType201Response
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetLayoutsAPIService.GetAssetLayouts")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FlagTypesAPIService.CreateFlagType")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/asset_layouts"
+	localVarPath := localBasePath + "/flag_types"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"*/*"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.body
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiDeleteFlagTypeRequest struct {
+	ctx        context.Context
+	ApiService *FlagTypesAPIService
+	id         int32
+}
+
+func (r ApiDeleteFlagTypeRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeleteFlagTypeExecute(r)
+}
+
+/*
+DeleteFlagType Delete a Flag Type
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the Flag Type to delete
+	@return ApiDeleteFlagTypeRequest
+*/
+func (a *FlagTypesAPIService) DeleteFlagType(ctx context.Context, id int32) ApiDeleteFlagTypeRequest {
+	return ApiDeleteFlagTypeRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+func (a *FlagTypesAPIService) DeleteFlagTypeExecute(r ApiDeleteFlagTypeRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FlagTypesAPIService.DeleteFlagType")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/flag_types/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiGetFlagTypeRequest struct {
+	ctx        context.Context
+	ApiService *FlagTypesAPIService
+	id         int32
+}
+
+func (r ApiGetFlagTypeRequest) Execute() (*CreateFlagType201Response, *http.Response, error) {
+	return r.ApiService.GetFlagTypeExecute(r)
+}
+
+/*
+GetFlagType Get a specific Flag Type
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the Flag Type to retrieve
+	@return ApiGetFlagTypeRequest
+*/
+func (a *FlagTypesAPIService) GetFlagType(ctx context.Context, id int32) ApiGetFlagTypeRequest {
+	return ApiGetFlagTypeRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+//
+//	@return CreateFlagType201Response
+func (a *FlagTypesAPIService) GetFlagTypeExecute(r ApiGetFlagTypeRequest) (*CreateFlagType201Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateFlagType201Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FlagTypesAPIService.GetFlagType")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/flag_types/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"*/*"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetFlagTypesRequest struct {
+	ctx        context.Context
+	ApiService *FlagTypesAPIService
+	name       *string
+	color      *string
+	slug       *string
+	createdAt  *string
+	updatedAt  *string
+	page       *int32
+	pageSize   *int32
+}
+
+// Filter by exact flag type name
+func (r ApiGetFlagTypesRequest) Name(name string) ApiGetFlagTypesRequest {
+	r.name = &name
+	return r
+}
+
+// Filter by exact color value (e.g., #FF0000)
+func (r ApiGetFlagTypesRequest) Color(color string) ApiGetFlagTypesRequest {
+	r.color = &color
+	return r
+}
+
+// Filter by exact slug value
+func (r ApiGetFlagTypesRequest) Slug(slug string) ApiGetFlagTypesRequest {
+	r.slug = &slug
+	return r
+}
+
+// Filter by creation date (YYYY-MM-DD or ISO datetime)
+func (r ApiGetFlagTypesRequest) CreatedAt(createdAt string) ApiGetFlagTypesRequest {
+	r.createdAt = &createdAt
+	return r
+}
+
+// Filter by update date (YYYY-MM-DD or ISO datetime)
+func (r ApiGetFlagTypesRequest) UpdatedAt(updatedAt string) ApiGetFlagTypesRequest {
+	r.updatedAt = &updatedAt
+	return r
+}
+
+// Page number for pagination
+func (r ApiGetFlagTypesRequest) Page(page int32) ApiGetFlagTypesRequest {
+	r.page = &page
+	return r
+}
+
+// Number of results per page (1-1000, default: 25)
+func (r ApiGetFlagTypesRequest) PageSize(pageSize int32) ApiGetFlagTypesRequest {
+	r.pageSize = &pageSize
+	return r
+}
+
+func (r ApiGetFlagTypesRequest) Execute() (*GetFlagTypes200Response, *http.Response, error) {
+	return r.ApiService.GetFlagTypesExecute(r)
+}
+
+/*
+GetFlagTypes Get a list of Flag Types
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGetFlagTypesRequest
+*/
+func (a *FlagTypesAPIService) GetFlagTypes(ctx context.Context) ApiGetFlagTypesRequest {
+	return ApiGetFlagTypesRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+// Execute executes the request
+//
+//	@return GetFlagTypes200Response
+func (a *FlagTypesAPIService) GetFlagTypesExecute(r ApiGetFlagTypesRequest) (*GetFlagTypes200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetFlagTypes200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FlagTypesAPIService.GetFlagTypes")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/flag_types"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -106,18 +461,24 @@ func (a *AssetLayoutsAPIService) GetAssetLayoutsExecute(r ApiGetAssetLayoutsRequ
 	if r.name != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "", "")
 	}
-	if r.page != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
+	if r.color != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "color", r.color, "", "")
 	}
 	if r.slug != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "slug", r.slug, "", "")
 	}
-	if r.active != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "active", r.active, "", "")
+	if r.createdAt != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at", r.createdAt, "", "")
 	}
 	if r.updatedAt != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "updated_at", r.updatedAt, "", "")
 	}
+	if r.page != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
+	}
+	if r.pageSize != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -186,25 +547,31 @@ func (a *AssetLayoutsAPIService) GetAssetLayoutsExecute(r ApiGetAssetLayoutsRequ
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetAssetLayoutsIdRequest struct {
+type ApiUpdateFlagTypeRequest struct {
 	ctx        context.Context
-	ApiService *AssetLayoutsAPIService
-	id         int64
+	ApiService *FlagTypesAPIService
+	id         int32
+	body       *UpdateFlagTypeRequest
 }
 
-func (r ApiGetAssetLayoutsIdRequest) Execute() (*PostAssetLayouts201Response, *http.Response, error) {
-	return r.ApiService.GetAssetLayoutsIdExecute(r)
+func (r ApiUpdateFlagTypeRequest) Body(body UpdateFlagTypeRequest) ApiUpdateFlagTypeRequest {
+	r.body = &body
+	return r
+}
+
+func (r ApiUpdateFlagTypeRequest) Execute() (*CreateFlagType201Response, *http.Response, error) {
+	return r.ApiService.UpdateFlagTypeExecute(r)
 }
 
 /*
-GetAssetLayoutsId Get an Asset Layout
+UpdateFlagType Update a Flag Type
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id ID of the requested Asset Layout
-	@return ApiGetAssetLayoutsIdRequest
+	@param id ID of the Flag Type to update
+	@return ApiUpdateFlagTypeRequest
 */
-func (a *AssetLayoutsAPIService) GetAssetLayoutsId(ctx context.Context, id int64) ApiGetAssetLayoutsIdRequest {
-	return ApiGetAssetLayoutsIdRequest{
+func (a *FlagTypesAPIService) UpdateFlagType(ctx context.Context, id int32) ApiUpdateFlagTypeRequest {
+	return ApiUpdateFlagTypeRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -213,279 +580,28 @@ func (a *AssetLayoutsAPIService) GetAssetLayoutsId(ctx context.Context, id int64
 
 // Execute executes the request
 //
-//	@return PostAssetLayouts201Response
-func (a *AssetLayoutsAPIService) GetAssetLayoutsIdExecute(r ApiGetAssetLayoutsIdRequest) (*PostAssetLayouts201Response, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PostAssetLayouts201Response
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetLayoutsAPIService.GetAssetLayoutsId")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/asset_layouts/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"*/*"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["APIKeyHeader"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["x-api-key"] = key
-			}
-		}
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiPostAssetLayoutsRequest struct {
-	ctx         context.Context
-	ApiService  *AssetLayoutsAPIService
-	assetLayout *PostAssetLayoutsRequest
-}
-
-// Asset layout object that needs to be added to the store
-func (r ApiPostAssetLayoutsRequest) AssetLayout(assetLayout PostAssetLayoutsRequest) ApiPostAssetLayoutsRequest {
-	r.assetLayout = &assetLayout
-	return r
-}
-
-func (r ApiPostAssetLayoutsRequest) Execute() (*PostAssetLayouts201Response, *http.Response, error) {
-	return r.ApiService.PostAssetLayoutsExecute(r)
-}
-
-/*
-PostAssetLayouts Create an Asset Layout
-
-Create a new Asset Layout with the specified properties.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPostAssetLayoutsRequest
-*/
-func (a *AssetLayoutsAPIService) PostAssetLayouts(ctx context.Context) ApiPostAssetLayoutsRequest {
-	return ApiPostAssetLayoutsRequest{
-		ApiService: a,
-		ctx:        ctx,
-	}
-}
-
-// Execute executes the request
-//
-//	@return PostAssetLayouts201Response
-func (a *AssetLayoutsAPIService) PostAssetLayoutsExecute(r ApiPostAssetLayoutsRequest) (*PostAssetLayouts201Response, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PostAssetLayouts201Response
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetLayoutsAPIService.PostAssetLayouts")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/asset_layouts"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.assetLayout == nil {
-		return localVarReturnValue, nil, reportError("assetLayout is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"*/*"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.assetLayout
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["APIKeyHeader"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["x-api-key"] = key
-			}
-		}
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiPutAssetLayoutsIdRequest struct {
-	ctx         context.Context
-	ApiService  *AssetLayoutsAPIService
-	id          int64
-	assetLayout *PutAssetLayoutsIdRequest
-}
-
-// Asset layout object that needs to be updated in the store
-func (r ApiPutAssetLayoutsIdRequest) AssetLayout(assetLayout PutAssetLayoutsIdRequest) ApiPutAssetLayoutsIdRequest {
-	r.assetLayout = &assetLayout
-	return r
-}
-
-func (r ApiPutAssetLayoutsIdRequest) Execute() (*PostAssetLayouts201Response, *http.Response, error) {
-	return r.ApiService.PutAssetLayoutsIdExecute(r)
-}
-
-/*
-PutAssetLayoutsId Update an Asset Layout
-
-Update an Asset Layout including its fields. To update existing fields, include the field 'id' in the fields array. NOTE: If you change the 'list_id' value of a ListSelect field, this will automatically clear all existing asset data for that specific field across all assets.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id ID of the Asset Layout to be updated
-	@return ApiPutAssetLayoutsIdRequest
-*/
-func (a *AssetLayoutsAPIService) PutAssetLayoutsId(ctx context.Context, id int64) ApiPutAssetLayoutsIdRequest {
-	return ApiPutAssetLayoutsIdRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-//
-//	@return PostAssetLayouts201Response
-func (a *AssetLayoutsAPIService) PutAssetLayoutsIdExecute(r ApiPutAssetLayoutsIdRequest) (*PostAssetLayouts201Response, *http.Response, error) {
+//	@return CreateFlagType201Response
+func (a *FlagTypesAPIService) UpdateFlagTypeExecute(r ApiUpdateFlagTypeRequest) (*CreateFlagType201Response, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *PostAssetLayouts201Response
+		localVarReturnValue *CreateFlagType201Response
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetLayoutsAPIService.PutAssetLayoutsId")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FlagTypesAPIService.UpdateFlagType")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/asset_layouts/{id}"
+	localVarPath := localBasePath + "/flag_types/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.assetLayout == nil {
-		return localVarReturnValue, nil, reportError("assetLayout is required and must be specified")
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -506,7 +622,7 @@ func (a *AssetLayoutsAPIService) PutAssetLayoutsIdExecute(r ApiPutAssetLayoutsId
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.assetLayout
+	localVarPostBody = r.body
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

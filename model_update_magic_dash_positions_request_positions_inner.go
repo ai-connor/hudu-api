@@ -15,60 +15,88 @@ import (
 	"fmt"
 )
 
-// checks if the PostWebsitesRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostWebsitesRequest{}
+// checks if the UpdateMagicDashPositionsRequestPositionsInner type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateMagicDashPositionsRequestPositionsInner{}
 
-// PostWebsitesRequest struct for PostWebsitesRequest
-type PostWebsitesRequest struct {
-	Website              PostWebsitesRequestWebsite `json:"website"`
+// UpdateMagicDashPositionsRequestPositionsInner struct for UpdateMagicDashPositionsRequestPositionsInner
+type UpdateMagicDashPositionsRequestPositionsInner struct {
+	// The ID of the Magic Dash Item
+	Id int64 `json:"id"`
+	// The new position for the Magic Dash Item (starting at 1)
+	Position             int32 `json:"position"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostWebsitesRequest PostWebsitesRequest
+type _UpdateMagicDashPositionsRequestPositionsInner UpdateMagicDashPositionsRequestPositionsInner
 
-// NewPostWebsitesRequest instantiates a new PostWebsitesRequest object
+// NewUpdateMagicDashPositionsRequestPositionsInner instantiates a new UpdateMagicDashPositionsRequestPositionsInner object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostWebsitesRequest(website PostWebsitesRequestWebsite) *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
-	this.Website = website
+func NewUpdateMagicDashPositionsRequestPositionsInner(id int64, position int32) *UpdateMagicDashPositionsRequestPositionsInner {
+	this := UpdateMagicDashPositionsRequestPositionsInner{}
+	this.Id = id
+	this.Position = position
 	return &this
 }
 
-// NewPostWebsitesRequestWithDefaults instantiates a new PostWebsitesRequest object
+// NewUpdateMagicDashPositionsRequestPositionsInnerWithDefaults instantiates a new UpdateMagicDashPositionsRequestPositionsInner object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostWebsitesRequestWithDefaults() *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewUpdateMagicDashPositionsRequestPositionsInnerWithDefaults() *UpdateMagicDashPositionsRequestPositionsInner {
+	this := UpdateMagicDashPositionsRequestPositionsInner{}
 	return &this
 }
 
-// GetWebsite returns the Website field value
-func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
+// GetId returns the Id field value
+func (o *UpdateMagicDashPositionsRequestPositionsInner) GetId() int64 {
 	if o == nil {
-		var ret PostWebsitesRequestWebsite
+		var ret int64
 		return ret
 	}
 
-	return o.Website
+	return o.Id
 }
 
-// GetWebsiteOk returns a tuple with the Website field value
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool) {
+func (o *UpdateMagicDashPositionsRequestPositionsInner) GetIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Website, true
+	return &o.Id, true
 }
 
-// SetWebsite sets field value
-func (o *PostWebsitesRequest) SetWebsite(v PostWebsitesRequestWebsite) {
-	o.Website = v
+// SetId sets field value
+func (o *UpdateMagicDashPositionsRequestPositionsInner) SetId(v int64) {
+	o.Id = v
 }
 
-func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
+// GetPosition returns the Position field value
+func (o *UpdateMagicDashPositionsRequestPositionsInner) GetPosition() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.Position
+}
+
+// GetPositionOk returns a tuple with the Position field value
+// and a boolean to check if the value has been set.
+func (o *UpdateMagicDashPositionsRequestPositionsInner) GetPositionOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Position, true
+}
+
+// SetPosition sets field value
+func (o *UpdateMagicDashPositionsRequestPositionsInner) SetPosition(v int32) {
+	o.Position = v
+}
+
+func (o UpdateMagicDashPositionsRequestPositionsInner) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,9 +104,10 @@ func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
+func (o UpdateMagicDashPositionsRequestPositionsInner) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["website"] = o.Website
+	toSerialize["id"] = o.Id
+	toSerialize["position"] = o.Position
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -87,12 +116,13 @@ func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
+func (o *UpdateMagicDashPositionsRequestPositionsInner) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"website",
+		"id",
+		"position",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -109,58 +139,59 @@ func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varPostWebsitesRequest := _PostWebsitesRequest{}
+	varUpdateMagicDashPositionsRequestPositionsInner := _UpdateMagicDashPositionsRequestPositionsInner{}
 
-	err = json.Unmarshal(data, &varPostWebsitesRequest)
+	err = json.Unmarshal(data, &varUpdateMagicDashPositionsRequestPositionsInner)
 
 	if err != nil {
 		return err
 	}
 
-	*o = PostWebsitesRequest(varPostWebsitesRequest)
+	*o = UpdateMagicDashPositionsRequestPositionsInner(varUpdateMagicDashPositionsRequestPositionsInner)
 
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "website")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "position")
 		o.AdditionalProperties = additionalProperties
 	}
 
 	return err
 }
 
-type NullablePostWebsitesRequest struct {
-	value *PostWebsitesRequest
+type NullableUpdateMagicDashPositionsRequestPositionsInner struct {
+	value *UpdateMagicDashPositionsRequestPositionsInner
 	isSet bool
 }
 
-func (v NullablePostWebsitesRequest) Get() *PostWebsitesRequest {
+func (v NullableUpdateMagicDashPositionsRequestPositionsInner) Get() *UpdateMagicDashPositionsRequestPositionsInner {
 	return v.value
 }
 
-func (v *NullablePostWebsitesRequest) Set(val *PostWebsitesRequest) {
+func (v *NullableUpdateMagicDashPositionsRequestPositionsInner) Set(val *UpdateMagicDashPositionsRequestPositionsInner) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostWebsitesRequest) IsSet() bool {
+func (v NullableUpdateMagicDashPositionsRequestPositionsInner) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostWebsitesRequest) Unset() {
+func (v *NullableUpdateMagicDashPositionsRequestPositionsInner) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostWebsitesRequest(val *PostWebsitesRequest) *NullablePostWebsitesRequest {
-	return &NullablePostWebsitesRequest{value: val, isSet: true}
+func NewNullableUpdateMagicDashPositionsRequestPositionsInner(val *UpdateMagicDashPositionsRequestPositionsInner) *NullableUpdateMagicDashPositionsRequestPositionsInner {
+	return &NullableUpdateMagicDashPositionsRequestPositionsInner{value: val, isSet: true}
 }
 
-func (v NullablePostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (v NullableUpdateMagicDashPositionsRequestPositionsInner) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostWebsitesRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableUpdateMagicDashPositionsRequestPositionsInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

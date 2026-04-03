@@ -415,56 +415,13 @@ func (a *WebsitesAPIService) GetWebsitesIdExecute(r ApiGetWebsitesIdRequest) (*W
 }
 
 type ApiPostWebsitesRequest struct {
-	ctx          context.Context
-	ApiService   *WebsitesAPIService
-	companyId    *int32
-	name         *string
-	notes        *string
-	paused       *bool
-	disableDns   *bool
-	disableSsl   *bool
-	disableWhois *bool
+	ctx        context.Context
+	ApiService *WebsitesAPIService
+	body       *PostWebsitesRequest
 }
 
-// Used to associate website with company
-func (r ApiPostWebsitesRequest) CompanyId(companyId int32) ApiPostWebsitesRequest {
-	r.companyId = &companyId
-	return r
-}
-
-// The name or URL of the website
-func (r ApiPostWebsitesRequest) Name(name string) ApiPostWebsitesRequest {
-	r.name = &name
-	return r
-}
-
-// Add additional notes to a website
-func (r ApiPostWebsitesRequest) Notes(notes string) ApiPostWebsitesRequest {
-	r.notes = &notes
-	return r
-}
-
-// When true, website monitoring is paused
-func (r ApiPostWebsitesRequest) Paused(paused bool) ApiPostWebsitesRequest {
-	r.paused = &paused
-	return r
-}
-
-// When true, DNS monitoring is paused
-func (r ApiPostWebsitesRequest) DisableDns(disableDns bool) ApiPostWebsitesRequest {
-	r.disableDns = &disableDns
-	return r
-}
-
-// When true, SSL certificate monitoring is paused
-func (r ApiPostWebsitesRequest) DisableSsl(disableSsl bool) ApiPostWebsitesRequest {
-	r.disableSsl = &disableSsl
-	return r
-}
-
-// When true, WHOIS monitoring is paused
-func (r ApiPostWebsitesRequest) DisableWhois(disableWhois bool) ApiPostWebsitesRequest {
-	r.disableWhois = &disableWhois
+func (r ApiPostWebsitesRequest) Body(body PostWebsitesRequest) ApiPostWebsitesRequest {
+	r.body = &body
 	return r
 }
 
@@ -503,9 +460,12 @@ func (a *WebsitesAPIService) PostWebsitesExecute(r ApiPostWebsitesRequest) (*htt
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if r.body == nil {
+		return nil, reportError("body is required and must be specified")
+	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/x-www-form-urlencoded", "multipart/form-data"}
+	localVarHTTPContentTypes := []string{"application/json"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -521,27 +481,8 @@ func (a *WebsitesAPIService) PostWebsitesExecute(r ApiPostWebsitesRequest) (*htt
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	if r.companyId != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "company_id", r.companyId, "", "")
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
-	}
-	if r.notes != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "notes", r.notes, "", "")
-	}
-	if r.paused != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "paused", r.paused, "", "")
-	}
-	if r.disableDns != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "disable_dns", r.disableDns, "", "")
-	}
-	if r.disableSsl != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "disable_ssl", r.disableSsl, "", "")
-	}
-	if r.disableWhois != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "disable_whois", r.disableWhois, "", "")
-	}
+	// body params
+	localVarPostBody = r.body
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -588,11 +529,11 @@ type ApiPutWebsitesIdRequest struct {
 	ctx        context.Context
 	ApiService *WebsitesAPIService
 	id         int32
-	website    *PostWebsitesRequest
+	body       *PutWebsitesIdRequest
 }
 
-func (r ApiPutWebsitesIdRequest) Website(website PostWebsitesRequest) ApiPutWebsitesIdRequest {
-	r.website = &website
+func (r ApiPutWebsitesIdRequest) Body(body PutWebsitesIdRequest) ApiPutWebsitesIdRequest {
+	r.body = &body
 	return r
 }
 
@@ -637,8 +578,8 @@ func (a *WebsitesAPIService) PutWebsitesIdExecute(r ApiPutWebsitesIdRequest) (*W
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.website == nil {
-		return localVarReturnValue, nil, reportError("website is required and must be specified")
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -659,7 +600,7 @@ func (a *WebsitesAPIService) PutWebsitesIdExecute(r ApiPutWebsitesIdRequest) (*W
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.website
+	localVarPostBody = r.body
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

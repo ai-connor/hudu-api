@@ -37,8 +37,8 @@ type Expiration struct {
 	AssetLayoutFieldId *float32 `json:"asset_layout_field_id,omitempty"`
 	// The sync ID associated with the expiration (if any). Can be null
 	SyncId *float32 `json:"sync_id,omitempty"`
-	// The timestamp when the expiration was discarded (if any). Can be null.
-	DiscardedAt *time.Time `json:"discarded_at,omitempty"`
+	// The timestamp when the expiration was archived (if any). Can be null.
+	ArchivedAt *time.Time `json:"archived_at,omitempty"`
 	// The timestamp when the expiration was created
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The timestamp when the expiration was last updated
@@ -284,36 +284,36 @@ func (o *Expiration) SetSyncId(v float32) {
 	o.SyncId = &v
 }
 
-// GetDiscardedAt returns the DiscardedAt field value if set, zero value otherwise.
-func (o *Expiration) GetDiscardedAt() time.Time {
-	if o == nil || IsNil(o.DiscardedAt) {
+// GetArchivedAt returns the ArchivedAt field value if set, zero value otherwise.
+func (o *Expiration) GetArchivedAt() time.Time {
+	if o == nil || IsNil(o.ArchivedAt) {
 		var ret time.Time
 		return ret
 	}
-	return *o.DiscardedAt
+	return *o.ArchivedAt
 }
 
-// GetDiscardedAtOk returns a tuple with the DiscardedAt field value if set, nil otherwise
+// GetArchivedAtOk returns a tuple with the ArchivedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Expiration) GetDiscardedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.DiscardedAt) {
+func (o *Expiration) GetArchivedAtOk() (*time.Time, bool) {
+	if o == nil || IsNil(o.ArchivedAt) {
 		return nil, false
 	}
-	return o.DiscardedAt, true
+	return o.ArchivedAt, true
 }
 
-// HasDiscardedAt returns a boolean if a field has been set.
-func (o *Expiration) HasDiscardedAt() bool {
-	if o != nil && !IsNil(o.DiscardedAt) {
+// HasArchivedAt returns a boolean if a field has been set.
+func (o *Expiration) HasArchivedAt() bool {
+	if o != nil && !IsNil(o.ArchivedAt) {
 		return true
 	}
 
 	return false
 }
 
-// SetDiscardedAt gets a reference to the given time.Time and assigns it to the DiscardedAt field.
-func (o *Expiration) SetDiscardedAt(v time.Time) {
-	o.DiscardedAt = &v
+// SetArchivedAt gets a reference to the given time.Time and assigns it to the ArchivedAt field.
+func (o *Expiration) SetArchivedAt(v time.Time) {
+	o.ArchivedAt = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
@@ -458,8 +458,8 @@ func (o Expiration) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SyncId) {
 		toSerialize["sync_id"] = o.SyncId
 	}
-	if !IsNil(o.DiscardedAt) {
-		toSerialize["discarded_at"] = o.DiscardedAt
+	if !IsNil(o.ArchivedAt) {
+		toSerialize["archived_at"] = o.ArchivedAt
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
@@ -528,7 +528,7 @@ func (o *Expiration) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "company_id")
 		delete(additionalProperties, "asset_layout_field_id")
 		delete(additionalProperties, "sync_id")
-		delete(additionalProperties, "discarded_at")
+		delete(additionalProperties, "archived_at")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
 		delete(additionalProperties, "expiration_type")

@@ -12,63 +12,69 @@ package huduapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
-// checks if the PostWebsitesRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostWebsitesRequest{}
+// checks if the GetFlags200Response type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GetFlags200Response{}
 
-// PostWebsitesRequest struct for PostWebsitesRequest
-type PostWebsitesRequest struct {
-	Website              PostWebsitesRequestWebsite `json:"website"`
+// GetFlags200Response struct for GetFlags200Response
+type GetFlags200Response struct {
+	Flags                []Flag `json:"flags,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostWebsitesRequest PostWebsitesRequest
+type _GetFlags200Response GetFlags200Response
 
-// NewPostWebsitesRequest instantiates a new PostWebsitesRequest object
+// NewGetFlags200Response instantiates a new GetFlags200Response object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostWebsitesRequest(website PostWebsitesRequestWebsite) *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
-	this.Website = website
+func NewGetFlags200Response() *GetFlags200Response {
+	this := GetFlags200Response{}
 	return &this
 }
 
-// NewPostWebsitesRequestWithDefaults instantiates a new PostWebsitesRequest object
+// NewGetFlags200ResponseWithDefaults instantiates a new GetFlags200Response object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostWebsitesRequestWithDefaults() *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewGetFlags200ResponseWithDefaults() *GetFlags200Response {
+	this := GetFlags200Response{}
 	return &this
 }
 
-// GetWebsite returns the Website field value
-func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
-	if o == nil {
-		var ret PostWebsitesRequestWebsite
+// GetFlags returns the Flags field value if set, zero value otherwise.
+func (o *GetFlags200Response) GetFlags() []Flag {
+	if o == nil || IsNil(o.Flags) {
+		var ret []Flag
 		return ret
 	}
-
-	return o.Website
+	return o.Flags
 }
 
-// GetWebsiteOk returns a tuple with the Website field value
+// GetFlagsOk returns a tuple with the Flags field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool) {
-	if o == nil {
+func (o *GetFlags200Response) GetFlagsOk() ([]Flag, bool) {
+	if o == nil || IsNil(o.Flags) {
 		return nil, false
 	}
-	return &o.Website, true
+	return o.Flags, true
 }
 
-// SetWebsite sets field value
-func (o *PostWebsitesRequest) SetWebsite(v PostWebsitesRequestWebsite) {
-	o.Website = v
+// HasFlags returns a boolean if a field has been set.
+func (o *GetFlags200Response) HasFlags() bool {
+	if o != nil && !IsNil(o.Flags) {
+		return true
+	}
+
+	return false
 }
 
-func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
+// SetFlags gets a reference to the given []Flag and assigns it to the Flags field.
+func (o *GetFlags200Response) SetFlags(v []Flag) {
+	o.Flags = v
+}
+
+func (o GetFlags200Response) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,9 +82,11 @@ func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
+func (o GetFlags200Response) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["website"] = o.Website
+	if !IsNil(o.Flags) {
+		toSerialize["flags"] = o.Flags
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -87,80 +95,59 @@ func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"website",
-	}
+func (o *GetFlags200Response) UnmarshalJSON(data []byte) (err error) {
+	varGetFlags200Response := _GetFlags200Response{}
 
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
+	err = json.Unmarshal(data, &varGetFlags200Response)
 
 	if err != nil {
 		return err
 	}
 
-	for _, requiredProperty := range requiredProperties {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varPostWebsitesRequest := _PostWebsitesRequest{}
-
-	err = json.Unmarshal(data, &varPostWebsitesRequest)
-
-	if err != nil {
-		return err
-	}
-
-	*o = PostWebsitesRequest(varPostWebsitesRequest)
+	*o = GetFlags200Response(varGetFlags200Response)
 
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "website")
+		delete(additionalProperties, "flags")
 		o.AdditionalProperties = additionalProperties
 	}
 
 	return err
 }
 
-type NullablePostWebsitesRequest struct {
-	value *PostWebsitesRequest
+type NullableGetFlags200Response struct {
+	value *GetFlags200Response
 	isSet bool
 }
 
-func (v NullablePostWebsitesRequest) Get() *PostWebsitesRequest {
+func (v NullableGetFlags200Response) Get() *GetFlags200Response {
 	return v.value
 }
 
-func (v *NullablePostWebsitesRequest) Set(val *PostWebsitesRequest) {
+func (v *NullableGetFlags200Response) Set(val *GetFlags200Response) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostWebsitesRequest) IsSet() bool {
+func (v NullableGetFlags200Response) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostWebsitesRequest) Unset() {
+func (v *NullableGetFlags200Response) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostWebsitesRequest(val *PostWebsitesRequest) *NullablePostWebsitesRequest {
-	return &NullablePostWebsitesRequest{value: val, isSet: true}
+func NewNullableGetFlags200Response(val *GetFlags200Response) *NullableGetFlags200Response {
+	return &NullableGetFlags200Response{value: val, isSet: true}
 }
 
-func (v NullablePostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (v NullableGetFlags200Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostWebsitesRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableGetFlags200Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

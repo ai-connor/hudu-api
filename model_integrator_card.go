@@ -31,6 +31,16 @@ type IntegratorCard struct {
 	PrimaryField *string `json:"primary_field,omitempty"`
 	// A JSON object containing additional data about the integrated entity.
 	Data map[string]interface{} `json:"data,omitempty"`
+	// A list of Office 365 products assigned to the user or entity.
+	Office365AssignedProducts []string `json:"office_365_assigned_products,omitempty"`
+	// The date when the Exchange license was assigned, formatted as 'Mon DD, YYYY'.
+	ExchangeLicenseAssignDate *string `json:"exchange_license_assign_date,omitempty"`
+	// The date when the OneDrive license was assigned, formatted as 'Mon DD, YYYY'.
+	OnedriveLicenseAssignDate *string `json:"onedrive_license_assign_date,omitempty"`
+	// The date when the SharePoint license was assigned, formatted as 'Mon DD, YYYY'.
+	SharepointLicenseAssignDate *string `json:"sharepoint_license_assign_date,omitempty"`
+	// The date when the Skype for Business license was assigned, formatted as 'Mon DD, YYYY'.
+	SkypeForBusinessLicenseAssignDate *string `json:"skype_for_business_license_assign_date,omitempty"`
 	// The type of synchronization with the external system.
 	SyncType *string `json:"sync_type,omitempty"`
 	// The unique identifier of the synchronized entity in the external system.
@@ -251,6 +261,166 @@ func (o *IntegratorCard) SetData(v map[string]interface{}) {
 	o.Data = v
 }
 
+// GetOffice365AssignedProducts returns the Office365AssignedProducts field value if set, zero value otherwise.
+func (o *IntegratorCard) GetOffice365AssignedProducts() []string {
+	if o == nil || IsNil(o.Office365AssignedProducts) {
+		var ret []string
+		return ret
+	}
+	return o.Office365AssignedProducts
+}
+
+// GetOffice365AssignedProductsOk returns a tuple with the Office365AssignedProducts field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IntegratorCard) GetOffice365AssignedProductsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Office365AssignedProducts) {
+		return nil, false
+	}
+	return o.Office365AssignedProducts, true
+}
+
+// HasOffice365AssignedProducts returns a boolean if a field has been set.
+func (o *IntegratorCard) HasOffice365AssignedProducts() bool {
+	if o != nil && !IsNil(o.Office365AssignedProducts) {
+		return true
+	}
+
+	return false
+}
+
+// SetOffice365AssignedProducts gets a reference to the given []string and assigns it to the Office365AssignedProducts field.
+func (o *IntegratorCard) SetOffice365AssignedProducts(v []string) {
+	o.Office365AssignedProducts = v
+}
+
+// GetExchangeLicenseAssignDate returns the ExchangeLicenseAssignDate field value if set, zero value otherwise.
+func (o *IntegratorCard) GetExchangeLicenseAssignDate() string {
+	if o == nil || IsNil(o.ExchangeLicenseAssignDate) {
+		var ret string
+		return ret
+	}
+	return *o.ExchangeLicenseAssignDate
+}
+
+// GetExchangeLicenseAssignDateOk returns a tuple with the ExchangeLicenseAssignDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IntegratorCard) GetExchangeLicenseAssignDateOk() (*string, bool) {
+	if o == nil || IsNil(o.ExchangeLicenseAssignDate) {
+		return nil, false
+	}
+	return o.ExchangeLicenseAssignDate, true
+}
+
+// HasExchangeLicenseAssignDate returns a boolean if a field has been set.
+func (o *IntegratorCard) HasExchangeLicenseAssignDate() bool {
+	if o != nil && !IsNil(o.ExchangeLicenseAssignDate) {
+		return true
+	}
+
+	return false
+}
+
+// SetExchangeLicenseAssignDate gets a reference to the given string and assigns it to the ExchangeLicenseAssignDate field.
+func (o *IntegratorCard) SetExchangeLicenseAssignDate(v string) {
+	o.ExchangeLicenseAssignDate = &v
+}
+
+// GetOnedriveLicenseAssignDate returns the OnedriveLicenseAssignDate field value if set, zero value otherwise.
+func (o *IntegratorCard) GetOnedriveLicenseAssignDate() string {
+	if o == nil || IsNil(o.OnedriveLicenseAssignDate) {
+		var ret string
+		return ret
+	}
+	return *o.OnedriveLicenseAssignDate
+}
+
+// GetOnedriveLicenseAssignDateOk returns a tuple with the OnedriveLicenseAssignDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IntegratorCard) GetOnedriveLicenseAssignDateOk() (*string, bool) {
+	if o == nil || IsNil(o.OnedriveLicenseAssignDate) {
+		return nil, false
+	}
+	return o.OnedriveLicenseAssignDate, true
+}
+
+// HasOnedriveLicenseAssignDate returns a boolean if a field has been set.
+func (o *IntegratorCard) HasOnedriveLicenseAssignDate() bool {
+	if o != nil && !IsNil(o.OnedriveLicenseAssignDate) {
+		return true
+	}
+
+	return false
+}
+
+// SetOnedriveLicenseAssignDate gets a reference to the given string and assigns it to the OnedriveLicenseAssignDate field.
+func (o *IntegratorCard) SetOnedriveLicenseAssignDate(v string) {
+	o.OnedriveLicenseAssignDate = &v
+}
+
+// GetSharepointLicenseAssignDate returns the SharepointLicenseAssignDate field value if set, zero value otherwise.
+func (o *IntegratorCard) GetSharepointLicenseAssignDate() string {
+	if o == nil || IsNil(o.SharepointLicenseAssignDate) {
+		var ret string
+		return ret
+	}
+	return *o.SharepointLicenseAssignDate
+}
+
+// GetSharepointLicenseAssignDateOk returns a tuple with the SharepointLicenseAssignDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IntegratorCard) GetSharepointLicenseAssignDateOk() (*string, bool) {
+	if o == nil || IsNil(o.SharepointLicenseAssignDate) {
+		return nil, false
+	}
+	return o.SharepointLicenseAssignDate, true
+}
+
+// HasSharepointLicenseAssignDate returns a boolean if a field has been set.
+func (o *IntegratorCard) HasSharepointLicenseAssignDate() bool {
+	if o != nil && !IsNil(o.SharepointLicenseAssignDate) {
+		return true
+	}
+
+	return false
+}
+
+// SetSharepointLicenseAssignDate gets a reference to the given string and assigns it to the SharepointLicenseAssignDate field.
+func (o *IntegratorCard) SetSharepointLicenseAssignDate(v string) {
+	o.SharepointLicenseAssignDate = &v
+}
+
+// GetSkypeForBusinessLicenseAssignDate returns the SkypeForBusinessLicenseAssignDate field value if set, zero value otherwise.
+func (o *IntegratorCard) GetSkypeForBusinessLicenseAssignDate() string {
+	if o == nil || IsNil(o.SkypeForBusinessLicenseAssignDate) {
+		var ret string
+		return ret
+	}
+	return *o.SkypeForBusinessLicenseAssignDate
+}
+
+// GetSkypeForBusinessLicenseAssignDateOk returns a tuple with the SkypeForBusinessLicenseAssignDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IntegratorCard) GetSkypeForBusinessLicenseAssignDateOk() (*string, bool) {
+	if o == nil || IsNil(o.SkypeForBusinessLicenseAssignDate) {
+		return nil, false
+	}
+	return o.SkypeForBusinessLicenseAssignDate, true
+}
+
+// HasSkypeForBusinessLicenseAssignDate returns a boolean if a field has been set.
+func (o *IntegratorCard) HasSkypeForBusinessLicenseAssignDate() bool {
+	if o != nil && !IsNil(o.SkypeForBusinessLicenseAssignDate) {
+		return true
+	}
+
+	return false
+}
+
+// SetSkypeForBusinessLicenseAssignDate gets a reference to the given string and assigns it to the SkypeForBusinessLicenseAssignDate field.
+func (o *IntegratorCard) SetSkypeForBusinessLicenseAssignDate(v string) {
+	o.SkypeForBusinessLicenseAssignDate = &v
+}
+
 // GetSyncType returns the SyncType field value if set, zero value otherwise.
 func (o *IntegratorCard) GetSyncType() string {
 	if o == nil || IsNil(o.SyncType) {
@@ -375,6 +545,21 @@ func (o IntegratorCard) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Data) {
 		toSerialize["data"] = o.Data
 	}
+	if !IsNil(o.Office365AssignedProducts) {
+		toSerialize["office_365_assigned_products"] = o.Office365AssignedProducts
+	}
+	if !IsNil(o.ExchangeLicenseAssignDate) {
+		toSerialize["exchange_license_assign_date"] = o.ExchangeLicenseAssignDate
+	}
+	if !IsNil(o.OnedriveLicenseAssignDate) {
+		toSerialize["onedrive_license_assign_date"] = o.OnedriveLicenseAssignDate
+	}
+	if !IsNil(o.SharepointLicenseAssignDate) {
+		toSerialize["sharepoint_license_assign_date"] = o.SharepointLicenseAssignDate
+	}
+	if !IsNil(o.SkypeForBusinessLicenseAssignDate) {
+		toSerialize["skype_for_business_license_assign_date"] = o.SkypeForBusinessLicenseAssignDate
+	}
 	if !IsNil(o.SyncType) {
 		toSerialize["sync_type"] = o.SyncType
 	}
@@ -412,6 +597,11 @@ func (o *IntegratorCard) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "link")
 		delete(additionalProperties, "primary_field")
 		delete(additionalProperties, "data")
+		delete(additionalProperties, "office_365_assigned_products")
+		delete(additionalProperties, "exchange_license_assign_date")
+		delete(additionalProperties, "onedrive_license_assign_date")
+		delete(additionalProperties, "sharepoint_license_assign_date")
+		delete(additionalProperties, "skype_for_business_license_assign_date")
 		delete(additionalProperties, "sync_type")
 		delete(additionalProperties, "sync_id")
 		delete(additionalProperties, "sync_identifier")

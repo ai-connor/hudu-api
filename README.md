@@ -177,8 +177,22 @@ Class | Method | HTTP request | Description
 *CompaniesAPI* | [**PutCompaniesId**](docs/CompaniesAPI.md#putcompaniesid) | **Put** /companies/{id} | Update a specific company
 *CompaniesAPI* | [**PutCompaniesIdArchive**](docs/CompaniesAPI.md#putcompaniesidarchive) | **Put** /companies/{id}/archive | Archive a specific company
 *CompaniesAPI* | [**PutCompaniesIdUnarchive**](docs/CompaniesAPI.md#putcompaniesidunarchive) | **Put** /companies/{id}/unarchive | Unarchive a specific company
+*ExpirationsAPI* | [**DeleteExpiration**](docs/ExpirationsAPI.md#deleteexpiration) | **Delete** /expirations/{id} | Delete an expiration
 *ExpirationsAPI* | [**GetExpirations**](docs/ExpirationsAPI.md#getexpirations) | **Get** /expirations | Retrieve expirations for the account
+*ExpirationsAPI* | [**UpdateExpiration**](docs/ExpirationsAPI.md#updateexpiration) | **Put** /expirations/{id} | Update an expiration
+*ExportsAPI* | [**GetExport**](docs/ExportsAPI.md#getexport) | **Get** /exports/{id} | Get export details or download export file
+*ExportsAPI* | [**GetExports**](docs/ExportsAPI.md#getexports) | **Get** /exports | Get available exports for download
 *ExportsAPI* | [**PostExports**](docs/ExportsAPI.md#postexports) | **Post** /exports | Initiate an export of a company
+*FlagTypesAPI* | [**CreateFlagType**](docs/FlagTypesAPI.md#createflagtype) | **Post** /flag_types | Create a new Flag Type
+*FlagTypesAPI* | [**DeleteFlagType**](docs/FlagTypesAPI.md#deleteflagtype) | **Delete** /flag_types/{id} | Delete a Flag Type
+*FlagTypesAPI* | [**GetFlagType**](docs/FlagTypesAPI.md#getflagtype) | **Get** /flag_types/{id} | Get a specific Flag Type
+*FlagTypesAPI* | [**GetFlagTypes**](docs/FlagTypesAPI.md#getflagtypes) | **Get** /flag_types | Get a list of Flag Types
+*FlagTypesAPI* | [**UpdateFlagType**](docs/FlagTypesAPI.md#updateflagtype) | **Put** /flag_types/{id} | Update a Flag Type
+*FlagsAPI* | [**CreateFlag**](docs/FlagsAPI.md#createflag) | **Post** /flags | Create a new Flag
+*FlagsAPI* | [**DeleteFlag**](docs/FlagsAPI.md#deleteflag) | **Delete** /flags/{id} | Delete a Flag
+*FlagsAPI* | [**GetFlag**](docs/FlagsAPI.md#getflag) | **Get** /flags/{id} | Get a specific Flag
+*FlagsAPI* | [**GetFlags**](docs/FlagsAPI.md#getflags) | **Get** /flags | Get a list of Flags
+*FlagsAPI* | [**UpdateFlag**](docs/FlagsAPI.md#updateflag) | **Put** /flags/{id} | Update a Flag
 *FoldersAPI* | [**DeleteFoldersId**](docs/FoldersAPI.md#deletefoldersid) | **Delete** /folders/{id} | Delete a folder
 *FoldersAPI* | [**GetFolders**](docs/FoldersAPI.md#getfolders) | **Get** /folders | Retrieve a list of folders
 *FoldersAPI* | [**GetFoldersId**](docs/FoldersAPI.md#getfoldersid) | **Get** /folders/{id} | Retrieve a folder by ID
@@ -200,6 +214,7 @@ Class | Method | HTTP request | Description
 *MagicDashAPI* | [**DeleteMagicDashItemById**](docs/MagicDashAPI.md#deletemagicdashitembyid) | **Delete** /magic_dash/{id} | Delete a Magic Dash item with the specified ID
 *MagicDashAPI* | [**GetMagicDash**](docs/MagicDashAPI.md#getmagicdash) | **Get** /magic_dash | Retrieve a list of Magic Dash Items
 *MagicDashAPI* | [**PostMagicDash**](docs/MagicDashAPI.md#postmagicdash) | **Post** /magic_dash | Create or update a Magic Dash Item
+*MagicDashAPI* | [**UpdateMagicDashPositions**](docs/MagicDashAPI.md#updatemagicdashpositions) | **Put** /magic_dash/update_positions | Update positions of multiple Magic Dash Items
 *MatchersAPI* | [**DeleteMatcherById**](docs/MatchersAPI.md#deletematcherbyid) | **Delete** /matchers/{id} | Delete a Matcher
 *MatchersAPI* | [**GetMatchers**](docs/MatchersAPI.md#getmatchers) | **Get** /matchers | List matchers for an integration
 *MatchersAPI* | [**UpdateMatcherById**](docs/MatchersAPI.md#updatematcherbyid) | **Put** /matchers/{id} | Update a Matcher
@@ -276,6 +291,12 @@ Class | Method | HTTP request | Description
  - [AssetPassword](docs/AssetPassword.md)
  - [Company](docs/Company.md)
  - [CompanyIntegration](docs/CompanyIntegration.md)
+ - [CreateFlag201Response](docs/CreateFlag201Response.md)
+ - [CreateFlagRequest](docs/CreateFlagRequest.md)
+ - [CreateFlagRequestFlag](docs/CreateFlagRequestFlag.md)
+ - [CreateFlagType201Response](docs/CreateFlagType201Response.md)
+ - [CreateFlagTypeRequest](docs/CreateFlagTypeRequest.md)
+ - [CreateFlagTypeRequestFlagType](docs/CreateFlagTypeRequestFlagType.md)
  - [CreateListRequest](docs/CreateListRequest.md)
  - [CreateListRequestList](docs/CreateListRequestList.md)
  - [CreateListRequestListListItemsAttributesInner](docs/CreateListRequestListListItemsAttributesInner.md)
@@ -289,17 +310,21 @@ Class | Method | HTTP request | Description
  - [CreateVlanZoneRequest](docs/CreateVlanZoneRequest.md)
  - [DeleteProcedureTask200Response](docs/DeleteProcedureTask200Response.md)
  - [Expiration](docs/Expiration.md)
+ - [Flag](docs/Flag.md)
+ - [FlagType](docs/FlagType.md)
  - [Folder](docs/Folder.md)
  - [GetApiInfo200Response](docs/GetApiInfo200Response.md)
  - [GetArticles200Response](docs/GetArticles200Response.md)
  - [GetArticlesId200Response](docs/GetArticlesId200Response.md)
  - [GetAssetLayouts200Response](docs/GetAssetLayouts200Response.md)
  - [GetAssetPasswords200Response](docs/GetAssetPasswords200Response.md)
- - [GetAssetResponse](docs/GetAssetResponse.md)
  - [GetAssets200Response](docs/GetAssets200Response.md)
  - [GetCardsLookup200Response](docs/GetCardsLookup200Response.md)
  - [GetCompanies200Response](docs/GetCompanies200Response.md)
  - [GetCompaniesId200Response](docs/GetCompaniesId200Response.md)
+ - [GetExports200ResponseInner](docs/GetExports200ResponseInner.md)
+ - [GetFlagTypes200Response](docs/GetFlagTypes200Response.md)
+ - [GetFlags200Response](docs/GetFlags200Response.md)
  - [GetFolders200Response](docs/GetFolders200Response.md)
  - [GetMatchers200Response](docs/GetMatchers200Response.md)
  - [GetPasswordFolders200Response](docs/GetPasswordFolders200Response.md)
@@ -333,20 +358,37 @@ Class | Method | HTTP request | Description
  - [PostFoldersRequest](docs/PostFoldersRequest.md)
  - [PostFoldersRequestFolder](docs/PostFoldersRequestFolder.md)
  - [PostMagicDashRequest](docs/PostMagicDashRequest.md)
+ - [PostRackStorageItemsRequest](docs/PostRackStorageItemsRequest.md)
  - [PostRelations201Response](docs/PostRelations201Response.md)
  - [PostRelationsRequest](docs/PostRelationsRequest.md)
  - [PostWebsitesRequest](docs/PostWebsitesRequest.md)
+ - [PostWebsitesRequestWebsite](docs/PostWebsitesRequestWebsite.md)
  - [Procedure](docs/Procedure.md)
  - [ProcedureTask](docs/ProcedureTask.md)
  - [PublicPhoto](docs/PublicPhoto.md)
+ - [PutArticlesIdRequest](docs/PutArticlesIdRequest.md)
  - [PutAssetLayoutsIdRequest](docs/PutAssetLayoutsIdRequest.md)
+ - [PutAssetLayoutsIdRequestFieldsInner](docs/PutAssetLayoutsIdRequestFieldsInner.md)
  - [PutCompaniesCompanyIdAssetsIdMoveLayoutRequest](docs/PutCompaniesCompanyIdAssetsIdMoveLayoutRequest.md)
+ - [PutRackStorageItemsIdRequest](docs/PutRackStorageItemsIdRequest.md)
+ - [PutWebsitesIdRequest](docs/PutWebsitesIdRequest.md)
+ - [PutWebsitesIdRequestWebsite](docs/PutWebsitesIdRequestWebsite.md)
  - [RackStorage](docs/RackStorage.md)
  - [RackStorageItem](docs/RackStorageItem.md)
  - [Relation](docs/Relation.md)
+ - [UpdateExpirationRequest](docs/UpdateExpirationRequest.md)
+ - [UpdateExpirationRequestExpiration](docs/UpdateExpirationRequestExpiration.md)
+ - [UpdateFlagRequest](docs/UpdateFlagRequest.md)
+ - [UpdateFlagRequestFlag](docs/UpdateFlagRequestFlag.md)
+ - [UpdateFlagTypeRequest](docs/UpdateFlagTypeRequest.md)
+ - [UpdateFlagTypeRequestFlagType](docs/UpdateFlagTypeRequestFlagType.md)
  - [UpdateListRequest](docs/UpdateListRequest.md)
  - [UpdateListRequestList](docs/UpdateListRequestList.md)
  - [UpdateListRequestListListItemsAttributesInner](docs/UpdateListRequestListListItemsAttributesInner.md)
+ - [UpdateMagicDashPositions200Response](docs/UpdateMagicDashPositions200Response.md)
+ - [UpdateMagicDashPositions422Response](docs/UpdateMagicDashPositions422Response.md)
+ - [UpdateMagicDashPositionsRequest](docs/UpdateMagicDashPositionsRequest.md)
+ - [UpdateMagicDashPositionsRequestPositionsInner](docs/UpdateMagicDashPositionsRequestPositionsInner.md)
  - [UpdateMatcherByIdRequest](docs/UpdateMatcherByIdRequest.md)
  - [UpdatePasswordFolderRequest](docs/UpdatePasswordFolderRequest.md)
  - [UpdateProcedureRequest](docs/UpdateProcedureRequest.md)

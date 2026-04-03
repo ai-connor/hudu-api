@@ -375,7 +375,7 @@ func (r ApiPostUploadsRequest) UploadUploadableId(uploadUploadableId int32) ApiP
 	return r
 }
 
-// Type of record to be attached to. (Asset, Website, Procedure, AssetPassword, Company, Article)
+// Type of record to be attached to. (Asset, Website, AssetPassword, Article)
 func (r ApiPostUploadsRequest) UploadUploadableType(uploadUploadableType string) ApiPostUploadsRequest {
 	r.uploadUploadableType = &uploadUploadableType
 	return r

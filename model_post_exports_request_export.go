@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the PostExportsRequestExport type satisfies the MappedNullable interface at compile time
@@ -19,15 +20,25 @@ var _ MappedNullable = &PostExportsRequestExport{}
 
 // PostExportsRequestExport struct for PostExportsRequestExport
 type PostExportsRequestExport struct {
-	// True or False to indicate if websites should be included in the export
-	IncludeWebsites *bool `json:"include_websites,omitempty"`
-	// True or False to indicate if passwords should be included in the export
-	IncludePasswords *bool `json:"include_passwords,omitempty"`
-	// Specify the company to export
-	CompanyId *int64 `json:"company_id,omitempty"`
-	// Specify the export format: pdf, csv, or s3
-	Format *string `json:"format,omitempty"`
-	// Array of asset layout IDs to include in the export
+	// Required. The export format: 'pdf' for formatted PDF document or 'csv' for raw data export.
+	Format string `json:"format"`
+	// Required. The ID of the company to export.
+	CompanyId int64 `json:"company_id"`
+	// Required. Whether to include passwords in the export.
+	IncludePasswords bool `json:"include_passwords"`
+	// Required. Whether to include websites in the export.
+	IncludeWebsites bool `json:"include_websites"`
+	// PDF only. Whether to include knowledge base articles. Defaults to false if not provided.
+	IncludeArticles *bool `json:"include_articles,omitempty"`
+	// PDF only. Whether to include archived knowledge base articles. Defaults to false if not provided.
+	IncludeArchivedArticles *bool `json:"include_archived_articles,omitempty"`
+	// PDF only. Whether to include archived passwords. Defaults to false if not provided.
+	IncludeArchivedPasswords *bool `json:"include_archived_passwords,omitempty"`
+	// PDF only. Whether to include archived websites. Defaults to false if not provided.
+	IncludeArchivedWebsites *bool `json:"include_archived_websites,omitempty"`
+	// PDF only. Whether to include archived assets. Defaults to false if not provided.
+	IncludeArchivedAssets *bool `json:"include_archived_assets,omitempty"`
+	// PDF only. Array of asset layout IDs to filter which asset types to include. If empty or not provided, all asset layouts are included.
 	AssetLayoutIds       []int64 `json:"asset_layout_ids,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
@@ -38,8 +49,12 @@ type _PostExportsRequestExport PostExportsRequestExport
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostExportsRequestExport() *PostExportsRequestExport {
+func NewPostExportsRequestExport(format string, companyId int64, includePasswords bool, includeWebsites bool) *PostExportsRequestExport {
 	this := PostExportsRequestExport{}
+	this.Format = format
+	this.CompanyId = companyId
+	this.IncludePasswords = includePasswords
+	this.IncludeWebsites = includeWebsites
 	return &this
 }
 
@@ -51,132 +66,260 @@ func NewPostExportsRequestExportWithDefaults() *PostExportsRequestExport {
 	return &this
 }
 
-// GetIncludeWebsites returns the IncludeWebsites field value if set, zero value otherwise.
-func (o *PostExportsRequestExport) GetIncludeWebsites() bool {
-	if o == nil || IsNil(o.IncludeWebsites) {
-		var ret bool
-		return ret
-	}
-	return *o.IncludeWebsites
-}
-
-// GetIncludeWebsitesOk returns a tuple with the IncludeWebsites field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PostExportsRequestExport) GetIncludeWebsitesOk() (*bool, bool) {
-	if o == nil || IsNil(o.IncludeWebsites) {
-		return nil, false
-	}
-	return o.IncludeWebsites, true
-}
-
-// HasIncludeWebsites returns a boolean if a field has been set.
-func (o *PostExportsRequestExport) HasIncludeWebsites() bool {
-	if o != nil && !IsNil(o.IncludeWebsites) {
-		return true
-	}
-
-	return false
-}
-
-// SetIncludeWebsites gets a reference to the given bool and assigns it to the IncludeWebsites field.
-func (o *PostExportsRequestExport) SetIncludeWebsites(v bool) {
-	o.IncludeWebsites = &v
-}
-
-// GetIncludePasswords returns the IncludePasswords field value if set, zero value otherwise.
-func (o *PostExportsRequestExport) GetIncludePasswords() bool {
-	if o == nil || IsNil(o.IncludePasswords) {
-		var ret bool
-		return ret
-	}
-	return *o.IncludePasswords
-}
-
-// GetIncludePasswordsOk returns a tuple with the IncludePasswords field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PostExportsRequestExport) GetIncludePasswordsOk() (*bool, bool) {
-	if o == nil || IsNil(o.IncludePasswords) {
-		return nil, false
-	}
-	return o.IncludePasswords, true
-}
-
-// HasIncludePasswords returns a boolean if a field has been set.
-func (o *PostExportsRequestExport) HasIncludePasswords() bool {
-	if o != nil && !IsNil(o.IncludePasswords) {
-		return true
-	}
-
-	return false
-}
-
-// SetIncludePasswords gets a reference to the given bool and assigns it to the IncludePasswords field.
-func (o *PostExportsRequestExport) SetIncludePasswords(v bool) {
-	o.IncludePasswords = &v
-}
-
-// GetCompanyId returns the CompanyId field value if set, zero value otherwise.
-func (o *PostExportsRequestExport) GetCompanyId() int64 {
-	if o == nil || IsNil(o.CompanyId) {
-		var ret int64
-		return ret
-	}
-	return *o.CompanyId
-}
-
-// GetCompanyIdOk returns a tuple with the CompanyId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PostExportsRequestExport) GetCompanyIdOk() (*int64, bool) {
-	if o == nil || IsNil(o.CompanyId) {
-		return nil, false
-	}
-	return o.CompanyId, true
-}
-
-// HasCompanyId returns a boolean if a field has been set.
-func (o *PostExportsRequestExport) HasCompanyId() bool {
-	if o != nil && !IsNil(o.CompanyId) {
-		return true
-	}
-
-	return false
-}
-
-// SetCompanyId gets a reference to the given int64 and assigns it to the CompanyId field.
-func (o *PostExportsRequestExport) SetCompanyId(v int64) {
-	o.CompanyId = &v
-}
-
-// GetFormat returns the Format field value if set, zero value otherwise.
+// GetFormat returns the Format field value
 func (o *PostExportsRequestExport) GetFormat() string {
-	if o == nil || IsNil(o.Format) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Format
+
+	return o.Format
 }
 
-// GetFormatOk returns a tuple with the Format field value if set, nil otherwise
+// GetFormatOk returns a tuple with the Format field value
 // and a boolean to check if the value has been set.
 func (o *PostExportsRequestExport) GetFormatOk() (*string, bool) {
-	if o == nil || IsNil(o.Format) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Format, true
+	return &o.Format, true
 }
 
-// HasFormat returns a boolean if a field has been set.
-func (o *PostExportsRequestExport) HasFormat() bool {
-	if o != nil && !IsNil(o.Format) {
+// SetFormat sets field value
+func (o *PostExportsRequestExport) SetFormat(v string) {
+	o.Format = v
+}
+
+// GetCompanyId returns the CompanyId field value
+func (o *PostExportsRequestExport) GetCompanyId() int64 {
+	if o == nil {
+		var ret int64
+		return ret
+	}
+
+	return o.CompanyId
+}
+
+// GetCompanyIdOk returns a tuple with the CompanyId field value
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetCompanyIdOk() (*int64, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.CompanyId, true
+}
+
+// SetCompanyId sets field value
+func (o *PostExportsRequestExport) SetCompanyId(v int64) {
+	o.CompanyId = v
+}
+
+// GetIncludePasswords returns the IncludePasswords field value
+func (o *PostExportsRequestExport) GetIncludePasswords() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IncludePasswords
+}
+
+// GetIncludePasswordsOk returns a tuple with the IncludePasswords field value
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludePasswordsOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IncludePasswords, true
+}
+
+// SetIncludePasswords sets field value
+func (o *PostExportsRequestExport) SetIncludePasswords(v bool) {
+	o.IncludePasswords = v
+}
+
+// GetIncludeWebsites returns the IncludeWebsites field value
+func (o *PostExportsRequestExport) GetIncludeWebsites() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IncludeWebsites
+}
+
+// GetIncludeWebsitesOk returns a tuple with the IncludeWebsites field value
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludeWebsitesOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IncludeWebsites, true
+}
+
+// SetIncludeWebsites sets field value
+func (o *PostExportsRequestExport) SetIncludeWebsites(v bool) {
+	o.IncludeWebsites = v
+}
+
+// GetIncludeArticles returns the IncludeArticles field value if set, zero value otherwise.
+func (o *PostExportsRequestExport) GetIncludeArticles() bool {
+	if o == nil || IsNil(o.IncludeArticles) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeArticles
+}
+
+// GetIncludeArticlesOk returns a tuple with the IncludeArticles field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludeArticlesOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeArticles) {
+		return nil, false
+	}
+	return o.IncludeArticles, true
+}
+
+// HasIncludeArticles returns a boolean if a field has been set.
+func (o *PostExportsRequestExport) HasIncludeArticles() bool {
+	if o != nil && !IsNil(o.IncludeArticles) {
 		return true
 	}
 
 	return false
 }
 
-// SetFormat gets a reference to the given string and assigns it to the Format field.
-func (o *PostExportsRequestExport) SetFormat(v string) {
-	o.Format = &v
+// SetIncludeArticles gets a reference to the given bool and assigns it to the IncludeArticles field.
+func (o *PostExportsRequestExport) SetIncludeArticles(v bool) {
+	o.IncludeArticles = &v
+}
+
+// GetIncludeArchivedArticles returns the IncludeArchivedArticles field value if set, zero value otherwise.
+func (o *PostExportsRequestExport) GetIncludeArchivedArticles() bool {
+	if o == nil || IsNil(o.IncludeArchivedArticles) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeArchivedArticles
+}
+
+// GetIncludeArchivedArticlesOk returns a tuple with the IncludeArchivedArticles field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludeArchivedArticlesOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeArchivedArticles) {
+		return nil, false
+	}
+	return o.IncludeArchivedArticles, true
+}
+
+// HasIncludeArchivedArticles returns a boolean if a field has been set.
+func (o *PostExportsRequestExport) HasIncludeArchivedArticles() bool {
+	if o != nil && !IsNil(o.IncludeArchivedArticles) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeArchivedArticles gets a reference to the given bool and assigns it to the IncludeArchivedArticles field.
+func (o *PostExportsRequestExport) SetIncludeArchivedArticles(v bool) {
+	o.IncludeArchivedArticles = &v
+}
+
+// GetIncludeArchivedPasswords returns the IncludeArchivedPasswords field value if set, zero value otherwise.
+func (o *PostExportsRequestExport) GetIncludeArchivedPasswords() bool {
+	if o == nil || IsNil(o.IncludeArchivedPasswords) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeArchivedPasswords
+}
+
+// GetIncludeArchivedPasswordsOk returns a tuple with the IncludeArchivedPasswords field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludeArchivedPasswordsOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeArchivedPasswords) {
+		return nil, false
+	}
+	return o.IncludeArchivedPasswords, true
+}
+
+// HasIncludeArchivedPasswords returns a boolean if a field has been set.
+func (o *PostExportsRequestExport) HasIncludeArchivedPasswords() bool {
+	if o != nil && !IsNil(o.IncludeArchivedPasswords) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeArchivedPasswords gets a reference to the given bool and assigns it to the IncludeArchivedPasswords field.
+func (o *PostExportsRequestExport) SetIncludeArchivedPasswords(v bool) {
+	o.IncludeArchivedPasswords = &v
+}
+
+// GetIncludeArchivedWebsites returns the IncludeArchivedWebsites field value if set, zero value otherwise.
+func (o *PostExportsRequestExport) GetIncludeArchivedWebsites() bool {
+	if o == nil || IsNil(o.IncludeArchivedWebsites) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeArchivedWebsites
+}
+
+// GetIncludeArchivedWebsitesOk returns a tuple with the IncludeArchivedWebsites field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludeArchivedWebsitesOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeArchivedWebsites) {
+		return nil, false
+	}
+	return o.IncludeArchivedWebsites, true
+}
+
+// HasIncludeArchivedWebsites returns a boolean if a field has been set.
+func (o *PostExportsRequestExport) HasIncludeArchivedWebsites() bool {
+	if o != nil && !IsNil(o.IncludeArchivedWebsites) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeArchivedWebsites gets a reference to the given bool and assigns it to the IncludeArchivedWebsites field.
+func (o *PostExportsRequestExport) SetIncludeArchivedWebsites(v bool) {
+	o.IncludeArchivedWebsites = &v
+}
+
+// GetIncludeArchivedAssets returns the IncludeArchivedAssets field value if set, zero value otherwise.
+func (o *PostExportsRequestExport) GetIncludeArchivedAssets() bool {
+	if o == nil || IsNil(o.IncludeArchivedAssets) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeArchivedAssets
+}
+
+// GetIncludeArchivedAssetsOk returns a tuple with the IncludeArchivedAssets field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PostExportsRequestExport) GetIncludeArchivedAssetsOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeArchivedAssets) {
+		return nil, false
+	}
+	return o.IncludeArchivedAssets, true
+}
+
+// HasIncludeArchivedAssets returns a boolean if a field has been set.
+func (o *PostExportsRequestExport) HasIncludeArchivedAssets() bool {
+	if o != nil && !IsNil(o.IncludeArchivedAssets) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeArchivedAssets gets a reference to the given bool and assigns it to the IncludeArchivedAssets field.
+func (o *PostExportsRequestExport) SetIncludeArchivedAssets(v bool) {
+	o.IncludeArchivedAssets = &v
 }
 
 // GetAssetLayoutIds returns the AssetLayoutIds field value if set, zero value otherwise.
@@ -221,17 +364,24 @@ func (o PostExportsRequestExport) MarshalJSON() ([]byte, error) {
 
 func (o PostExportsRequestExport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.IncludeWebsites) {
-		toSerialize["include_websites"] = o.IncludeWebsites
+	toSerialize["format"] = o.Format
+	toSerialize["company_id"] = o.CompanyId
+	toSerialize["include_passwords"] = o.IncludePasswords
+	toSerialize["include_websites"] = o.IncludeWebsites
+	if !IsNil(o.IncludeArticles) {
+		toSerialize["include_articles"] = o.IncludeArticles
 	}
-	if !IsNil(o.IncludePasswords) {
-		toSerialize["include_passwords"] = o.IncludePasswords
+	if !IsNil(o.IncludeArchivedArticles) {
+		toSerialize["include_archived_articles"] = o.IncludeArchivedArticles
 	}
-	if !IsNil(o.CompanyId) {
-		toSerialize["company_id"] = o.CompanyId
+	if !IsNil(o.IncludeArchivedPasswords) {
+		toSerialize["include_archived_passwords"] = o.IncludeArchivedPasswords
 	}
-	if !IsNil(o.Format) {
-		toSerialize["format"] = o.Format
+	if !IsNil(o.IncludeArchivedWebsites) {
+		toSerialize["include_archived_websites"] = o.IncludeArchivedWebsites
+	}
+	if !IsNil(o.IncludeArchivedAssets) {
+		toSerialize["include_archived_assets"] = o.IncludeArchivedAssets
 	}
 	if !IsNil(o.AssetLayoutIds) {
 		toSerialize["asset_layout_ids"] = o.AssetLayoutIds
@@ -245,6 +395,30 @@ func (o PostExportsRequestExport) ToMap() (map[string]interface{}, error) {
 }
 
 func (o *PostExportsRequestExport) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"format",
+		"company_id",
+		"include_passwords",
+		"include_websites",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err
+	}
+
+	for _, requiredProperty := range requiredProperties {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
 	varPostExportsRequestExport := _PostExportsRequestExport{}
 
 	err = json.Unmarshal(data, &varPostExportsRequestExport)
@@ -258,10 +432,15 @@ func (o *PostExportsRequestExport) UnmarshalJSON(data []byte) (err error) {
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "include_websites")
-		delete(additionalProperties, "include_passwords")
-		delete(additionalProperties, "company_id")
 		delete(additionalProperties, "format")
+		delete(additionalProperties, "company_id")
+		delete(additionalProperties, "include_passwords")
+		delete(additionalProperties, "include_websites")
+		delete(additionalProperties, "include_articles")
+		delete(additionalProperties, "include_archived_articles")
+		delete(additionalProperties, "include_archived_passwords")
+		delete(additionalProperties, "include_archived_websites")
+		delete(additionalProperties, "include_archived_assets")
 		delete(additionalProperties, "asset_layout_ids")
 		o.AdditionalProperties = additionalProperties
 	}

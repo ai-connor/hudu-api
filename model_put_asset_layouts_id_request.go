@@ -19,18 +19,16 @@ var _ MappedNullable = &PutAssetLayoutsIdRequest{}
 
 // PutAssetLayoutsIdRequest struct for PutAssetLayoutsIdRequest
 type PutAssetLayoutsIdRequest struct {
-	// An array of field names for the Asset Layout
-	Fields []string `json:"fields,omitempty"`
-	// If true, the Asset Layout is active
-	Active *bool `json:"active,omitempty"`
-	// Hex code for the icon color
-	IconColor *string `json:"icon_color,omitempty"`
-	// Hex code for the background color
-	Color *string `json:"color,omitempty"`
-	// Icon class name
-	Icon *string `json:"icon,omitempty"`
 	// Name of the Asset Layout
 	Name *string `json:"name,omitempty"`
+	// Icon class name
+	Icon *string `json:"icon,omitempty"`
+	// Hex code for the background color
+	Color *string `json:"color,omitempty"`
+	// Hex code for the icon color
+	IconColor *string `json:"icon_color,omitempty"`
+	// If true, the Asset Layout is active
+	Active *bool `json:"active,omitempty"`
 	// If true, include passwords in the Asset Layout
 	IncludePasswords *bool `json:"include_passwords,omitempty"`
 	// If true, include photos in the Asset Layout
@@ -40,7 +38,9 @@ type PutAssetLayoutsIdRequest struct {
 	// If true, include files in the Asset Layout
 	IncludeFiles *bool `json:"include_files,omitempty"`
 	// List of password types, separated with new line characters
-	PasswordTypes        *string `json:"password_types,omitempty"`
+	PasswordTypes *string `json:"password_types,omitempty"`
+	// An array of fields for the Asset Layout. To update existing fields, include the field 'id'. For ListSelect fields, you can update the list_id to change the associated list (this will clear all existing values for that field across all assets).
+	Fields               []PutAssetLayoutsIdRequestFieldsInner `json:"fields,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -63,132 +63,36 @@ func NewPutAssetLayoutsIdRequestWithDefaults() *PutAssetLayoutsIdRequest {
 	return &this
 }
 
-// GetFields returns the Fields field value if set, zero value otherwise.
-func (o *PutAssetLayoutsIdRequest) GetFields() []string {
-	if o == nil || IsNil(o.Fields) {
-		var ret []string
-		return ret
-	}
-	return o.Fields
-}
-
-// GetFieldsOk returns a tuple with the Fields field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PutAssetLayoutsIdRequest) GetFieldsOk() ([]string, bool) {
-	if o == nil || IsNil(o.Fields) {
-		return nil, false
-	}
-	return o.Fields, true
-}
-
-// HasFields returns a boolean if a field has been set.
-func (o *PutAssetLayoutsIdRequest) HasFields() bool {
-	if o != nil && !IsNil(o.Fields) {
-		return true
-	}
-
-	return false
-}
-
-// SetFields gets a reference to the given []string and assigns it to the Fields field.
-func (o *PutAssetLayoutsIdRequest) SetFields(v []string) {
-	o.Fields = v
-}
-
-// GetActive returns the Active field value if set, zero value otherwise.
-func (o *PutAssetLayoutsIdRequest) GetActive() bool {
-	if o == nil || IsNil(o.Active) {
-		var ret bool
-		return ret
-	}
-	return *o.Active
-}
-
-// GetActiveOk returns a tuple with the Active field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PutAssetLayoutsIdRequest) GetActiveOk() (*bool, bool) {
-	if o == nil || IsNil(o.Active) {
-		return nil, false
-	}
-	return o.Active, true
-}
-
-// HasActive returns a boolean if a field has been set.
-func (o *PutAssetLayoutsIdRequest) HasActive() bool {
-	if o != nil && !IsNil(o.Active) {
-		return true
-	}
-
-	return false
-}
-
-// SetActive gets a reference to the given bool and assigns it to the Active field.
-func (o *PutAssetLayoutsIdRequest) SetActive(v bool) {
-	o.Active = &v
-}
-
-// GetIconColor returns the IconColor field value if set, zero value otherwise.
-func (o *PutAssetLayoutsIdRequest) GetIconColor() string {
-	if o == nil || IsNil(o.IconColor) {
+// GetName returns the Name field value if set, zero value otherwise.
+func (o *PutAssetLayoutsIdRequest) GetName() string {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
-	return *o.IconColor
+	return *o.Name
 }
 
-// GetIconColorOk returns a tuple with the IconColor field value if set, nil otherwise
+// GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PutAssetLayoutsIdRequest) GetIconColorOk() (*string, bool) {
-	if o == nil || IsNil(o.IconColor) {
+func (o *PutAssetLayoutsIdRequest) GetNameOk() (*string, bool) {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
-	return o.IconColor, true
+	return o.Name, true
 }
 
-// HasIconColor returns a boolean if a field has been set.
-func (o *PutAssetLayoutsIdRequest) HasIconColor() bool {
-	if o != nil && !IsNil(o.IconColor) {
+// HasName returns a boolean if a field has been set.
+func (o *PutAssetLayoutsIdRequest) HasName() bool {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
 	return false
 }
 
-// SetIconColor gets a reference to the given string and assigns it to the IconColor field.
-func (o *PutAssetLayoutsIdRequest) SetIconColor(v string) {
-	o.IconColor = &v
-}
-
-// GetColor returns the Color field value if set, zero value otherwise.
-func (o *PutAssetLayoutsIdRequest) GetColor() string {
-	if o == nil || IsNil(o.Color) {
-		var ret string
-		return ret
-	}
-	return *o.Color
-}
-
-// GetColorOk returns a tuple with the Color field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PutAssetLayoutsIdRequest) GetColorOk() (*string, bool) {
-	if o == nil || IsNil(o.Color) {
-		return nil, false
-	}
-	return o.Color, true
-}
-
-// HasColor returns a boolean if a field has been set.
-func (o *PutAssetLayoutsIdRequest) HasColor() bool {
-	if o != nil && !IsNil(o.Color) {
-		return true
-	}
-
-	return false
-}
-
-// SetColor gets a reference to the given string and assigns it to the Color field.
-func (o *PutAssetLayoutsIdRequest) SetColor(v string) {
-	o.Color = &v
+// SetName gets a reference to the given string and assigns it to the Name field.
+func (o *PutAssetLayoutsIdRequest) SetName(v string) {
+	o.Name = &v
 }
 
 // GetIcon returns the Icon field value if set, zero value otherwise.
@@ -223,36 +127,100 @@ func (o *PutAssetLayoutsIdRequest) SetIcon(v string) {
 	o.Icon = &v
 }
 
-// GetName returns the Name field value if set, zero value otherwise.
-func (o *PutAssetLayoutsIdRequest) GetName() string {
-	if o == nil || IsNil(o.Name) {
+// GetColor returns the Color field value if set, zero value otherwise.
+func (o *PutAssetLayoutsIdRequest) GetColor() string {
+	if o == nil || IsNil(o.Color) {
 		var ret string
 		return ret
 	}
-	return *o.Name
+	return *o.Color
 }
 
-// GetNameOk returns a tuple with the Name field value if set, nil otherwise
+// GetColorOk returns a tuple with the Color field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PutAssetLayoutsIdRequest) GetNameOk() (*string, bool) {
-	if o == nil || IsNil(o.Name) {
+func (o *PutAssetLayoutsIdRequest) GetColorOk() (*string, bool) {
+	if o == nil || IsNil(o.Color) {
 		return nil, false
 	}
-	return o.Name, true
+	return o.Color, true
 }
 
-// HasName returns a boolean if a field has been set.
-func (o *PutAssetLayoutsIdRequest) HasName() bool {
-	if o != nil && !IsNil(o.Name) {
+// HasColor returns a boolean if a field has been set.
+func (o *PutAssetLayoutsIdRequest) HasColor() bool {
+	if o != nil && !IsNil(o.Color) {
 		return true
 	}
 
 	return false
 }
 
-// SetName gets a reference to the given string and assigns it to the Name field.
-func (o *PutAssetLayoutsIdRequest) SetName(v string) {
-	o.Name = &v
+// SetColor gets a reference to the given string and assigns it to the Color field.
+func (o *PutAssetLayoutsIdRequest) SetColor(v string) {
+	o.Color = &v
+}
+
+// GetIconColor returns the IconColor field value if set, zero value otherwise.
+func (o *PutAssetLayoutsIdRequest) GetIconColor() string {
+	if o == nil || IsNil(o.IconColor) {
+		var ret string
+		return ret
+	}
+	return *o.IconColor
+}
+
+// GetIconColorOk returns a tuple with the IconColor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PutAssetLayoutsIdRequest) GetIconColorOk() (*string, bool) {
+	if o == nil || IsNil(o.IconColor) {
+		return nil, false
+	}
+	return o.IconColor, true
+}
+
+// HasIconColor returns a boolean if a field has been set.
+func (o *PutAssetLayoutsIdRequest) HasIconColor() bool {
+	if o != nil && !IsNil(o.IconColor) {
+		return true
+	}
+
+	return false
+}
+
+// SetIconColor gets a reference to the given string and assigns it to the IconColor field.
+func (o *PutAssetLayoutsIdRequest) SetIconColor(v string) {
+	o.IconColor = &v
+}
+
+// GetActive returns the Active field value if set, zero value otherwise.
+func (o *PutAssetLayoutsIdRequest) GetActive() bool {
+	if o == nil || IsNil(o.Active) {
+		var ret bool
+		return ret
+	}
+	return *o.Active
+}
+
+// GetActiveOk returns a tuple with the Active field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PutAssetLayoutsIdRequest) GetActiveOk() (*bool, bool) {
+	if o == nil || IsNil(o.Active) {
+		return nil, false
+	}
+	return o.Active, true
+}
+
+// HasActive returns a boolean if a field has been set.
+func (o *PutAssetLayoutsIdRequest) HasActive() bool {
+	if o != nil && !IsNil(o.Active) {
+		return true
+	}
+
+	return false
+}
+
+// SetActive gets a reference to the given bool and assigns it to the Active field.
+func (o *PutAssetLayoutsIdRequest) SetActive(v bool) {
+	o.Active = &v
 }
 
 // GetIncludePasswords returns the IncludePasswords field value if set, zero value otherwise.
@@ -415,6 +383,38 @@ func (o *PutAssetLayoutsIdRequest) SetPasswordTypes(v string) {
 	o.PasswordTypes = &v
 }
 
+// GetFields returns the Fields field value if set, zero value otherwise.
+func (o *PutAssetLayoutsIdRequest) GetFields() []PutAssetLayoutsIdRequestFieldsInner {
+	if o == nil || IsNil(o.Fields) {
+		var ret []PutAssetLayoutsIdRequestFieldsInner
+		return ret
+	}
+	return o.Fields
+}
+
+// GetFieldsOk returns a tuple with the Fields field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PutAssetLayoutsIdRequest) GetFieldsOk() ([]PutAssetLayoutsIdRequestFieldsInner, bool) {
+	if o == nil || IsNil(o.Fields) {
+		return nil, false
+	}
+	return o.Fields, true
+}
+
+// HasFields returns a boolean if a field has been set.
+func (o *PutAssetLayoutsIdRequest) HasFields() bool {
+	if o != nil && !IsNil(o.Fields) {
+		return true
+	}
+
+	return false
+}
+
+// SetFields gets a reference to the given []PutAssetLayoutsIdRequestFieldsInner and assigns it to the Fields field.
+func (o *PutAssetLayoutsIdRequest) SetFields(v []PutAssetLayoutsIdRequestFieldsInner) {
+	o.Fields = v
+}
+
 func (o PutAssetLayoutsIdRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -425,23 +425,20 @@ func (o PutAssetLayoutsIdRequest) MarshalJSON() ([]byte, error) {
 
 func (o PutAssetLayoutsIdRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Fields) {
-		toSerialize["fields"] = o.Fields
-	}
-	if !IsNil(o.Active) {
-		toSerialize["active"] = o.Active
-	}
-	if !IsNil(o.IconColor) {
-		toSerialize["icon_color"] = o.IconColor
-	}
-	if !IsNil(o.Color) {
-		toSerialize["color"] = o.Color
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
 	}
 	if !IsNil(o.Icon) {
 		toSerialize["icon"] = o.Icon
 	}
-	if !IsNil(o.Name) {
-		toSerialize["name"] = o.Name
+	if !IsNil(o.Color) {
+		toSerialize["color"] = o.Color
+	}
+	if !IsNil(o.IconColor) {
+		toSerialize["icon_color"] = o.IconColor
+	}
+	if !IsNil(o.Active) {
+		toSerialize["active"] = o.Active
 	}
 	if !IsNil(o.IncludePasswords) {
 		toSerialize["include_passwords"] = o.IncludePasswords
@@ -457,6 +454,9 @@ func (o PutAssetLayoutsIdRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.PasswordTypes) {
 		toSerialize["password_types"] = o.PasswordTypes
+	}
+	if !IsNil(o.Fields) {
+		toSerialize["fields"] = o.Fields
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -480,17 +480,17 @@ func (o *PutAssetLayoutsIdRequest) UnmarshalJSON(data []byte) (err error) {
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "fields")
-		delete(additionalProperties, "active")
-		delete(additionalProperties, "icon_color")
-		delete(additionalProperties, "color")
-		delete(additionalProperties, "icon")
 		delete(additionalProperties, "name")
+		delete(additionalProperties, "icon")
+		delete(additionalProperties, "color")
+		delete(additionalProperties, "icon_color")
+		delete(additionalProperties, "active")
 		delete(additionalProperties, "include_passwords")
 		delete(additionalProperties, "include_photos")
 		delete(additionalProperties, "include_comments")
 		delete(additionalProperties, "include_files")
 		delete(additionalProperties, "password_types")
+		delete(additionalProperties, "fields")
 		o.AdditionalProperties = additionalProperties
 	}
 

@@ -12,63 +12,69 @@ package huduapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
-// checks if the PostWebsitesRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostWebsitesRequest{}
+// checks if the CreateFlagRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreateFlagRequest{}
 
-// PostWebsitesRequest struct for PostWebsitesRequest
-type PostWebsitesRequest struct {
-	Website              PostWebsitesRequestWebsite `json:"website"`
+// CreateFlagRequest struct for CreateFlagRequest
+type CreateFlagRequest struct {
+	Flag                 *CreateFlagRequestFlag `json:"flag,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostWebsitesRequest PostWebsitesRequest
+type _CreateFlagRequest CreateFlagRequest
 
-// NewPostWebsitesRequest instantiates a new PostWebsitesRequest object
+// NewCreateFlagRequest instantiates a new CreateFlagRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostWebsitesRequest(website PostWebsitesRequestWebsite) *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
-	this.Website = website
+func NewCreateFlagRequest() *CreateFlagRequest {
+	this := CreateFlagRequest{}
 	return &this
 }
 
-// NewPostWebsitesRequestWithDefaults instantiates a new PostWebsitesRequest object
+// NewCreateFlagRequestWithDefaults instantiates a new CreateFlagRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostWebsitesRequestWithDefaults() *PostWebsitesRequest {
-	this := PostWebsitesRequest{}
+func NewCreateFlagRequestWithDefaults() *CreateFlagRequest {
+	this := CreateFlagRequest{}
 	return &this
 }
 
-// GetWebsite returns the Website field value
-func (o *PostWebsitesRequest) GetWebsite() PostWebsitesRequestWebsite {
-	if o == nil {
-		var ret PostWebsitesRequestWebsite
+// GetFlag returns the Flag field value if set, zero value otherwise.
+func (o *CreateFlagRequest) GetFlag() CreateFlagRequestFlag {
+	if o == nil || IsNil(o.Flag) {
+		var ret CreateFlagRequestFlag
 		return ret
 	}
-
-	return o.Website
+	return *o.Flag
 }
 
-// GetWebsiteOk returns a tuple with the Website field value
+// GetFlagOk returns a tuple with the Flag field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostWebsitesRequest) GetWebsiteOk() (*PostWebsitesRequestWebsite, bool) {
-	if o == nil {
+func (o *CreateFlagRequest) GetFlagOk() (*CreateFlagRequestFlag, bool) {
+	if o == nil || IsNil(o.Flag) {
 		return nil, false
 	}
-	return &o.Website, true
+	return o.Flag, true
 }
 
-// SetWebsite sets field value
-func (o *PostWebsitesRequest) SetWebsite(v PostWebsitesRequestWebsite) {
-	o.Website = v
+// HasFlag returns a boolean if a field has been set.
+func (o *CreateFlagRequest) HasFlag() bool {
+	if o != nil && !IsNil(o.Flag) {
+		return true
+	}
+
+	return false
 }
 
-func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
+// SetFlag gets a reference to the given CreateFlagRequestFlag and assigns it to the Flag field.
+func (o *CreateFlagRequest) SetFlag(v CreateFlagRequestFlag) {
+	o.Flag = &v
+}
+
+func (o CreateFlagRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,9 +82,11 @@ func (o PostWebsitesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
+func (o CreateFlagRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["website"] = o.Website
+	if !IsNil(o.Flag) {
+		toSerialize["flag"] = o.Flag
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -87,80 +95,59 @@ func (o PostWebsitesRequest) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostWebsitesRequest) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"website",
-	}
+func (o *CreateFlagRequest) UnmarshalJSON(data []byte) (err error) {
+	varCreateFlagRequest := _CreateFlagRequest{}
 
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
+	err = json.Unmarshal(data, &varCreateFlagRequest)
 
 	if err != nil {
 		return err
 	}
 
-	for _, requiredProperty := range requiredProperties {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varPostWebsitesRequest := _PostWebsitesRequest{}
-
-	err = json.Unmarshal(data, &varPostWebsitesRequest)
-
-	if err != nil {
-		return err
-	}
-
-	*o = PostWebsitesRequest(varPostWebsitesRequest)
+	*o = CreateFlagRequest(varCreateFlagRequest)
 
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "website")
+		delete(additionalProperties, "flag")
 		o.AdditionalProperties = additionalProperties
 	}
 
 	return err
 }
 
-type NullablePostWebsitesRequest struct {
-	value *PostWebsitesRequest
+type NullableCreateFlagRequest struct {
+	value *CreateFlagRequest
 	isSet bool
 }
 
-func (v NullablePostWebsitesRequest) Get() *PostWebsitesRequest {
+func (v NullableCreateFlagRequest) Get() *CreateFlagRequest {
 	return v.value
 }
 
-func (v *NullablePostWebsitesRequest) Set(val *PostWebsitesRequest) {
+func (v *NullableCreateFlagRequest) Set(val *CreateFlagRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostWebsitesRequest) IsSet() bool {
+func (v NullableCreateFlagRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostWebsitesRequest) Unset() {
+func (v *NullableCreateFlagRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostWebsitesRequest(val *PostWebsitesRequest) *NullablePostWebsitesRequest {
-	return &NullablePostWebsitesRequest{value: val, isSet: true}
+func NewNullableCreateFlagRequest(val *CreateFlagRequest) *NullableCreateFlagRequest {
+	return &NullableCreateFlagRequest{value: val, isSet: true}
 }
 
-func (v NullablePostWebsitesRequest) MarshalJSON() ([]byte, error) {
+func (v NullableCreateFlagRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostWebsitesRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableCreateFlagRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
