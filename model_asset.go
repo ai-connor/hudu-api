@@ -12,7 +12,6 @@ package huduapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the Asset type satisfies the MappedNullable interface at compile time
@@ -49,9 +48,9 @@ type Asset struct {
 	// The URL of the asset page
 	Url *string `json:"url,omitempty"`
 	// The date and time when the asset was created
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The date and time when the asset was last updated
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// A list of fields associated with the asset
 	Fields []AssetFieldsInner `json:"fields,omitempty"`
 	// A list of cards associated with the asset (if available)
@@ -527,9 +526,9 @@ func (o *Asset) SetUrl(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Asset) GetCreatedAt() time.Time {
+func (o *Asset) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -537,7 +536,7 @@ func (o *Asset) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Asset) GetCreatedAtOk() (*time.Time, bool) {
+func (o *Asset) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -553,15 +552,15 @@ func (o *Asset) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *Asset) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *Asset) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Asset) GetUpdatedAt() time.Time {
+func (o *Asset) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -569,7 +568,7 @@ func (o *Asset) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Asset) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *Asset) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -585,8 +584,8 @@ func (o *Asset) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *Asset) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *Asset) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

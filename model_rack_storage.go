@@ -12,7 +12,6 @@ package huduapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the RackStorage type satisfies the MappedNullable interface at compile time
@@ -37,11 +36,11 @@ type RackStorage struct {
 	// The width of the rack storage.
 	Width *int64 `json:"width,omitempty"`
 	// The date and time when the rack storage was created.
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The date and time when the rack storage was last updated.
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// The date and time when the rack storage was discarded. Can Be null.
-	DiscardedAt *time.Time `json:"discarded_at,omitempty"`
+	DiscardedAt *string `json:"discarded_at,omitempty"`
 	// The unique ID of the company.
 	CompanyId            *int64 `json:"company_id,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -323,9 +322,9 @@ func (o *RackStorage) SetWidth(v int64) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *RackStorage) GetCreatedAt() time.Time {
+func (o *RackStorage) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -333,7 +332,7 @@ func (o *RackStorage) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RackStorage) GetCreatedAtOk() (*time.Time, bool) {
+func (o *RackStorage) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -349,15 +348,15 @@ func (o *RackStorage) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *RackStorage) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *RackStorage) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *RackStorage) GetUpdatedAt() time.Time {
+func (o *RackStorage) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -365,7 +364,7 @@ func (o *RackStorage) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RackStorage) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *RackStorage) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -381,15 +380,15 @@ func (o *RackStorage) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *RackStorage) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *RackStorage) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 
 // GetDiscardedAt returns the DiscardedAt field value if set, zero value otherwise.
-func (o *RackStorage) GetDiscardedAt() time.Time {
+func (o *RackStorage) GetDiscardedAt() string {
 	if o == nil || IsNil(o.DiscardedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.DiscardedAt
@@ -397,7 +396,7 @@ func (o *RackStorage) GetDiscardedAt() time.Time {
 
 // GetDiscardedAtOk returns a tuple with the DiscardedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RackStorage) GetDiscardedAtOk() (*time.Time, bool) {
+func (o *RackStorage) GetDiscardedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.DiscardedAt) {
 		return nil, false
 	}
@@ -413,8 +412,8 @@ func (o *RackStorage) HasDiscardedAt() bool {
 	return false
 }
 
-// SetDiscardedAt gets a reference to the given time.Time and assigns it to the DiscardedAt field.
-func (o *RackStorage) SetDiscardedAt(v time.Time) {
+// SetDiscardedAt gets a reference to the given string and assigns it to the DiscardedAt field.
+func (o *RackStorage) SetDiscardedAt(v string) {
 	o.DiscardedAt = &v
 }
 

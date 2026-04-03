@@ -13,7 +13,6 @@ package huduapi
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 // checks if the Expiration type satisfies the MappedNullable interface at compile time
@@ -38,11 +37,11 @@ type Expiration struct {
 	// The sync ID associated with the expiration (if any). Can be null
 	SyncId *float32 `json:"sync_id,omitempty"`
 	// The timestamp when the expiration was archived (if any). Can be null.
-	ArchivedAt *time.Time `json:"archived_at,omitempty"`
+	ArchivedAt *string `json:"archived_at,omitempty"`
 	// The timestamp when the expiration was created
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The timestamp when the expiration was last updated
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// The type of expiration (e.g., domain)
 	ExpirationType string `json:"expiration_type"`
 	// The asset field ID associated with the expiration (if any). Can be null.
@@ -285,9 +284,9 @@ func (o *Expiration) SetSyncId(v float32) {
 }
 
 // GetArchivedAt returns the ArchivedAt field value if set, zero value otherwise.
-func (o *Expiration) GetArchivedAt() time.Time {
+func (o *Expiration) GetArchivedAt() string {
 	if o == nil || IsNil(o.ArchivedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.ArchivedAt
@@ -295,7 +294,7 @@ func (o *Expiration) GetArchivedAt() time.Time {
 
 // GetArchivedAtOk returns a tuple with the ArchivedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Expiration) GetArchivedAtOk() (*time.Time, bool) {
+func (o *Expiration) GetArchivedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.ArchivedAt) {
 		return nil, false
 	}
@@ -311,15 +310,15 @@ func (o *Expiration) HasArchivedAt() bool {
 	return false
 }
 
-// SetArchivedAt gets a reference to the given time.Time and assigns it to the ArchivedAt field.
-func (o *Expiration) SetArchivedAt(v time.Time) {
+// SetArchivedAt gets a reference to the given string and assigns it to the ArchivedAt field.
+func (o *Expiration) SetArchivedAt(v string) {
 	o.ArchivedAt = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Expiration) GetCreatedAt() time.Time {
+func (o *Expiration) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -327,7 +326,7 @@ func (o *Expiration) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Expiration) GetCreatedAtOk() (*time.Time, bool) {
+func (o *Expiration) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -343,15 +342,15 @@ func (o *Expiration) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *Expiration) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *Expiration) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Expiration) GetUpdatedAt() time.Time {
+func (o *Expiration) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -359,7 +358,7 @@ func (o *Expiration) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Expiration) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *Expiration) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -375,8 +374,8 @@ func (o *Expiration) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *Expiration) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *Expiration) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

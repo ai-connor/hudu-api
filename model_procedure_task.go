@@ -13,7 +13,6 @@ package huduapi
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 // checks if the ProcedureTask type satisfies the MappedNullable interface at compile time
@@ -30,15 +29,15 @@ type ProcedureTask struct {
 	// Indicates whether the task is completed.
 	Completed *bool `json:"completed,omitempty"`
 	// The date and time when the task was completed.
-	CompletedAt *time.Time `json:"completed_at,omitempty"`
+	CompletedAt *string `json:"completed_at,omitempty"`
 	// The ID of the user assigned to the task, if any.
 	UserId *int64 `json:"user_id,omitempty"`
 	// The ID of the procedure this task belongs to.
 	ProcedureId int64 `json:"procedure_id"`
 	// The date and time when the task was created.
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The date and time when the task was last updated.
-	UpdatedAt            *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt            *string `json:"updated_at,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -177,9 +176,9 @@ func (o *ProcedureTask) SetCompleted(v bool) {
 }
 
 // GetCompletedAt returns the CompletedAt field value if set, zero value otherwise.
-func (o *ProcedureTask) GetCompletedAt() time.Time {
+func (o *ProcedureTask) GetCompletedAt() string {
 	if o == nil || IsNil(o.CompletedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CompletedAt
@@ -187,7 +186,7 @@ func (o *ProcedureTask) GetCompletedAt() time.Time {
 
 // GetCompletedAtOk returns a tuple with the CompletedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProcedureTask) GetCompletedAtOk() (*time.Time, bool) {
+func (o *ProcedureTask) GetCompletedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CompletedAt) {
 		return nil, false
 	}
@@ -203,8 +202,8 @@ func (o *ProcedureTask) HasCompletedAt() bool {
 	return false
 }
 
-// SetCompletedAt gets a reference to the given time.Time and assigns it to the CompletedAt field.
-func (o *ProcedureTask) SetCompletedAt(v time.Time) {
+// SetCompletedAt gets a reference to the given string and assigns it to the CompletedAt field.
+func (o *ProcedureTask) SetCompletedAt(v string) {
 	o.CompletedAt = &v
 }
 
@@ -265,9 +264,9 @@ func (o *ProcedureTask) SetProcedureId(v int64) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *ProcedureTask) GetCreatedAt() time.Time {
+func (o *ProcedureTask) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -275,7 +274,7 @@ func (o *ProcedureTask) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProcedureTask) GetCreatedAtOk() (*time.Time, bool) {
+func (o *ProcedureTask) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -291,15 +290,15 @@ func (o *ProcedureTask) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *ProcedureTask) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *ProcedureTask) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *ProcedureTask) GetUpdatedAt() time.Time {
+func (o *ProcedureTask) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -307,7 +306,7 @@ func (o *ProcedureTask) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProcedureTask) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *ProcedureTask) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -323,8 +322,8 @@ func (o *ProcedureTask) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *ProcedureTask) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *ProcedureTask) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

@@ -12,7 +12,6 @@ package huduapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the GetExports200ResponseInner type satisfies the MappedNullable interface at compile time
@@ -29,9 +28,9 @@ type GetExports200ResponseInner struct {
 	// Whether this export is in PDF format
 	IsPdf *bool `json:"is_pdf,omitempty"`
 	// When the export was created
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// When the export was last updated
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// URL to download the export file
 	DownloadUrl *string `json:"download_url,omitempty"`
 	// Original filename of the export
@@ -189,9 +188,9 @@ func (o *GetExports200ResponseInner) SetIsPdf(v bool) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *GetExports200ResponseInner) GetCreatedAt() time.Time {
+func (o *GetExports200ResponseInner) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -199,7 +198,7 @@ func (o *GetExports200ResponseInner) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetExports200ResponseInner) GetCreatedAtOk() (*time.Time, bool) {
+func (o *GetExports200ResponseInner) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -215,15 +214,15 @@ func (o *GetExports200ResponseInner) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *GetExports200ResponseInner) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *GetExports200ResponseInner) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *GetExports200ResponseInner) GetUpdatedAt() time.Time {
+func (o *GetExports200ResponseInner) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -231,7 +230,7 @@ func (o *GetExports200ResponseInner) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetExports200ResponseInner) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *GetExports200ResponseInner) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -247,8 +246,8 @@ func (o *GetExports200ResponseInner) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *GetExports200ResponseInner) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *GetExports200ResponseInner) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

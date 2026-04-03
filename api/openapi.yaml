@@ -5203,10 +5203,10 @@ components:
         company_id: 1
         object_type: object_type
         enable_sharing: true
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         content: content
         url: url
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         share_url: share_url
         draft: true
         name: name
@@ -5255,11 +5255,9 @@ components:
           type: integer
         created_at:
           description: The date and time when the article was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the article was last updated.
-          format: date-time
           type: string
         public_photos:
           description: A list of public photos.
@@ -5305,12 +5303,12 @@ components:
         company_id: 6.027456183070403
         object_type: object_type
         primary_mail: primary_mail
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         primary_manufacturer: primary_manufacturer
         asset_layout_id: 1.4658129805029452
         url: url
         archived: true
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         company_name: company_name
         name: name
         asset_type: asset_type
@@ -5372,11 +5370,9 @@ components:
           type: string
         created_at:
           description: The date and time when the asset was created
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the asset was last updated
-          format: date-time
           type: string
         fields:
           description: A list of fields associated with the asset
@@ -5542,14 +5538,14 @@ components:
         password_folder_name: password_folder_name
         company_id: 1
         description: description
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         otp_secret: otp_secret
         url: url
         passwordable_type: passwordable_type
         password: password
         login_url: login_url
         password_type: password_type
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         name: name
         passwordable_id: 6
         id: 0
@@ -5600,11 +5596,9 @@ components:
           type: string
         created_at:
           description: Timestamp when the password was created
-          format: date-time
           type: string
         updated_at:
           description: Timestamp when the password was last updated
-          format: date-time
           type: string
         password_folder_id:
           description: "ID of the folder in which the password is stored, if any.\
@@ -5637,10 +5631,10 @@ components:
         notes: notes
         city: city
         knowledge_base_url: knowledge_base_url
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         archived: true
         passwords_url: passwords_url
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         nickname: nickname
         address_line_1: address_line_1
         country_name: country_name
@@ -5756,11 +5750,9 @@ components:
           type: string
         created_at:
           description: The date and time when the company was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the company was last updated.
-          format: date-time
           type: string
         integrations:
           description: A list of integrations associated with the company.
@@ -5818,12 +5810,12 @@ components:
       example:
         date: 2000-01-23
         company_id: 5.962133916683182
-        archived_at: 2000-01-23T04:56:07.000+00:00
-        created_at: 2000-01-23T04:56:07.000+00:00
+        archived_at: archived_at
+        created_at: created_at
         expirationable_type: expirationable_type
         expiration_type: expiration_type
         account_id: 1.4658129805029452
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         asset_field_id: 7.061401241503109
         expirationable_id: 6.027456183070403
         id: 0.8008281904610115
@@ -5860,15 +5852,12 @@ components:
         archived_at:
           description: The timestamp when the expiration was archived (if any). Can
             be null.
-          format: date-time
           type: string
         created_at:
           description: The timestamp when the expiration was created
-          format: date-time
           type: string
         updated_at:
           description: The timestamp when the expiration was last updated
-          format: date-time
           type: string
         expiration_type:
           description: "The type of expiration (e.g., domain)"
@@ -5889,9 +5878,9 @@ components:
     Flag:
       example:
         flagable_type: flagable_type
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         description: description
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         flag_type_id: 6
         flagable_id: 1
@@ -5918,19 +5907,17 @@ components:
           type: integer
         created_at:
           description: The date and time when the flag was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the flag was last updated.
-          format: date-time
           type: string
       type: object
     FlagType:
       example:
         color: Red
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         name: name
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         slug: slug
       properties:
@@ -5965,22 +5952,20 @@ components:
           type: string
         created_at:
           description: The date and time when the flag type was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the flag type was last updated.
-          format: date-time
           type: string
       type: object
     Folder:
       example:
         company_id: 6
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         parent_folder_id: 1
         icon: icon
         name: name
         description: description
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
       properties:
         id:
@@ -6006,11 +5991,9 @@ components:
           type: integer
         created_at:
           description: The timestamp of folder creation
-          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last folder update
-          format: date-time
           type: string
       required:
       - id
@@ -6019,7 +6002,7 @@ components:
     Group:
       example:
         default: true
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         members:
         - last_name: last_name
           id: 1
@@ -6034,7 +6017,7 @@ components:
           slug: slug
           security_level: security_level
         name: name
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         member_count: 6
         slug: slug
@@ -6058,11 +6041,9 @@ components:
           type: boolean
         created_at:
           description: The timestamp when the group was created.
-          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last group update.
-          format: date-time
           type: string
         member_count:
           description: The number of members in the group (excludes admins and super
@@ -6235,9 +6216,9 @@ components:
       type: object
     List:
       example:
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         name: name
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         list_items:
         - name: name
@@ -6254,11 +6235,9 @@ components:
           type: string
         created_at:
           description: The date and time when the list was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the list was last updated.
-          format: date-time
           type: string
         list_items:
           description: The items belonging to this list.
@@ -6393,16 +6372,16 @@ components:
         notes: notes
         ancestry: ancestry
         company_id: 1
-        archived_at: 2000-01-23T04:56:07.000+00:00
+        archived_at: archived_at
         sync_identifier: sync_identifier
         status_list_item_id: 5
         description: description
         is_radar: true
         role_list_item_id: 2
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         location_id: 5
         url: url
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         name: name
         id: 0
         network_type: 6
@@ -6465,11 +6444,9 @@ components:
           type: integer
         created_at:
           description: The date and time when the network was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the network was last updated.
-          format: date-time
           type: string
         url:
           description: The URL to access this network in the web interface.
@@ -6477,20 +6454,19 @@ components:
         archived_at:
           description: The date and time when the network was archived. Null if not
             archived.
-          format: date-time
           type: string
       type: object
     Password_Folder:
       example:
         security: all_users
         company_id: 6
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         name: name
         description: description
         allowed_groups:
         - 1
         - 1
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         slug: slug
       properties:
@@ -6525,11 +6501,9 @@ components:
           type: array
         created_at:
           description: The timestamp of password folder creation
-          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last password folder update
-          format: date-time
           type: string
       type: object
     Procedure:
@@ -6601,12 +6575,10 @@ components:
         created_at:
           description: The date and time when the procedure was created.
           example: 2022-12-09T22:23:29.894Z
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the procedure was last updated.
           example: 2022-12-09T22:23:29.894Z
-          format: date-time
           type: string
         parent_procedure:
           description: "The parent procedure, if any. Can Be null."
@@ -6627,12 +6599,12 @@ components:
       type: object
     ProcedureTask:
       example:
-        completed_at: 2000-01-23T04:56:07.000+00:00
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        completed_at: completed_at
+        updated_at: updated_at
         user_id: 6
         procedure_id: 1
         name: name
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         completed: true
         priority: unsure
@@ -6658,7 +6630,6 @@ components:
           type: boolean
         completed_at:
           description: The date and time when the task was completed.
-          format: date-time
           type: string
         user_id:
           description: "The ID of the user assigned to the task, if any."
@@ -6670,11 +6641,9 @@ components:
           type: integer
         created_at:
           description: The date and time when the task was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the task was last updated.
-          format: date-time
           type: string
       required:
       - id
@@ -6719,15 +6688,15 @@ components:
       type: object
     RackStorage:
       example:
-        updated_at: 2000-01-23T04:56:07.000+00:00
-        discarded_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
+        discarded_at: discarded_at
         company_id: 7
         starting_unit: 5
         max_wattage: 1
         name: name
         width: 2
         description: description
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         location_id: 6
         height: 5
@@ -6764,16 +6733,13 @@ components:
           type: integer
         created_at:
           description: The date and time when the rack storage was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the rack storage was last updated.
-          format: date-time
           type: string
         discarded_at:
           description: The date and time when the rack storage was discarded. Can
             Be null.
-          format: date-time
           type: string
         company_id:
           description: The unique ID of the company.
@@ -6910,12 +6876,12 @@ components:
       example:
         ext: ext
         size: size
-        archived_at: 2000-01-23T04:56:07.000+00:00
+        archived_at: archived_at
         uploadable_id: 6
         mime: mime
         name: name
         id: 0
-        created_date: 2000-01-23T04:56:07.000+00:00
+        created_date: created_date
         uploadable_type: uploadable_type
         url: url
       properties:
@@ -6939,11 +6905,9 @@ components:
           type: string
         created_date:
           description: Date when the file was uploaded
-          format: date-time
           type: string
         archived_at:
           description: Date when the file was archived. Null if the file is not archived.
-          format: date-time
           type: string
         uploadable_id:
           description: ID of the object the file is associated with
@@ -6968,14 +6932,14 @@ components:
         score_90_days: 2
         last_sign_in_ip: last_sign_in_ip
         last_name: last_name
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         sign_in_count: 6
         time_zone: time_zone
         security_level: security_level
         currently_signed_in: true
         archived: true
-        last_sign_in_at: 2000-01-23T04:56:07.000+00:00
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        last_sign_in_at: last_sign_in_at
+        updated_at: updated_at
         portal_member_company_id: 1
         accepted_invite: true
         phone_number: phone_number
@@ -7025,18 +6989,15 @@ components:
           type: boolean
         last_sign_in_at:
           description: Timestamp of the last sign-in.
-          format: date-time
           type: string
         last_sign_in_ip:
           description: IP address from the last sign-in.
           type: string
         created_at:
           description: The timestamp when the user was created.
-          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last user update.
-          format: date-time
           type: string
         archived:
           description: Indicates if the user is archived (discarded).
@@ -7065,13 +7026,13 @@ components:
         vlan_id: 6
         notes: notes
         company_id: 1
-        archived_at: 2000-01-23T04:56:07.000+00:00
+        archived_at: archived_at
         status_list_item_id: 5
         description: description
         role_list_item_id: 2
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         url: url
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         name: name
         vlan_zone_id: 5
         id: 0
@@ -7116,15 +7077,12 @@ components:
           type: integer
         archived_at:
           description: The date and time when the VLAN was archived. Null if not archived.
-          format: date-time
           type: string
         created_at:
           description: The date and time when the VLAN was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the VLAN was last updated.
-          format: date-time
           type: string
         networks_count:
           description: Number of networks currently assigned to this VLAN.
@@ -7139,12 +7097,12 @@ components:
         \ or rack range)."
       example:
         company_id: 6
-        updated_at: 2000-01-23T04:56:07.000+00:00
-        archived_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
+        archived_at: archived_at
         vlans_count: 1
         name: name
         description: description
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         slug: slug
         url: url
@@ -7174,15 +7132,12 @@ components:
         archived_at:
           description: The date and time when the VLAN Zone was archived. Null if
             not archived.
-          format: date-time
           type: string
         created_at:
           description: The date and time when the VLAN Zone was created.
-          format: date-time
           type: string
         updated_at:
           description: The date and time when the VLAN Zone was last updated.
-          format: date-time
           type: string
         vlans_count:
           description: Number of VLANs currently assigned to this zone
@@ -7201,8 +7156,8 @@ components:
         icon: icon
         sent_notifications: true
         enable_dmarc_tracking: true
-        refreshed_at: 2000-01-23T04:56:07.000+00:00
-        discarded_at: 2000-01-23T04:56:07.000+00:00
+        refreshed_at: refreshed_at
+        discarded_at: discarded_at
         asset_field_id: 5
         asset_type: asset_type
         disable_ssl: true
@@ -7218,7 +7173,7 @@ components:
         disable_whois: true
         url: url
         account_id: 5
-        monitored_at: 2000-01-23T04:56:07.000+00:00
+        monitored_at: monitored_at
         company_name: company_name
         name: name
         monitor_type: 1
@@ -7254,11 +7209,9 @@ components:
           type: string
         refreshed_at:
           description: The timestamp when the website was last refreshed
-          format: date-time
           type: string
         monitored_at:
           description: The timestamp when the website was last monitored
-          format: date-time
           type: string
         headers:
           description: HTTP headers associated with the website (optional)
@@ -7282,7 +7235,6 @@ components:
           type: integer
         discarded_at:
           description: The timestamp when the website was discarded (optional)
-          format: date-time
           type: string
         disable_ssl:
           description: Indicates whether SSL checks are disabled for the website
@@ -7339,10 +7291,10 @@ components:
         - company_id: 1
           object_type: object_type
           enable_sharing: true
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           content: content
           url: url
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           share_url: share_url
           draft: true
           name: name
@@ -7355,10 +7307,10 @@ components:
         - company_id: 1
           object_type: object_type
           enable_sharing: true
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           content: content
           url: url
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           share_url: share_url
           draft: true
           name: name
@@ -7406,10 +7358,10 @@ components:
           company_id: 1
           object_type: object_type
           enable_sharing: true
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           content: content
           url: url
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           share_url: share_url
           draft: true
           name: name
@@ -7785,14 +7737,14 @@ components:
         - password_folder_name: password_folder_name
           company_id: 1
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           otp_secret: otp_secret
           url: url
           passwordable_type: passwordable_type
           password: password
           login_url: login_url
           password_type: password_type
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
           passwordable_id: 6
           id: 0
@@ -7802,14 +7754,14 @@ components:
         - password_folder_name: password_folder_name
           company_id: 1
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           otp_secret: otp_secret
           url: url
           passwordable_type: passwordable_type
           password: password
           login_url: login_url
           password_type: password_type
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
           passwordable_id: 6
           id: 0
@@ -7863,14 +7815,14 @@ components:
           password_folder_name: password_folder_name
           company_id: 1
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           otp_secret: otp_secret
           url: url
           passwordable_type: passwordable_type
           password: password
           login_url: login_url
           password_type: password_type
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
           passwordable_id: 6
           id: 0
@@ -7920,12 +7872,12 @@ components:
           company_id: 6.027456183070403
           object_type: object_type
           primary_mail: primary_mail
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           primary_manufacturer: primary_manufacturer
           asset_layout_id: 1.4658129805029452
           url: url
           archived: true
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           company_name: company_name
           name: name
           asset_type: asset_type
@@ -7978,12 +7930,12 @@ components:
           company_id: 6.027456183070403
           object_type: object_type
           primary_mail: primary_mail
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           primary_manufacturer: primary_manufacturer
           asset_layout_id: 1.4658129805029452
           url: url
           archived: true
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           company_name: company_name
           name: name
           asset_type: asset_type
@@ -8116,10 +8068,10 @@ components:
           notes: notes
           city: city
           knowledge_base_url: knowledge_base_url
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           archived: true
           passwords_url: passwords_url
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           nickname: nickname
           address_line_1: address_line_1
           country_name: country_name
@@ -8161,10 +8113,10 @@ components:
           notes: notes
           city: city
           knowledge_base_url: knowledge_base_url
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           archived: true
           passwords_url: passwords_url
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           nickname: nickname
           address_line_1: address_line_1
           country_name: country_name
@@ -8263,10 +8215,10 @@ components:
           notes: notes
           city: city
           knowledge_base_url: knowledge_base_url
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           archived: true
           passwords_url: passwords_url
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           nickname: nickname
           address_line_1: address_line_1
           country_name: country_name
@@ -8323,10 +8275,10 @@ components:
       example:
         account_id: 6
         is_pdf: true
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: updated_at
         file_name: file_name
         download_url: download_url
-        created_at: 2000-01-23T04:56:07.000+00:00
+        created_at: created_at
         id: 0
         file_size: 1
         status: started
@@ -8350,11 +8302,9 @@ components:
           type: boolean
         created_at:
           description: When the export was created
-          format: date-time
           type: string
         updated_at:
           description: When the export was last updated
-          format: date-time
           type: string
         download_url:
           description: URL to download the export file
@@ -8427,15 +8377,15 @@ components:
       example:
         flag_types:
         - color: Red
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           slug: slug
         - color: Red
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           slug: slug
       properties:
@@ -8485,9 +8435,9 @@ components:
       example:
         flag_type:
           color: Red
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           slug: slug
       properties:
@@ -8532,16 +8482,16 @@ components:
       example:
         flags:
         - flagable_type: flagable_type
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           flag_type_id: 6
           flagable_id: 1
         - flagable_type: flagable_type
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           flag_type_id: 6
           flagable_id: 1
@@ -8597,9 +8547,9 @@ components:
       example:
         flag:
           flagable_type: flagable_type
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           flag_type_id: 6
           flagable_id: 1
@@ -8647,20 +8597,20 @@ components:
       example:
         folders:
         - company_id: 6
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           parent_folder_id: 1
           icon: icon
           name: name
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
         - company_id: 6
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           parent_folder_id: 1
           icon: icon
           name: name
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
       properties:
         folders:
@@ -8697,12 +8647,12 @@ components:
       example:
         folder:
           company_id: 6
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           parent_folder_id: 1
           icon: icon
           name: name
           description: description
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
       properties:
         folder:
@@ -9052,13 +9002,13 @@ components:
         password_folder:
           security: all_users
           company_id: 6
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: updated_at
           name: name
           description: description
           allowed_groups:
           - 1
           - 1
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           slug: slug
       properties:
@@ -9099,21 +9049,21 @@ components:
     getProcedureTasks_200_response:
       example:
         procedure_tasks:
-        - completed_at: 2000-01-23T04:56:07.000+00:00
-          updated_at: 2000-01-23T04:56:07.000+00:00
+        - completed_at: completed_at
+          updated_at: updated_at
           user_id: 6
           procedure_id: 1
           name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           completed: true
           priority: unsure
-        - completed_at: 2000-01-23T04:56:07.000+00:00
-          updated_at: 2000-01-23T04:56:07.000+00:00
+        - completed_at: completed_at
+          updated_at: updated_at
           user_id: 6
           procedure_id: 1
           name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           completed: true
           priority: unsure
@@ -9162,12 +9112,12 @@ components:
     createProcedureTask_201_response:
       example:
         procedure_task:
-          completed_at: 2000-01-23T04:56:07.000+00:00
-          updated_at: 2000-01-23T04:56:07.000+00:00
+          completed_at: completed_at
+          updated_at: updated_at
           user_id: 6
           procedure_id: 1
           name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
+          created_at: created_at
           id: 0
           completed: true
           priority: unsure
