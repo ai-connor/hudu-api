@@ -23,18 +23,14 @@ type CreateProcedureTaskRequest struct {
 	Name *string `json:"name,omitempty"`
 	// A detailed description of the task.
 	Description *string `json:"description,omitempty"`
-	// The ID of the procedure this task belongs to.
+	// The ID of the **process** (template) to add this task to. **Must be a process** - cannot be a run.
 	ProcedureId *int32 `json:"procedure_id,omitempty"`
-	// The position of the task in the procedure.
+	// The position of the task in the process.
 	Position *int32 `json:"position,omitempty"`
-	// The ID of the user assigned to the task.
-	UserId *int32 `json:"user_id,omitempty"`
-	// The due date for the task.
-	DueDate *string `json:"due_date,omitempty"`
-	// The priority level of the task.
-	Priority *string `json:"priority,omitempty"`
-	// An array of user IDs assigned to the task.
-	AssignedUsers        []int32 `json:"assigned_users,omitempty"`
+	// Whether the task is optional. Optional tasks don't need to be completed for the process/run to be considered complete.
+	Optional *bool `json:"optional,omitempty"`
+	// The ID of the parent task if this is a subtask. Leave null for top-level tasks. Subtasks cannot have their own subtasks (no nested subtasks).
+	ParentTaskId         *int32 `json:"parent_task_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -185,132 +181,68 @@ func (o *CreateProcedureTaskRequest) SetPosition(v int32) {
 	o.Position = &v
 }
 
-// GetUserId returns the UserId field value if set, zero value otherwise.
-func (o *CreateProcedureTaskRequest) GetUserId() int32 {
-	if o == nil || IsNil(o.UserId) {
+// GetOptional returns the Optional field value if set, zero value otherwise.
+func (o *CreateProcedureTaskRequest) GetOptional() bool {
+	if o == nil || IsNil(o.Optional) {
+		var ret bool
+		return ret
+	}
+	return *o.Optional
+}
+
+// GetOptionalOk returns a tuple with the Optional field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateProcedureTaskRequest) GetOptionalOk() (*bool, bool) {
+	if o == nil || IsNil(o.Optional) {
+		return nil, false
+	}
+	return o.Optional, true
+}
+
+// HasOptional returns a boolean if a field has been set.
+func (o *CreateProcedureTaskRequest) HasOptional() bool {
+	if o != nil && !IsNil(o.Optional) {
+		return true
+	}
+
+	return false
+}
+
+// SetOptional gets a reference to the given bool and assigns it to the Optional field.
+func (o *CreateProcedureTaskRequest) SetOptional(v bool) {
+	o.Optional = &v
+}
+
+// GetParentTaskId returns the ParentTaskId field value if set, zero value otherwise.
+func (o *CreateProcedureTaskRequest) GetParentTaskId() int32 {
+	if o == nil || IsNil(o.ParentTaskId) {
 		var ret int32
 		return ret
 	}
-	return *o.UserId
+	return *o.ParentTaskId
 }
 
-// GetUserIdOk returns a tuple with the UserId field value if set, nil otherwise
+// GetParentTaskIdOk returns a tuple with the ParentTaskId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateProcedureTaskRequest) GetUserIdOk() (*int32, bool) {
-	if o == nil || IsNil(o.UserId) {
+func (o *CreateProcedureTaskRequest) GetParentTaskIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.ParentTaskId) {
 		return nil, false
 	}
-	return o.UserId, true
+	return o.ParentTaskId, true
 }
 
-// HasUserId returns a boolean if a field has been set.
-func (o *CreateProcedureTaskRequest) HasUserId() bool {
-	if o != nil && !IsNil(o.UserId) {
+// HasParentTaskId returns a boolean if a field has been set.
+func (o *CreateProcedureTaskRequest) HasParentTaskId() bool {
+	if o != nil && !IsNil(o.ParentTaskId) {
 		return true
 	}
 
 	return false
 }
 
-// SetUserId gets a reference to the given int32 and assigns it to the UserId field.
-func (o *CreateProcedureTaskRequest) SetUserId(v int32) {
-	o.UserId = &v
-}
-
-// GetDueDate returns the DueDate field value if set, zero value otherwise.
-func (o *CreateProcedureTaskRequest) GetDueDate() string {
-	if o == nil || IsNil(o.DueDate) {
-		var ret string
-		return ret
-	}
-	return *o.DueDate
-}
-
-// GetDueDateOk returns a tuple with the DueDate field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateProcedureTaskRequest) GetDueDateOk() (*string, bool) {
-	if o == nil || IsNil(o.DueDate) {
-		return nil, false
-	}
-	return o.DueDate, true
-}
-
-// HasDueDate returns a boolean if a field has been set.
-func (o *CreateProcedureTaskRequest) HasDueDate() bool {
-	if o != nil && !IsNil(o.DueDate) {
-		return true
-	}
-
-	return false
-}
-
-// SetDueDate gets a reference to the given string and assigns it to the DueDate field.
-func (o *CreateProcedureTaskRequest) SetDueDate(v string) {
-	o.DueDate = &v
-}
-
-// GetPriority returns the Priority field value if set, zero value otherwise.
-func (o *CreateProcedureTaskRequest) GetPriority() string {
-	if o == nil || IsNil(o.Priority) {
-		var ret string
-		return ret
-	}
-	return *o.Priority
-}
-
-// GetPriorityOk returns a tuple with the Priority field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateProcedureTaskRequest) GetPriorityOk() (*string, bool) {
-	if o == nil || IsNil(o.Priority) {
-		return nil, false
-	}
-	return o.Priority, true
-}
-
-// HasPriority returns a boolean if a field has been set.
-func (o *CreateProcedureTaskRequest) HasPriority() bool {
-	if o != nil && !IsNil(o.Priority) {
-		return true
-	}
-
-	return false
-}
-
-// SetPriority gets a reference to the given string and assigns it to the Priority field.
-func (o *CreateProcedureTaskRequest) SetPriority(v string) {
-	o.Priority = &v
-}
-
-// GetAssignedUsers returns the AssignedUsers field value if set, zero value otherwise.
-func (o *CreateProcedureTaskRequest) GetAssignedUsers() []int32 {
-	if o == nil || IsNil(o.AssignedUsers) {
-		var ret []int32
-		return ret
-	}
-	return o.AssignedUsers
-}
-
-// GetAssignedUsersOk returns a tuple with the AssignedUsers field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateProcedureTaskRequest) GetAssignedUsersOk() ([]int32, bool) {
-	if o == nil || IsNil(o.AssignedUsers) {
-		return nil, false
-	}
-	return o.AssignedUsers, true
-}
-
-// HasAssignedUsers returns a boolean if a field has been set.
-func (o *CreateProcedureTaskRequest) HasAssignedUsers() bool {
-	if o != nil && !IsNil(o.AssignedUsers) {
-		return true
-	}
-
-	return false
-}
-
-// SetAssignedUsers gets a reference to the given []int32 and assigns it to the AssignedUsers field.
-func (o *CreateProcedureTaskRequest) SetAssignedUsers(v []int32) {
-	o.AssignedUsers = v
+// SetParentTaskId gets a reference to the given int32 and assigns it to the ParentTaskId field.
+func (o *CreateProcedureTaskRequest) SetParentTaskId(v int32) {
+	o.ParentTaskId = &v
 }
 
 func (o CreateProcedureTaskRequest) MarshalJSON() ([]byte, error) {
@@ -335,17 +267,11 @@ func (o CreateProcedureTaskRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Position) {
 		toSerialize["position"] = o.Position
 	}
-	if !IsNil(o.UserId) {
-		toSerialize["user_id"] = o.UserId
+	if !IsNil(o.Optional) {
+		toSerialize["optional"] = o.Optional
 	}
-	if !IsNil(o.DueDate) {
-		toSerialize["due_date"] = o.DueDate
-	}
-	if !IsNil(o.Priority) {
-		toSerialize["priority"] = o.Priority
-	}
-	if !IsNil(o.AssignedUsers) {
-		toSerialize["assigned_users"] = o.AssignedUsers
+	if !IsNil(o.ParentTaskId) {
+		toSerialize["parent_task_id"] = o.ParentTaskId
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -373,10 +299,8 @@ func (o *CreateProcedureTaskRequest) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "description")
 		delete(additionalProperties, "procedure_id")
 		delete(additionalProperties, "position")
-		delete(additionalProperties, "user_id")
-		delete(additionalProperties, "due_date")
-		delete(additionalProperties, "priority")
-		delete(additionalProperties, "assigned_users")
+		delete(additionalProperties, "optional")
+		delete(additionalProperties, "parent_task_id")
 		o.AdditionalProperties = additionalProperties
 	}
 

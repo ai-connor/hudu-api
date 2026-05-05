@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the Group type satisfies the MappedNullable interface at compile time
@@ -30,9 +31,9 @@ type Group struct {
 	// Indicates if this is the default group for new users.
 	Default *bool `json:"default,omitempty"`
 	// The timestamp when the group was created.
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The timestamp of the last group update.
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	// The number of members in the group (excludes admins and super admins).
 	MemberCount *int32 `json:"member_count,omitempty"`
 	// List of group members (excludes admins and super admins).
@@ -220,9 +221,9 @@ func (o *Group) SetDefault(v bool) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Group) GetCreatedAt() string {
+func (o *Group) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -230,7 +231,7 @@ func (o *Group) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Group) GetCreatedAtOk() (*string, bool) {
+func (o *Group) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -246,15 +247,15 @@ func (o *Group) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *Group) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *Group) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Group) GetUpdatedAt() string {
+func (o *Group) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -262,7 +263,7 @@ func (o *Group) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Group) GetUpdatedAtOk() (*string, bool) {
+func (o *Group) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -278,8 +279,8 @@ func (o *Group) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *Group) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *Group) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 

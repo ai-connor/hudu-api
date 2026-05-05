@@ -13,6 +13,7 @@ package huduapi
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // checks if the ProcedureTask type satisfies the MappedNullable interface at compile time
@@ -24,20 +25,52 @@ type ProcedureTask struct {
 	Id int64 `json:"id"`
 	// The name of the procedure task.
 	Name string `json:"name"`
+	// The description of the task (base64 encoded).
+	Description *string `json:"description,omitempty"`
+	// The position of the task in the procedure.
+	Position *int32 `json:"position,omitempty"`
 	// The priority level of the task.
 	Priority *string `json:"priority,omitempty"`
 	// Indicates whether the task is completed.
 	Completed *bool `json:"completed,omitempty"`
-	// The date and time when the task was completed.
-	CompletedAt *string `json:"completed_at,omitempty"`
-	// The ID of the user assigned to the task, if any.
+	// Formatted date and time when the task was completed.
+	CompletedDate *string `json:"completed_date,omitempty"`
+	// Notes about the completion of the task.
+	CompletionNotes *string `json:"completion_notes,omitempty"`
+	// The due date for the task.
+	DueDate *string `json:"due_date,omitempty"`
+	// Formatted due date string.
+	FormattedDueDate *string `json:"formatted_due_date,omitempty"`
+	// The ID of the user who completed the task, if any.
 	UserId *int64 `json:"user_id,omitempty"`
-	// The ID of the procedure this task belongs to.
+	// The name of the user who completed the task.
+	UserName *string `json:"user_name,omitempty"`
+	// Array of user IDs assigned to this task.
+	AssignedUsers []int32 `json:"assigned_users,omitempty"`
+	// The ID of the first assigned user.
+	FirstAssignedUserId *int32 `json:"first_assigned_user_id,omitempty"`
+	// The name of the first assigned user.
+	FirstAssignedUserName *string `json:"first_assigned_user_name,omitempty"`
+	// The initials of the first assigned user.
+	FirstAssignedUserInitials *string `json:"first_assigned_user_initials,omitempty"`
+	// The ID of the procedure (process or run) this task belongs to.
 	ProcedureId int64 `json:"procedure_id"`
+	// Whether the task is optional. Optional tasks don't need to be completed for the procedure to be considered complete.
+	Optional *bool `json:"optional,omitempty"`
+	// The ID of the parent task if this is a subtask, null otherwise.
+	ParentTaskId *int32 `json:"parent_task_id,omitempty"`
+	// Array of IDs of subtasks belonging to this task.
+	SubtaskIds []int32 `json:"subtask_ids,omitempty"`
+	// The number of subtasks this task has.
+	SubtaskCount *int32 `json:"subtask_count,omitempty"`
+	// Whether this task has any subtasks.
+	HasSubtasks *bool `json:"has_subtasks,omitempty"`
+	// The URL to view this task in the application.
+	Url *string `json:"url,omitempty"`
 	// The date and time when the task was created.
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The date and time when the task was last updated.
-	UpdatedAt            *string `json:"updated_at,omitempty"`
+	UpdatedAt            *time.Time `json:"updated_at,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -111,6 +144,70 @@ func (o *ProcedureTask) SetName(v string) {
 	o.Name = v
 }
 
+// GetDescription returns the Description field value if set, zero value otherwise.
+func (o *ProcedureTask) GetDescription() string {
+	if o == nil || IsNil(o.Description) {
+		var ret string
+		return ret
+	}
+	return *o.Description
+}
+
+// GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetDescriptionOk() (*string, bool) {
+	if o == nil || IsNil(o.Description) {
+		return nil, false
+	}
+	return o.Description, true
+}
+
+// HasDescription returns a boolean if a field has been set.
+func (o *ProcedureTask) HasDescription() bool {
+	if o != nil && !IsNil(o.Description) {
+		return true
+	}
+
+	return false
+}
+
+// SetDescription gets a reference to the given string and assigns it to the Description field.
+func (o *ProcedureTask) SetDescription(v string) {
+	o.Description = &v
+}
+
+// GetPosition returns the Position field value if set, zero value otherwise.
+func (o *ProcedureTask) GetPosition() int32 {
+	if o == nil || IsNil(o.Position) {
+		var ret int32
+		return ret
+	}
+	return *o.Position
+}
+
+// GetPositionOk returns a tuple with the Position field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetPositionOk() (*int32, bool) {
+	if o == nil || IsNil(o.Position) {
+		return nil, false
+	}
+	return o.Position, true
+}
+
+// HasPosition returns a boolean if a field has been set.
+func (o *ProcedureTask) HasPosition() bool {
+	if o != nil && !IsNil(o.Position) {
+		return true
+	}
+
+	return false
+}
+
+// SetPosition gets a reference to the given int32 and assigns it to the Position field.
+func (o *ProcedureTask) SetPosition(v int32) {
+	o.Position = &v
+}
+
 // GetPriority returns the Priority field value if set, zero value otherwise.
 func (o *ProcedureTask) GetPriority() string {
 	if o == nil || IsNil(o.Priority) {
@@ -175,36 +272,132 @@ func (o *ProcedureTask) SetCompleted(v bool) {
 	o.Completed = &v
 }
 
-// GetCompletedAt returns the CompletedAt field value if set, zero value otherwise.
-func (o *ProcedureTask) GetCompletedAt() string {
-	if o == nil || IsNil(o.CompletedAt) {
+// GetCompletedDate returns the CompletedDate field value if set, zero value otherwise.
+func (o *ProcedureTask) GetCompletedDate() string {
+	if o == nil || IsNil(o.CompletedDate) {
 		var ret string
 		return ret
 	}
-	return *o.CompletedAt
+	return *o.CompletedDate
 }
 
-// GetCompletedAtOk returns a tuple with the CompletedAt field value if set, nil otherwise
+// GetCompletedDateOk returns a tuple with the CompletedDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProcedureTask) GetCompletedAtOk() (*string, bool) {
-	if o == nil || IsNil(o.CompletedAt) {
+func (o *ProcedureTask) GetCompletedDateOk() (*string, bool) {
+	if o == nil || IsNil(o.CompletedDate) {
 		return nil, false
 	}
-	return o.CompletedAt, true
+	return o.CompletedDate, true
 }
 
-// HasCompletedAt returns a boolean if a field has been set.
-func (o *ProcedureTask) HasCompletedAt() bool {
-	if o != nil && !IsNil(o.CompletedAt) {
+// HasCompletedDate returns a boolean if a field has been set.
+func (o *ProcedureTask) HasCompletedDate() bool {
+	if o != nil && !IsNil(o.CompletedDate) {
 		return true
 	}
 
 	return false
 }
 
-// SetCompletedAt gets a reference to the given string and assigns it to the CompletedAt field.
-func (o *ProcedureTask) SetCompletedAt(v string) {
-	o.CompletedAt = &v
+// SetCompletedDate gets a reference to the given string and assigns it to the CompletedDate field.
+func (o *ProcedureTask) SetCompletedDate(v string) {
+	o.CompletedDate = &v
+}
+
+// GetCompletionNotes returns the CompletionNotes field value if set, zero value otherwise.
+func (o *ProcedureTask) GetCompletionNotes() string {
+	if o == nil || IsNil(o.CompletionNotes) {
+		var ret string
+		return ret
+	}
+	return *o.CompletionNotes
+}
+
+// GetCompletionNotesOk returns a tuple with the CompletionNotes field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetCompletionNotesOk() (*string, bool) {
+	if o == nil || IsNil(o.CompletionNotes) {
+		return nil, false
+	}
+	return o.CompletionNotes, true
+}
+
+// HasCompletionNotes returns a boolean if a field has been set.
+func (o *ProcedureTask) HasCompletionNotes() bool {
+	if o != nil && !IsNil(o.CompletionNotes) {
+		return true
+	}
+
+	return false
+}
+
+// SetCompletionNotes gets a reference to the given string and assigns it to the CompletionNotes field.
+func (o *ProcedureTask) SetCompletionNotes(v string) {
+	o.CompletionNotes = &v
+}
+
+// GetDueDate returns the DueDate field value if set, zero value otherwise.
+func (o *ProcedureTask) GetDueDate() string {
+	if o == nil || IsNil(o.DueDate) {
+		var ret string
+		return ret
+	}
+	return *o.DueDate
+}
+
+// GetDueDateOk returns a tuple with the DueDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetDueDateOk() (*string, bool) {
+	if o == nil || IsNil(o.DueDate) {
+		return nil, false
+	}
+	return o.DueDate, true
+}
+
+// HasDueDate returns a boolean if a field has been set.
+func (o *ProcedureTask) HasDueDate() bool {
+	if o != nil && !IsNil(o.DueDate) {
+		return true
+	}
+
+	return false
+}
+
+// SetDueDate gets a reference to the given string and assigns it to the DueDate field.
+func (o *ProcedureTask) SetDueDate(v string) {
+	o.DueDate = &v
+}
+
+// GetFormattedDueDate returns the FormattedDueDate field value if set, zero value otherwise.
+func (o *ProcedureTask) GetFormattedDueDate() string {
+	if o == nil || IsNil(o.FormattedDueDate) {
+		var ret string
+		return ret
+	}
+	return *o.FormattedDueDate
+}
+
+// GetFormattedDueDateOk returns a tuple with the FormattedDueDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetFormattedDueDateOk() (*string, bool) {
+	if o == nil || IsNil(o.FormattedDueDate) {
+		return nil, false
+	}
+	return o.FormattedDueDate, true
+}
+
+// HasFormattedDueDate returns a boolean if a field has been set.
+func (o *ProcedureTask) HasFormattedDueDate() bool {
+	if o != nil && !IsNil(o.FormattedDueDate) {
+		return true
+	}
+
+	return false
+}
+
+// SetFormattedDueDate gets a reference to the given string and assigns it to the FormattedDueDate field.
+func (o *ProcedureTask) SetFormattedDueDate(v string) {
+	o.FormattedDueDate = &v
 }
 
 // GetUserId returns the UserId field value if set, zero value otherwise.
@@ -239,6 +432,166 @@ func (o *ProcedureTask) SetUserId(v int64) {
 	o.UserId = &v
 }
 
+// GetUserName returns the UserName field value if set, zero value otherwise.
+func (o *ProcedureTask) GetUserName() string {
+	if o == nil || IsNil(o.UserName) {
+		var ret string
+		return ret
+	}
+	return *o.UserName
+}
+
+// GetUserNameOk returns a tuple with the UserName field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetUserNameOk() (*string, bool) {
+	if o == nil || IsNil(o.UserName) {
+		return nil, false
+	}
+	return o.UserName, true
+}
+
+// HasUserName returns a boolean if a field has been set.
+func (o *ProcedureTask) HasUserName() bool {
+	if o != nil && !IsNil(o.UserName) {
+		return true
+	}
+
+	return false
+}
+
+// SetUserName gets a reference to the given string and assigns it to the UserName field.
+func (o *ProcedureTask) SetUserName(v string) {
+	o.UserName = &v
+}
+
+// GetAssignedUsers returns the AssignedUsers field value if set, zero value otherwise.
+func (o *ProcedureTask) GetAssignedUsers() []int32 {
+	if o == nil || IsNil(o.AssignedUsers) {
+		var ret []int32
+		return ret
+	}
+	return o.AssignedUsers
+}
+
+// GetAssignedUsersOk returns a tuple with the AssignedUsers field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetAssignedUsersOk() ([]int32, bool) {
+	if o == nil || IsNil(o.AssignedUsers) {
+		return nil, false
+	}
+	return o.AssignedUsers, true
+}
+
+// HasAssignedUsers returns a boolean if a field has been set.
+func (o *ProcedureTask) HasAssignedUsers() bool {
+	if o != nil && !IsNil(o.AssignedUsers) {
+		return true
+	}
+
+	return false
+}
+
+// SetAssignedUsers gets a reference to the given []int32 and assigns it to the AssignedUsers field.
+func (o *ProcedureTask) SetAssignedUsers(v []int32) {
+	o.AssignedUsers = v
+}
+
+// GetFirstAssignedUserId returns the FirstAssignedUserId field value if set, zero value otherwise.
+func (o *ProcedureTask) GetFirstAssignedUserId() int32 {
+	if o == nil || IsNil(o.FirstAssignedUserId) {
+		var ret int32
+		return ret
+	}
+	return *o.FirstAssignedUserId
+}
+
+// GetFirstAssignedUserIdOk returns a tuple with the FirstAssignedUserId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetFirstAssignedUserIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.FirstAssignedUserId) {
+		return nil, false
+	}
+	return o.FirstAssignedUserId, true
+}
+
+// HasFirstAssignedUserId returns a boolean if a field has been set.
+func (o *ProcedureTask) HasFirstAssignedUserId() bool {
+	if o != nil && !IsNil(o.FirstAssignedUserId) {
+		return true
+	}
+
+	return false
+}
+
+// SetFirstAssignedUserId gets a reference to the given int32 and assigns it to the FirstAssignedUserId field.
+func (o *ProcedureTask) SetFirstAssignedUserId(v int32) {
+	o.FirstAssignedUserId = &v
+}
+
+// GetFirstAssignedUserName returns the FirstAssignedUserName field value if set, zero value otherwise.
+func (o *ProcedureTask) GetFirstAssignedUserName() string {
+	if o == nil || IsNil(o.FirstAssignedUserName) {
+		var ret string
+		return ret
+	}
+	return *o.FirstAssignedUserName
+}
+
+// GetFirstAssignedUserNameOk returns a tuple with the FirstAssignedUserName field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetFirstAssignedUserNameOk() (*string, bool) {
+	if o == nil || IsNil(o.FirstAssignedUserName) {
+		return nil, false
+	}
+	return o.FirstAssignedUserName, true
+}
+
+// HasFirstAssignedUserName returns a boolean if a field has been set.
+func (o *ProcedureTask) HasFirstAssignedUserName() bool {
+	if o != nil && !IsNil(o.FirstAssignedUserName) {
+		return true
+	}
+
+	return false
+}
+
+// SetFirstAssignedUserName gets a reference to the given string and assigns it to the FirstAssignedUserName field.
+func (o *ProcedureTask) SetFirstAssignedUserName(v string) {
+	o.FirstAssignedUserName = &v
+}
+
+// GetFirstAssignedUserInitials returns the FirstAssignedUserInitials field value if set, zero value otherwise.
+func (o *ProcedureTask) GetFirstAssignedUserInitials() string {
+	if o == nil || IsNil(o.FirstAssignedUserInitials) {
+		var ret string
+		return ret
+	}
+	return *o.FirstAssignedUserInitials
+}
+
+// GetFirstAssignedUserInitialsOk returns a tuple with the FirstAssignedUserInitials field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetFirstAssignedUserInitialsOk() (*string, bool) {
+	if o == nil || IsNil(o.FirstAssignedUserInitials) {
+		return nil, false
+	}
+	return o.FirstAssignedUserInitials, true
+}
+
+// HasFirstAssignedUserInitials returns a boolean if a field has been set.
+func (o *ProcedureTask) HasFirstAssignedUserInitials() bool {
+	if o != nil && !IsNil(o.FirstAssignedUserInitials) {
+		return true
+	}
+
+	return false
+}
+
+// SetFirstAssignedUserInitials gets a reference to the given string and assigns it to the FirstAssignedUserInitials field.
+func (o *ProcedureTask) SetFirstAssignedUserInitials(v string) {
+	o.FirstAssignedUserInitials = &v
+}
+
 // GetProcedureId returns the ProcedureId field value
 func (o *ProcedureTask) GetProcedureId() int64 {
 	if o == nil {
@@ -263,10 +616,202 @@ func (o *ProcedureTask) SetProcedureId(v int64) {
 	o.ProcedureId = v
 }
 
-// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *ProcedureTask) GetCreatedAt() string {
-	if o == nil || IsNil(o.CreatedAt) {
+// GetOptional returns the Optional field value if set, zero value otherwise.
+func (o *ProcedureTask) GetOptional() bool {
+	if o == nil || IsNil(o.Optional) {
+		var ret bool
+		return ret
+	}
+	return *o.Optional
+}
+
+// GetOptionalOk returns a tuple with the Optional field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetOptionalOk() (*bool, bool) {
+	if o == nil || IsNil(o.Optional) {
+		return nil, false
+	}
+	return o.Optional, true
+}
+
+// HasOptional returns a boolean if a field has been set.
+func (o *ProcedureTask) HasOptional() bool {
+	if o != nil && !IsNil(o.Optional) {
+		return true
+	}
+
+	return false
+}
+
+// SetOptional gets a reference to the given bool and assigns it to the Optional field.
+func (o *ProcedureTask) SetOptional(v bool) {
+	o.Optional = &v
+}
+
+// GetParentTaskId returns the ParentTaskId field value if set, zero value otherwise.
+func (o *ProcedureTask) GetParentTaskId() int32 {
+	if o == nil || IsNil(o.ParentTaskId) {
+		var ret int32
+		return ret
+	}
+	return *o.ParentTaskId
+}
+
+// GetParentTaskIdOk returns a tuple with the ParentTaskId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetParentTaskIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.ParentTaskId) {
+		return nil, false
+	}
+	return o.ParentTaskId, true
+}
+
+// HasParentTaskId returns a boolean if a field has been set.
+func (o *ProcedureTask) HasParentTaskId() bool {
+	if o != nil && !IsNil(o.ParentTaskId) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentTaskId gets a reference to the given int32 and assigns it to the ParentTaskId field.
+func (o *ProcedureTask) SetParentTaskId(v int32) {
+	o.ParentTaskId = &v
+}
+
+// GetSubtaskIds returns the SubtaskIds field value if set, zero value otherwise.
+func (o *ProcedureTask) GetSubtaskIds() []int32 {
+	if o == nil || IsNil(o.SubtaskIds) {
+		var ret []int32
+		return ret
+	}
+	return o.SubtaskIds
+}
+
+// GetSubtaskIdsOk returns a tuple with the SubtaskIds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetSubtaskIdsOk() ([]int32, bool) {
+	if o == nil || IsNil(o.SubtaskIds) {
+		return nil, false
+	}
+	return o.SubtaskIds, true
+}
+
+// HasSubtaskIds returns a boolean if a field has been set.
+func (o *ProcedureTask) HasSubtaskIds() bool {
+	if o != nil && !IsNil(o.SubtaskIds) {
+		return true
+	}
+
+	return false
+}
+
+// SetSubtaskIds gets a reference to the given []int32 and assigns it to the SubtaskIds field.
+func (o *ProcedureTask) SetSubtaskIds(v []int32) {
+	o.SubtaskIds = v
+}
+
+// GetSubtaskCount returns the SubtaskCount field value if set, zero value otherwise.
+func (o *ProcedureTask) GetSubtaskCount() int32 {
+	if o == nil || IsNil(o.SubtaskCount) {
+		var ret int32
+		return ret
+	}
+	return *o.SubtaskCount
+}
+
+// GetSubtaskCountOk returns a tuple with the SubtaskCount field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetSubtaskCountOk() (*int32, bool) {
+	if o == nil || IsNil(o.SubtaskCount) {
+		return nil, false
+	}
+	return o.SubtaskCount, true
+}
+
+// HasSubtaskCount returns a boolean if a field has been set.
+func (o *ProcedureTask) HasSubtaskCount() bool {
+	if o != nil && !IsNil(o.SubtaskCount) {
+		return true
+	}
+
+	return false
+}
+
+// SetSubtaskCount gets a reference to the given int32 and assigns it to the SubtaskCount field.
+func (o *ProcedureTask) SetSubtaskCount(v int32) {
+	o.SubtaskCount = &v
+}
+
+// GetHasSubtasks returns the HasSubtasks field value if set, zero value otherwise.
+func (o *ProcedureTask) GetHasSubtasks() bool {
+	if o == nil || IsNil(o.HasSubtasks) {
+		var ret bool
+		return ret
+	}
+	return *o.HasSubtasks
+}
+
+// GetHasSubtasksOk returns a tuple with the HasSubtasks field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetHasSubtasksOk() (*bool, bool) {
+	if o == nil || IsNil(o.HasSubtasks) {
+		return nil, false
+	}
+	return o.HasSubtasks, true
+}
+
+// HasHasSubtasks returns a boolean if a field has been set.
+func (o *ProcedureTask) HasHasSubtasks() bool {
+	if o != nil && !IsNil(o.HasSubtasks) {
+		return true
+	}
+
+	return false
+}
+
+// SetHasSubtasks gets a reference to the given bool and assigns it to the HasSubtasks field.
+func (o *ProcedureTask) SetHasSubtasks(v bool) {
+	o.HasSubtasks = &v
+}
+
+// GetUrl returns the Url field value if set, zero value otherwise.
+func (o *ProcedureTask) GetUrl() string {
+	if o == nil || IsNil(o.Url) {
 		var ret string
+		return ret
+	}
+	return *o.Url
+}
+
+// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProcedureTask) GetUrlOk() (*string, bool) {
+	if o == nil || IsNil(o.Url) {
+		return nil, false
+	}
+	return o.Url, true
+}
+
+// HasUrl returns a boolean if a field has been set.
+func (o *ProcedureTask) HasUrl() bool {
+	if o != nil && !IsNil(o.Url) {
+		return true
+	}
+
+	return false
+}
+
+// SetUrl gets a reference to the given string and assigns it to the Url field.
+func (o *ProcedureTask) SetUrl(v string) {
+	o.Url = &v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *ProcedureTask) GetCreatedAt() time.Time {
+	if o == nil || IsNil(o.CreatedAt) {
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -274,7 +819,7 @@ func (o *ProcedureTask) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProcedureTask) GetCreatedAtOk() (*string, bool) {
+func (o *ProcedureTask) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -290,15 +835,15 @@ func (o *ProcedureTask) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *ProcedureTask) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *ProcedureTask) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *ProcedureTask) GetUpdatedAt() string {
+func (o *ProcedureTask) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -306,7 +851,7 @@ func (o *ProcedureTask) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProcedureTask) GetUpdatedAtOk() (*string, bool) {
+func (o *ProcedureTask) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -322,8 +867,8 @@ func (o *ProcedureTask) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *ProcedureTask) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *ProcedureTask) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
@@ -339,19 +884,67 @@ func (o ProcedureTask) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Position) {
+		toSerialize["position"] = o.Position
+	}
 	if !IsNil(o.Priority) {
 		toSerialize["priority"] = o.Priority
 	}
 	if !IsNil(o.Completed) {
 		toSerialize["completed"] = o.Completed
 	}
-	if !IsNil(o.CompletedAt) {
-		toSerialize["completed_at"] = o.CompletedAt
+	if !IsNil(o.CompletedDate) {
+		toSerialize["completed_date"] = o.CompletedDate
+	}
+	if !IsNil(o.CompletionNotes) {
+		toSerialize["completion_notes"] = o.CompletionNotes
+	}
+	if !IsNil(o.DueDate) {
+		toSerialize["due_date"] = o.DueDate
+	}
+	if !IsNil(o.FormattedDueDate) {
+		toSerialize["formatted_due_date"] = o.FormattedDueDate
 	}
 	if !IsNil(o.UserId) {
 		toSerialize["user_id"] = o.UserId
 	}
+	if !IsNil(o.UserName) {
+		toSerialize["user_name"] = o.UserName
+	}
+	if !IsNil(o.AssignedUsers) {
+		toSerialize["assigned_users"] = o.AssignedUsers
+	}
+	if !IsNil(o.FirstAssignedUserId) {
+		toSerialize["first_assigned_user_id"] = o.FirstAssignedUserId
+	}
+	if !IsNil(o.FirstAssignedUserName) {
+		toSerialize["first_assigned_user_name"] = o.FirstAssignedUserName
+	}
+	if !IsNil(o.FirstAssignedUserInitials) {
+		toSerialize["first_assigned_user_initials"] = o.FirstAssignedUserInitials
+	}
 	toSerialize["procedure_id"] = o.ProcedureId
+	if !IsNil(o.Optional) {
+		toSerialize["optional"] = o.Optional
+	}
+	if !IsNil(o.ParentTaskId) {
+		toSerialize["parent_task_id"] = o.ParentTaskId
+	}
+	if !IsNil(o.SubtaskIds) {
+		toSerialize["subtask_ids"] = o.SubtaskIds
+	}
+	if !IsNil(o.SubtaskCount) {
+		toSerialize["subtask_count"] = o.SubtaskCount
+	}
+	if !IsNil(o.HasSubtasks) {
+		toSerialize["has_subtasks"] = o.HasSubtasks
+	}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
@@ -405,11 +998,27 @@ func (o *ProcedureTask) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "position")
 		delete(additionalProperties, "priority")
 		delete(additionalProperties, "completed")
-		delete(additionalProperties, "completed_at")
+		delete(additionalProperties, "completed_date")
+		delete(additionalProperties, "completion_notes")
+		delete(additionalProperties, "due_date")
+		delete(additionalProperties, "formatted_due_date")
 		delete(additionalProperties, "user_id")
+		delete(additionalProperties, "user_name")
+		delete(additionalProperties, "assigned_users")
+		delete(additionalProperties, "first_assigned_user_id")
+		delete(additionalProperties, "first_assigned_user_name")
+		delete(additionalProperties, "first_assigned_user_initials")
 		delete(additionalProperties, "procedure_id")
+		delete(additionalProperties, "optional")
+		delete(additionalProperties, "parent_task_id")
+		delete(additionalProperties, "subtask_ids")
+		delete(additionalProperties, "subtask_count")
+		delete(additionalProperties, "has_subtasks")
+		delete(additionalProperties, "url")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
 		o.AdditionalProperties = additionalProperties

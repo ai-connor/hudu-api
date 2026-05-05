@@ -20,13 +20,13 @@ var _ MappedNullable = &CreateProcedureRequest{}
 
 // CreateProcedureRequest struct for CreateProcedureRequest
 type CreateProcedureRequest struct {
-	// Name of the procedure
+	// Name of the process
 	Name string `json:"name"`
-	// Description of the procedure
+	// Description of the process
 	Description *string `json:"description,omitempty"`
-	// The ID of the company this procedure should be transferred to. Set to null to make this a global template.
+	// The ID of the company this process belongs to. Set to `null` to create a **global template** (available to all companies). Set to a company ID to create a **company process** (can be kicked off to create runs).
 	CompanyId *int64 `json:"company_id,omitempty"`
-	// When true, sets both template and remove_completion_ability to true. When false, sets both to false.
+	// **DEPRECATED** - Legacy parameter. When true, sets both template and remove_completion_ability flags to true.
 	CompanyTemplate      *bool `json:"company_template,omitempty"`
 	AdditionalProperties map[string]interface{}
 }

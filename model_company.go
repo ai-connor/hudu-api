@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the Company type satisfies the MappedNullable interface at compile time
@@ -68,9 +69,9 @@ type Company struct {
 	// The URL for the company's knowledge base within the application.
 	KnowledgeBaseUrl *string `json:"knowledge_base_url,omitempty"`
 	// The date and time when the company was created.
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The date and time when the company was last updated.
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	// A list of integrations associated with the company.
 	Integrations         []CompanyIntegration `json:"integrations,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -864,9 +865,9 @@ func (o *Company) SetKnowledgeBaseUrl(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Company) GetCreatedAt() string {
+func (o *Company) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -874,7 +875,7 @@ func (o *Company) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Company) GetCreatedAtOk() (*string, bool) {
+func (o *Company) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -890,15 +891,15 @@ func (o *Company) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *Company) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *Company) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Company) GetUpdatedAt() string {
+func (o *Company) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -906,7 +907,7 @@ func (o *Company) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Company) GetUpdatedAtOk() (*string, bool) {
+func (o *Company) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -922,8 +923,8 @@ func (o *Company) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *Company) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *Company) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 

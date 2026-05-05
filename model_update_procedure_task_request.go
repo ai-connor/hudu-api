@@ -19,24 +19,24 @@ var _ MappedNullable = &UpdateProcedureTaskRequest{}
 
 // UpdateProcedureTaskRequest struct for UpdateProcedureTaskRequest
 type UpdateProcedureTaskRequest struct {
-	// The name of the task.
+	// The name of the task. **Process tasks only** - cannot be changed on run tasks.
 	Name *string `json:"name,omitempty"`
-	// A detailed description of the task.
+	// A detailed description of the task. **Process tasks only** - cannot be changed on run tasks.
 	Description *string `json:"description,omitempty"`
-	// When true, marks the task as completed.
-	Completed *bool `json:"completed,omitempty"`
-	// The ID of the procedure this task belongs to.
+	// The ID of the process or run this task belongs to. **Process tasks only** - can be changed to move tasks between processes. Cannot be changed on run tasks.
 	ProcedureId *int32 `json:"procedure_id,omitempty"`
-	// The position of the task in the procedure.
+	// The position of the task in the process. **Process tasks only** - cannot be changed on run tasks.
 	Position *int32 `json:"position,omitempty"`
-	// The ID of the user assigned to the task.
-	UserId *int32 `json:"user_id,omitempty"`
-	// The due date for the task.
+	// The due date for the task. **Run tasks only** - rejected on process tasks.
 	DueDate *string `json:"due_date,omitempty"`
-	// The priority level of the task.
+	// The priority level of the task. **Run tasks only** - rejected on process tasks.
 	Priority *string `json:"priority,omitempty"`
-	// An array of user IDs assigned to the task.
-	AssignedUsers        []int32 `json:"assigned_users,omitempty"`
+	// An array of user IDs assigned to the task. **Run tasks only** - rejected on process tasks.
+	AssignedUsers []int32 `json:"assigned_users,omitempty"`
+	// Whether the task is optional. Optional tasks don't need to be completed for the process/run to be considered complete. **Process tasks only** - cannot be changed on run tasks.
+	Optional *bool `json:"optional,omitempty"`
+	// The ID of the parent task if this is a subtask. Set to null to make it a top-level task. Subtasks cannot have their own subtasks (no nested subtasks). **Process tasks only** - cannot be changed on run tasks.
+	ParentTaskId         *int32 `json:"parent_task_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -123,38 +123,6 @@ func (o *UpdateProcedureTaskRequest) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetCompleted returns the Completed field value if set, zero value otherwise.
-func (o *UpdateProcedureTaskRequest) GetCompleted() bool {
-	if o == nil || IsNil(o.Completed) {
-		var ret bool
-		return ret
-	}
-	return *o.Completed
-}
-
-// GetCompletedOk returns a tuple with the Completed field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UpdateProcedureTaskRequest) GetCompletedOk() (*bool, bool) {
-	if o == nil || IsNil(o.Completed) {
-		return nil, false
-	}
-	return o.Completed, true
-}
-
-// HasCompleted returns a boolean if a field has been set.
-func (o *UpdateProcedureTaskRequest) HasCompleted() bool {
-	if o != nil && !IsNil(o.Completed) {
-		return true
-	}
-
-	return false
-}
-
-// SetCompleted gets a reference to the given bool and assigns it to the Completed field.
-func (o *UpdateProcedureTaskRequest) SetCompleted(v bool) {
-	o.Completed = &v
-}
-
 // GetProcedureId returns the ProcedureId field value if set, zero value otherwise.
 func (o *UpdateProcedureTaskRequest) GetProcedureId() int32 {
 	if o == nil || IsNil(o.ProcedureId) {
@@ -217,38 +185,6 @@ func (o *UpdateProcedureTaskRequest) HasPosition() bool {
 // SetPosition gets a reference to the given int32 and assigns it to the Position field.
 func (o *UpdateProcedureTaskRequest) SetPosition(v int32) {
 	o.Position = &v
-}
-
-// GetUserId returns the UserId field value if set, zero value otherwise.
-func (o *UpdateProcedureTaskRequest) GetUserId() int32 {
-	if o == nil || IsNil(o.UserId) {
-		var ret int32
-		return ret
-	}
-	return *o.UserId
-}
-
-// GetUserIdOk returns a tuple with the UserId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UpdateProcedureTaskRequest) GetUserIdOk() (*int32, bool) {
-	if o == nil || IsNil(o.UserId) {
-		return nil, false
-	}
-	return o.UserId, true
-}
-
-// HasUserId returns a boolean if a field has been set.
-func (o *UpdateProcedureTaskRequest) HasUserId() bool {
-	if o != nil && !IsNil(o.UserId) {
-		return true
-	}
-
-	return false
-}
-
-// SetUserId gets a reference to the given int32 and assigns it to the UserId field.
-func (o *UpdateProcedureTaskRequest) SetUserId(v int32) {
-	o.UserId = &v
 }
 
 // GetDueDate returns the DueDate field value if set, zero value otherwise.
@@ -347,6 +283,70 @@ func (o *UpdateProcedureTaskRequest) SetAssignedUsers(v []int32) {
 	o.AssignedUsers = v
 }
 
+// GetOptional returns the Optional field value if set, zero value otherwise.
+func (o *UpdateProcedureTaskRequest) GetOptional() bool {
+	if o == nil || IsNil(o.Optional) {
+		var ret bool
+		return ret
+	}
+	return *o.Optional
+}
+
+// GetOptionalOk returns a tuple with the Optional field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateProcedureTaskRequest) GetOptionalOk() (*bool, bool) {
+	if o == nil || IsNil(o.Optional) {
+		return nil, false
+	}
+	return o.Optional, true
+}
+
+// HasOptional returns a boolean if a field has been set.
+func (o *UpdateProcedureTaskRequest) HasOptional() bool {
+	if o != nil && !IsNil(o.Optional) {
+		return true
+	}
+
+	return false
+}
+
+// SetOptional gets a reference to the given bool and assigns it to the Optional field.
+func (o *UpdateProcedureTaskRequest) SetOptional(v bool) {
+	o.Optional = &v
+}
+
+// GetParentTaskId returns the ParentTaskId field value if set, zero value otherwise.
+func (o *UpdateProcedureTaskRequest) GetParentTaskId() int32 {
+	if o == nil || IsNil(o.ParentTaskId) {
+		var ret int32
+		return ret
+	}
+	return *o.ParentTaskId
+}
+
+// GetParentTaskIdOk returns a tuple with the ParentTaskId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateProcedureTaskRequest) GetParentTaskIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.ParentTaskId) {
+		return nil, false
+	}
+	return o.ParentTaskId, true
+}
+
+// HasParentTaskId returns a boolean if a field has been set.
+func (o *UpdateProcedureTaskRequest) HasParentTaskId() bool {
+	if o != nil && !IsNil(o.ParentTaskId) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentTaskId gets a reference to the given int32 and assigns it to the ParentTaskId field.
+func (o *UpdateProcedureTaskRequest) SetParentTaskId(v int32) {
+	o.ParentTaskId = &v
+}
+
 func (o UpdateProcedureTaskRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -363,17 +363,11 @@ func (o UpdateProcedureTaskRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if !IsNil(o.Completed) {
-		toSerialize["completed"] = o.Completed
-	}
 	if !IsNil(o.ProcedureId) {
 		toSerialize["procedure_id"] = o.ProcedureId
 	}
 	if !IsNil(o.Position) {
 		toSerialize["position"] = o.Position
-	}
-	if !IsNil(o.UserId) {
-		toSerialize["user_id"] = o.UserId
 	}
 	if !IsNil(o.DueDate) {
 		toSerialize["due_date"] = o.DueDate
@@ -383,6 +377,12 @@ func (o UpdateProcedureTaskRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.AssignedUsers) {
 		toSerialize["assigned_users"] = o.AssignedUsers
+	}
+	if !IsNil(o.Optional) {
+		toSerialize["optional"] = o.Optional
+	}
+	if !IsNil(o.ParentTaskId) {
+		toSerialize["parent_task_id"] = o.ParentTaskId
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -408,13 +408,13 @@ func (o *UpdateProcedureTaskRequest) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "name")
 		delete(additionalProperties, "description")
-		delete(additionalProperties, "completed")
 		delete(additionalProperties, "procedure_id")
 		delete(additionalProperties, "position")
-		delete(additionalProperties, "user_id")
 		delete(additionalProperties, "due_date")
 		delete(additionalProperties, "priority")
 		delete(additionalProperties, "assigned_users")
+		delete(additionalProperties, "optional")
+		delete(additionalProperties, "parent_task_id")
 		o.AdditionalProperties = additionalProperties
 	}
 

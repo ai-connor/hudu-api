@@ -88,6 +88,8 @@ type APIClient struct {
 
 	PasswordFoldersAPI *PasswordFoldersAPIService
 
+	PhotosAPI *PhotosAPIService
+
 	ProcedureTasksAPI *ProcedureTasksAPIService
 
 	ProceduresAPI *ProceduresAPIService
@@ -149,6 +151,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.MatchersAPI = (*MatchersAPIService)(&c.common)
 	c.NetworksAPI = (*NetworksAPIService)(&c.common)
 	c.PasswordFoldersAPI = (*PasswordFoldersAPIService)(&c.common)
+	c.PhotosAPI = (*PhotosAPIService)(&c.common)
 	c.ProcedureTasksAPI = (*ProcedureTasksAPIService)(&c.common)
 	c.ProceduresAPI = (*ProceduresAPIService)(&c.common)
 	c.PublicPhotosAPI = (*PublicPhotosAPIService)(&c.common)

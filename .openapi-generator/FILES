@@ -22,6 +22,7 @@ api_magic_dash.go
 api_matchers.go
 api_networks.go
 api_password_folders.go
+api_photos.go
 api_procedure_tasks.go
 api_procedures.go
 api_public_photos.go
@@ -59,6 +60,8 @@ model_create_list_request_list_list_items_attributes_inner.go
 model_create_network_request.go
 model_create_password_folder_201_response.go
 model_create_password_folder_request.go
+model_create_photo_201_response.go
+model_create_photo_422_response.go
 model_create_procedure_request.go
 model_create_procedure_task_201_response.go
 model_create_procedure_task_request.go
@@ -84,9 +87,11 @@ model_get_flags_200_response.go
 model_get_folders_200_response.go
 model_get_matchers_200_response.go
 model_get_password_folders_200_response.go
+model_get_photos_200_response.go
 model_get_procedure_by_id_200_response.go
 model_get_procedure_tasks_200_response.go
 model_get_procedures_200_response.go
+model_get_public_photo_200_response.go
 model_get_public_photos_200_response.go
 model_get_relations_200_response.go
 model_group.go
@@ -99,6 +104,7 @@ model_magic_dash.go
 model_matcher.go
 model_network.go
 model_password_folder.go
+model_photo.go
 model_post_articles_request.go
 model_post_asset_layouts_201_response.go
 model_post_asset_layouts_request.go
@@ -126,6 +132,8 @@ model_put_articles_id_request.go
 model_put_asset_layouts_id_request.go
 model_put_asset_layouts_id_request_fields_inner.go
 model_put_companies_company_id_assets_id_move_layout_request.go
+model_put_folders_id_request.go
+model_put_folders_id_request_folder.go
 model_put_rack_storage_items_id_request.go
 model_put_websites_id_request.go
 model_put_websites_id_request_website.go
@@ -147,6 +155,8 @@ model_update_magic_dash_positions_request.go
 model_update_magic_dash_positions_request_positions_inner.go
 model_update_matcher_by_id_request.go
 model_update_password_folder_request.go
+model_update_photo_request.go
+model_update_photo_request_photo.go
 model_update_procedure_request.go
 model_update_procedure_task_request.go
 model_update_public_photo_200_response.go

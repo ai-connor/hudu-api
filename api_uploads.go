@@ -130,6 +130,20 @@ func (a *UploadsAPIService) DeleteUploadsIdExecute(r ApiDeleteUploadsIdRequest) 
 type ApiGetUploadsRequest struct {
 	ctx        context.Context
 	ApiService *UploadsAPIService
+	page       *int32
+	pageSize   *int32
+}
+
+// Page number for pagination
+func (r ApiGetUploadsRequest) Page(page int32) ApiGetUploadsRequest {
+	r.page = &page
+	return r
+}
+
+// Number of results per page (1-1000, default: 25)
+func (r ApiGetUploadsRequest) PageSize(pageSize int32) ApiGetUploadsRequest {
+	r.pageSize = &pageSize
+	return r
 }
 
 func (r ApiGetUploadsRequest) Execute() ([]Upload, *http.Response, error) {
@@ -171,6 +185,12 @@ func (a *UploadsAPIService) GetUploadsExecute(r ApiGetUploadsRequest) ([]Upload,
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.page != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
+	}
+	if r.pageSize != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -243,6 +263,13 @@ type ApiGetUploadsIdRequest struct {
 	ctx        context.Context
 	ApiService *UploadsAPIService
 	id         int32
+	download   *bool
+}
+
+// Set to true to download the file instead of returning metadata
+func (r ApiGetUploadsIdRequest) Download(download bool) ApiGetUploadsIdRequest {
+	r.download = &download
+	return r
 }
 
 func (r ApiGetUploadsIdRequest) Execute() (*Upload, *http.Response, error) {
@@ -250,7 +277,11 @@ func (r ApiGetUploadsIdRequest) Execute() (*Upload, *http.Response, error) {
 }
 
 /*
-GetUploadsId Get a specific upload
+GetUploadsId Get a specific upload or download the file
+
+Returns upload metadata by default. Set download=true to download the file directly.
+
+**CORS Configuration for Browser Testing**: If you experience CORS errors or "Failed to fetch" when testing the download endpoint in browser-based tools (e.g., Swagger UI), you need to configure CORS on your cloud storage bucket (DigitalOcean Spaces/S3) with: (1) Origin: `https://your-domain.com`, (2) Allowed Methods: `GET`, `HEAD`, (3) Allowed Headers: `*`
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the requested upload
@@ -287,6 +318,9 @@ func (a *UploadsAPIService) GetUploadsIdExecute(r ApiGetUploadsIdRequest) (*Uplo
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.download != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "download", r.download, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

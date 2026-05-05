@@ -22,7 +22,7 @@ type AssetFieldsInner struct {
 	// The identifier of the field
 	Id *float32 `json:"id,omitempty"`
 	// The value stored in the field
-	Value *string `json:"value,omitempty"`
+	Value *bool `json:"value,omitempty"`
 	// The label of the field
 	Label *string `json:"label,omitempty"`
 	// The position of the field in the asset's layout
@@ -82,9 +82,9 @@ func (o *AssetFieldsInner) SetId(v float32) {
 }
 
 // GetValue returns the Value field value if set, zero value otherwise.
-func (o *AssetFieldsInner) GetValue() string {
+func (o *AssetFieldsInner) GetValue() bool {
 	if o == nil || IsNil(o.Value) {
-		var ret string
+		var ret bool
 		return ret
 	}
 	return *o.Value
@@ -92,7 +92,7 @@ func (o *AssetFieldsInner) GetValue() string {
 
 // GetValueOk returns a tuple with the Value field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AssetFieldsInner) GetValueOk() (*string, bool) {
+func (o *AssetFieldsInner) GetValueOk() (*bool, bool) {
 	if o == nil || IsNil(o.Value) {
 		return nil, false
 	}
@@ -108,8 +108,8 @@ func (o *AssetFieldsInner) HasValue() bool {
 	return false
 }
 
-// SetValue gets a reference to the given string and assigns it to the Value field.
-func (o *AssetFieldsInner) SetValue(v string) {
+// SetValue gets a reference to the given bool and assigns it to the Value field.
+func (o *AssetFieldsInner) SetValue(v bool) {
 	o.Value = &v
 }
 

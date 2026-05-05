@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the Vlan type satisfies the MappedNullable interface at compile time
@@ -40,11 +41,11 @@ type Vlan struct {
 	// The role list item ID for this VLAN.
 	RoleListItemId *int64 `json:"role_list_item_id,omitempty"`
 	// The date and time when the VLAN was archived. Null if not archived.
-	ArchivedAt *string `json:"archived_at,omitempty"`
+	ArchivedAt *time.Time `json:"archived_at,omitempty"`
 	// The date and time when the VLAN was created.
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The date and time when the VLAN was last updated.
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	// Number of networks currently assigned to this VLAN.
 	NetworksCount *int64 `json:"networks_count,omitempty"`
 	// Link to VLAN in the web UI
@@ -392,9 +393,9 @@ func (o *Vlan) SetRoleListItemId(v int64) {
 }
 
 // GetArchivedAt returns the ArchivedAt field value if set, zero value otherwise.
-func (o *Vlan) GetArchivedAt() string {
+func (o *Vlan) GetArchivedAt() time.Time {
 	if o == nil || IsNil(o.ArchivedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.ArchivedAt
@@ -402,7 +403,7 @@ func (o *Vlan) GetArchivedAt() string {
 
 // GetArchivedAtOk returns a tuple with the ArchivedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Vlan) GetArchivedAtOk() (*string, bool) {
+func (o *Vlan) GetArchivedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.ArchivedAt) {
 		return nil, false
 	}
@@ -418,15 +419,15 @@ func (o *Vlan) HasArchivedAt() bool {
 	return false
 }
 
-// SetArchivedAt gets a reference to the given string and assigns it to the ArchivedAt field.
-func (o *Vlan) SetArchivedAt(v string) {
+// SetArchivedAt gets a reference to the given time.Time and assigns it to the ArchivedAt field.
+func (o *Vlan) SetArchivedAt(v time.Time) {
 	o.ArchivedAt = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Vlan) GetCreatedAt() string {
+func (o *Vlan) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -434,7 +435,7 @@ func (o *Vlan) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Vlan) GetCreatedAtOk() (*string, bool) {
+func (o *Vlan) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -450,15 +451,15 @@ func (o *Vlan) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *Vlan) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *Vlan) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Vlan) GetUpdatedAt() string {
+func (o *Vlan) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -466,7 +467,7 @@ func (o *Vlan) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Vlan) GetUpdatedAtOk() (*string, bool) {
+func (o *Vlan) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -482,8 +483,8 @@ func (o *Vlan) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *Vlan) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *Vlan) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 

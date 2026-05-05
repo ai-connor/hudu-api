@@ -228,20 +228,26 @@ Class | Method | HTTP request | Description
 *PasswordFoldersAPI* | [**GetPasswordFolderById**](docs/PasswordFoldersAPI.md#getpasswordfolderbyid) | **Get** /password_folders/{id} | Retrieve a password folder by ID
 *PasswordFoldersAPI* | [**GetPasswordFolders**](docs/PasswordFoldersAPI.md#getpasswordfolders) | **Get** /password_folders | Retrieve a list of password folders
 *PasswordFoldersAPI* | [**UpdatePasswordFolder**](docs/PasswordFoldersAPI.md#updatepasswordfolder) | **Put** /password_folders/{id} | Update an existing password folder
-*ProcedureTasksAPI* | [**CreateProcedureTask**](docs/ProcedureTasksAPI.md#createproceduretask) | **Post** /procedure_tasks | Create a new Procedure Task
-*ProcedureTasksAPI* | [**DeleteProcedureTask**](docs/ProcedureTasksAPI.md#deleteproceduretask) | **Delete** /procedure_tasks/{id} | Delete a Procedure Task
-*ProcedureTasksAPI* | [**GetProcedureTaskById**](docs/ProcedureTasksAPI.md#getproceduretaskbyid) | **Get** /procedure_tasks/{id} | Get a Procedure Task by ID
-*ProcedureTasksAPI* | [**GetProcedureTasks**](docs/ProcedureTasksAPI.md#getproceduretasks) | **Get** /procedure_tasks | Get a list of Procedure Tasks
-*ProcedureTasksAPI* | [**UpdateProcedureTask**](docs/ProcedureTasksAPI.md#updateproceduretask) | **Put** /procedure_tasks/{id} | Update a Procedure Task
-*ProceduresAPI* | [**CreateProcedure**](docs/ProceduresAPI.md#createprocedure) | **Post** /procedures | Create a new Procedure (Process)
-*ProceduresAPI* | [**CreateProcedureFromTemplate**](docs/ProceduresAPI.md#createprocedurefromtemplate) | **Post** /procedures/{id}/create_from_template | Create a Procedure from Template
-*ProceduresAPI* | [**DeleteProcedure**](docs/ProceduresAPI.md#deleteprocedure) | **Delete** /procedures/{id} | Delete a Procedure
-*ProceduresAPI* | [**DuplicateProcedure**](docs/ProceduresAPI.md#duplicateprocedure) | **Post** /procedures/{id}/duplicate | Duplicate an existing Procedure
-*ProceduresAPI* | [**GetProcedureById**](docs/ProceduresAPI.md#getprocedurebyid) | **Get** /procedures/{id} | Get a Procedure (Process)
-*ProceduresAPI* | [**GetProcedures**](docs/ProceduresAPI.md#getprocedures) | **Get** /procedures | Get a list of Procedures (Processes)
-*ProceduresAPI* | [**KickoffProcedureById**](docs/ProceduresAPI.md#kickoffprocedurebyid) | **Post** /procedures/{id}/kickoff | Kickoff a Procedure (Process)
-*ProceduresAPI* | [**UpdateProcedure**](docs/ProceduresAPI.md#updateprocedure) | **Put** /procedures/{id} | Update an existing Procedure
+*PhotosAPI* | [**CreatePhoto**](docs/PhotosAPI.md#createphoto) | **Post** /photos | Create a new Photo
+*PhotosAPI* | [**DeletePhoto**](docs/PhotosAPI.md#deletephoto) | **Delete** /photos/{id} | Delete a Photo
+*PhotosAPI* | [**GetPhoto**](docs/PhotosAPI.md#getphoto) | **Get** /photos/{id} | Get a specific Photo
+*PhotosAPI* | [**GetPhotos**](docs/PhotosAPI.md#getphotos) | **Get** /photos | Get a list of Photos
+*PhotosAPI* | [**UpdatePhoto**](docs/PhotosAPI.md#updatephoto) | **Put** /photos/{id} | Update a Photo
+*ProcedureTasksAPI* | [**CreateProcedureTask**](docs/ProcedureTasksAPI.md#createproceduretask) | **Post** /procedure_tasks | Create a new Task on a Process
+*ProcedureTasksAPI* | [**DeleteProcedureTask**](docs/ProcedureTasksAPI.md#deleteproceduretask) | **Delete** /procedure_tasks/{id} | Delete a Task from a Process
+*ProcedureTasksAPI* | [**GetProcedureTaskById**](docs/ProcedureTasksAPI.md#getproceduretaskbyid) | **Get** /procedure_tasks/{id} | Get a Task by ID
+*ProcedureTasksAPI* | [**GetProcedureTasks**](docs/ProcedureTasksAPI.md#getproceduretasks) | **Get** /procedure_tasks | Get a list of Process/Run Tasks
+*ProcedureTasksAPI* | [**UpdateProcedureTask**](docs/ProcedureTasksAPI.md#updateproceduretask) | **Put** /procedure_tasks/{id} | Update a Task
+*ProceduresAPI* | [**CreateProcedure**](docs/ProceduresAPI.md#createprocedure) | **Post** /procedures | Create a new Process (Template)
+*ProceduresAPI* | [**CreateProcedureFromTemplate**](docs/ProceduresAPI.md#createprocedurefromtemplate) | **Post** /procedures/{id}/create_from_template | Create a Process from a Global Template
+*ProceduresAPI* | [**DeleteProcedure**](docs/ProceduresAPI.md#deleteprocedure) | **Delete** /procedures/{id} | Delete a Process or Run
+*ProceduresAPI* | [**DuplicateProcedure**](docs/ProceduresAPI.md#duplicateprocedure) | **Post** /procedures/{id}/duplicate | Duplicate an existing Process
+*ProceduresAPI* | [**GetProcedureById**](docs/ProceduresAPI.md#getprocedurebyid) | **Get** /procedures/{id} | Get a Process or Run
+*ProceduresAPI* | [**GetProcedures**](docs/ProceduresAPI.md#getprocedures) | **Get** /procedures | Get a list of Processes and Runs
+*ProceduresAPI* | [**KickoffProcedureById**](docs/ProceduresAPI.md#kickoffprocedurebyid) | **Post** /procedures/{id}/kickoff | Create a Run from a Process
+*ProceduresAPI* | [**UpdateProcedure**](docs/ProceduresAPI.md#updateprocedure) | **Put** /procedures/{id} | Update an existing Process or Run
 *PublicPhotosAPI* | [**CreatePublicPhoto**](docs/PublicPhotosAPI.md#createpublicphoto) | **Post** /public_photos | Create a public photo
+*PublicPhotosAPI* | [**GetPublicPhoto**](docs/PublicPhotosAPI.md#getpublicphoto) | **Get** /public_photos/{id} | Get public photo details or download public photo file
 *PublicPhotosAPI* | [**GetPublicPhotos**](docs/PublicPhotosAPI.md#getpublicphotos) | **Get** /public_photos | Get a list of public photos
 *PublicPhotosAPI* | [**UpdatePublicPhoto**](docs/PublicPhotosAPI.md#updatepublicphoto) | **Put** /public_photos/{id} | Update a public photo
 *RackStorageItemsAPI* | [**DeleteRackStorageItemsId**](docs/RackStorageItemsAPI.md#deleterackstorageitemsid) | **Delete** /rack_storage_items/{id} | Delete a Rack Storage Item
@@ -260,7 +266,7 @@ Class | Method | HTTP request | Description
 *S3ExportsAPI* | [**PostS3Exports**](docs/S3ExportsAPI.md#posts3exports) | **Post** /s3_exports | Initiate a s3 export.
 *UploadsAPI* | [**DeleteUploadsId**](docs/UploadsAPI.md#deleteuploadsid) | **Delete** /uploads/{id} | Delete an upload
 *UploadsAPI* | [**GetUploads**](docs/UploadsAPI.md#getuploads) | **Get** /uploads | Get a list of all uploads
-*UploadsAPI* | [**GetUploadsId**](docs/UploadsAPI.md#getuploadsid) | **Get** /uploads/{id} | Get a specific upload
+*UploadsAPI* | [**GetUploadsId**](docs/UploadsAPI.md#getuploadsid) | **Get** /uploads/{id} | Get a specific upload or download the file
 *UploadsAPI* | [**PostUploads**](docs/UploadsAPI.md#postuploads) | **Post** /uploads | Upload a file
 *UsersAPI* | [**GetUserById**](docs/UsersAPI.md#getuserbyid) | **Get** /users/{id} | Retrieve a user by ID
 *UsersAPI* | [**GetUsers**](docs/UsersAPI.md#getusers) | **Get** /users | Retrieve a list of users
@@ -303,6 +309,8 @@ Class | Method | HTTP request | Description
  - [CreateNetworkRequest](docs/CreateNetworkRequest.md)
  - [CreatePasswordFolder201Response](docs/CreatePasswordFolder201Response.md)
  - [CreatePasswordFolderRequest](docs/CreatePasswordFolderRequest.md)
+ - [CreatePhoto201Response](docs/CreatePhoto201Response.md)
+ - [CreatePhoto422Response](docs/CreatePhoto422Response.md)
  - [CreateProcedureRequest](docs/CreateProcedureRequest.md)
  - [CreateProcedureTask201Response](docs/CreateProcedureTask201Response.md)
  - [CreateProcedureTaskRequest](docs/CreateProcedureTaskRequest.md)
@@ -328,9 +336,11 @@ Class | Method | HTTP request | Description
  - [GetFolders200Response](docs/GetFolders200Response.md)
  - [GetMatchers200Response](docs/GetMatchers200Response.md)
  - [GetPasswordFolders200Response](docs/GetPasswordFolders200Response.md)
+ - [GetPhotos200Response](docs/GetPhotos200Response.md)
  - [GetProcedureById200Response](docs/GetProcedureById200Response.md)
  - [GetProcedureTasks200Response](docs/GetProcedureTasks200Response.md)
  - [GetProcedures200Response](docs/GetProcedures200Response.md)
+ - [GetPublicPhoto200Response](docs/GetPublicPhoto200Response.md)
  - [GetPublicPhotos200Response](docs/GetPublicPhotos200Response.md)
  - [GetRelations200Response](docs/GetRelations200Response.md)
  - [Group](docs/Group.md)
@@ -343,6 +353,7 @@ Class | Method | HTTP request | Description
  - [Matcher](docs/Matcher.md)
  - [Network](docs/Network.md)
  - [PasswordFolder](docs/PasswordFolder.md)
+ - [Photo](docs/Photo.md)
  - [PostArticlesRequest](docs/PostArticlesRequest.md)
  - [PostAssetLayouts201Response](docs/PostAssetLayouts201Response.md)
  - [PostAssetLayoutsRequest](docs/PostAssetLayoutsRequest.md)
@@ -370,6 +381,8 @@ Class | Method | HTTP request | Description
  - [PutAssetLayoutsIdRequest](docs/PutAssetLayoutsIdRequest.md)
  - [PutAssetLayoutsIdRequestFieldsInner](docs/PutAssetLayoutsIdRequestFieldsInner.md)
  - [PutCompaniesCompanyIdAssetsIdMoveLayoutRequest](docs/PutCompaniesCompanyIdAssetsIdMoveLayoutRequest.md)
+ - [PutFoldersIdRequest](docs/PutFoldersIdRequest.md)
+ - [PutFoldersIdRequestFolder](docs/PutFoldersIdRequestFolder.md)
  - [PutRackStorageItemsIdRequest](docs/PutRackStorageItemsIdRequest.md)
  - [PutWebsitesIdRequest](docs/PutWebsitesIdRequest.md)
  - [PutWebsitesIdRequestWebsite](docs/PutWebsitesIdRequestWebsite.md)
@@ -391,6 +404,8 @@ Class | Method | HTTP request | Description
  - [UpdateMagicDashPositionsRequestPositionsInner](docs/UpdateMagicDashPositionsRequestPositionsInner.md)
  - [UpdateMatcherByIdRequest](docs/UpdateMatcherByIdRequest.md)
  - [UpdatePasswordFolderRequest](docs/UpdatePasswordFolderRequest.md)
+ - [UpdatePhotoRequest](docs/UpdatePhotoRequest.md)
+ - [UpdatePhotoRequestPhoto](docs/UpdatePhotoRequestPhoto.md)
  - [UpdateProcedureRequest](docs/UpdateProcedureRequest.md)
  - [UpdateProcedureTaskRequest](docs/UpdateProcedureTaskRequest.md)
  - [UpdatePublicPhoto200Response](docs/UpdatePublicPhoto200Response.md)

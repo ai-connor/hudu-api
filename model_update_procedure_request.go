@@ -19,15 +19,11 @@ var _ MappedNullable = &UpdateProcedureRequest{}
 
 // UpdateProcedureRequest struct for UpdateProcedureRequest
 type UpdateProcedureRequest struct {
-	// The new name for the procedure.
+	// The new name for the process or run.
 	Name *string `json:"name,omitempty"`
-	// The new description for the procedure.
+	// For **processes**: the process description. **Runs** snapshot the parent process description at kickoff; that text is not editable in the product UI—avoid relying on changing this field for runs.
 	Description *string `json:"description,omitempty"`
-	// When true, sets both template and remove_completion_ability to true. When false, sets both to false.
-	CompanyTemplate *bool `json:"company_template,omitempty"`
-	// The ID of the company this procedure should be transferred to. Set to null to make this a global template.
-	CompanyId *int64 `json:"company_id,omitempty"`
-	// When true, archives the procedure by setting discarded_at. When false, unarchives the procedure by clearing discarded_at.
+	// When true, archives the **company process**. When false, unarchives it. **Only company processes** are affected—global processes and **runs** cannot be archived via this parameter (runs follow the parent process).
 	Archived             *bool `json:"archived,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
@@ -115,70 +111,6 @@ func (o *UpdateProcedureRequest) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetCompanyTemplate returns the CompanyTemplate field value if set, zero value otherwise.
-func (o *UpdateProcedureRequest) GetCompanyTemplate() bool {
-	if o == nil || IsNil(o.CompanyTemplate) {
-		var ret bool
-		return ret
-	}
-	return *o.CompanyTemplate
-}
-
-// GetCompanyTemplateOk returns a tuple with the CompanyTemplate field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UpdateProcedureRequest) GetCompanyTemplateOk() (*bool, bool) {
-	if o == nil || IsNil(o.CompanyTemplate) {
-		return nil, false
-	}
-	return o.CompanyTemplate, true
-}
-
-// HasCompanyTemplate returns a boolean if a field has been set.
-func (o *UpdateProcedureRequest) HasCompanyTemplate() bool {
-	if o != nil && !IsNil(o.CompanyTemplate) {
-		return true
-	}
-
-	return false
-}
-
-// SetCompanyTemplate gets a reference to the given bool and assigns it to the CompanyTemplate field.
-func (o *UpdateProcedureRequest) SetCompanyTemplate(v bool) {
-	o.CompanyTemplate = &v
-}
-
-// GetCompanyId returns the CompanyId field value if set, zero value otherwise.
-func (o *UpdateProcedureRequest) GetCompanyId() int64 {
-	if o == nil || IsNil(o.CompanyId) {
-		var ret int64
-		return ret
-	}
-	return *o.CompanyId
-}
-
-// GetCompanyIdOk returns a tuple with the CompanyId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UpdateProcedureRequest) GetCompanyIdOk() (*int64, bool) {
-	if o == nil || IsNil(o.CompanyId) {
-		return nil, false
-	}
-	return o.CompanyId, true
-}
-
-// HasCompanyId returns a boolean if a field has been set.
-func (o *UpdateProcedureRequest) HasCompanyId() bool {
-	if o != nil && !IsNil(o.CompanyId) {
-		return true
-	}
-
-	return false
-}
-
-// SetCompanyId gets a reference to the given int64 and assigns it to the CompanyId field.
-func (o *UpdateProcedureRequest) SetCompanyId(v int64) {
-	o.CompanyId = &v
-}
-
 // GetArchived returns the Archived field value if set, zero value otherwise.
 func (o *UpdateProcedureRequest) GetArchived() bool {
 	if o == nil || IsNil(o.Archived) {
@@ -227,12 +159,6 @@ func (o UpdateProcedureRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if !IsNil(o.CompanyTemplate) {
-		toSerialize["company_template"] = o.CompanyTemplate
-	}
-	if !IsNil(o.CompanyId) {
-		toSerialize["company_id"] = o.CompanyId
-	}
 	if !IsNil(o.Archived) {
 		toSerialize["archived"] = o.Archived
 	}
@@ -260,8 +186,6 @@ func (o *UpdateProcedureRequest) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "name")
 		delete(additionalProperties, "description")
-		delete(additionalProperties, "company_template")
-		delete(additionalProperties, "company_id")
 		delete(additionalProperties, "archived")
 		o.AdditionalProperties = additionalProperties
 	}

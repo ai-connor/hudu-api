@@ -28,7 +28,7 @@ type ApiCreateProcedureRequest struct {
 	body       *CreateProcedureRequest
 }
 
-// Procedure attributes
+// Process attributes
 func (r ApiCreateProcedureRequest) Body(body CreateProcedureRequest) ApiCreateProcedureRequest {
 	r.body = &body
 	return r
@@ -39,9 +39,15 @@ func (r ApiCreateProcedureRequest) Execute() (*Procedure, *http.Response, error)
 }
 
 /*
-CreateProcedure Create a new Procedure (Process)
+CreateProcedure Create a new Process (Template)
 
-Create a new procedure without any tasks
+Creates a new process template without any tasks. This endpoint creates **processes only** - you cannot create runs (active instances) with this endpoint. Use the `/kickoff` endpoint to create runs from processes.
+
+**Process Types:**
+- **Global Template** (`company_id: null`): Available to all companies as a template. Cannot be kicked off directly - must first be copied to a company.
+- **Company Process** (`company_id: <id>`): A company-specific process that can be kicked off to create runs.
+
+**Note:** Runs cannot be created via POST. Use `POST /procedures/{id}/kickoff` to create runs from processes.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiCreateProcedureRequest
@@ -157,19 +163,19 @@ type ApiCreateProcedureFromTemplateRequest struct {
 	description *string
 }
 
-// The ID of the company for the new procedure. If not provided, a global template will be created.
+// The ID of the company for the new process. If provided, creates a **company process**. If not provided, creates a **global template** (copy of the source).
 func (r ApiCreateProcedureFromTemplateRequest) CompanyId(companyId int32) ApiCreateProcedureFromTemplateRequest {
 	r.companyId = &companyId
 	return r
 }
 
-// The new name for the procedure.
+// The new name for the process.
 func (r ApiCreateProcedureFromTemplateRequest) Name(name string) ApiCreateProcedureFromTemplateRequest {
 	r.name = &name
 	return r
 }
 
-// The new description for the procedure.
+// The new description for the process.
 func (r ApiCreateProcedureFromTemplateRequest) Description(description string) ApiCreateProcedureFromTemplateRequest {
 	r.description = &description
 	return r
@@ -180,12 +186,18 @@ func (r ApiCreateProcedureFromTemplateRequest) Execute() (*GetProcedureById200Re
 }
 
 /*
-CreateProcedureFromTemplate Create a Procedure from Template
+CreateProcedureFromTemplate Create a Process from a Global Template
 
-Create a new procedure instance from an existing template. If company_id is not provided, it creates a global template; otherwise, it creates a company-specific template.
+Creates a new process by copying from an existing **global template**. This is how you make global templates available to specific companies.
+
+**The source must be a global template** (`company_id: null`).
+
+**The result depends on the `company_id` parameter:**
+- If `company_id` is **not provided**: Creates another global template (copy of the original)
+- If `company_id` is **provided**: Creates a company-specific process that can be kicked off to create runs
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the template procedure to duplicate.
+	@param id The ID of the **global template** to copy from. Must be a process with `company_id: null`.
 	@return ApiCreateProcedureFromTemplateRequest
 */
 func (a *ProceduresAPIService) CreateProcedureFromTemplate(ctx context.Context, id int32) ApiCreateProcedureFromTemplateRequest {
@@ -307,12 +319,12 @@ func (r ApiDeleteProcedureRequest) Execute() (*DeleteProcedureTask200Response, *
 }
 
 /*
-DeleteProcedure Delete a Procedure
+DeleteProcedure Delete a Process or Run
 
-Remove a procedure by its ID.
+Remove a process or run by its ID.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the procedure to delete.
+	@param id The ID of the process or run to delete.
 	@return ApiDeleteProcedureRequest
 */
 func (a *ProceduresAPIService) DeleteProcedure(ctx context.Context, id int32) ApiDeleteProcedureRequest {
@@ -423,19 +435,19 @@ type ApiDuplicateProcedureRequest struct {
 	description *string
 }
 
-// The ID of the company for the new duplicated procedure.
+// The ID of the company for the new duplicated process.
 func (r ApiDuplicateProcedureRequest) CompanyId(companyId int32) ApiDuplicateProcedureRequest {
 	r.companyId = &companyId
 	return r
 }
 
-// The new name for the duplicated procedure (optional).
+// The new name for the duplicated process (optional).
 func (r ApiDuplicateProcedureRequest) Name(name string) ApiDuplicateProcedureRequest {
 	r.name = &name
 	return r
 }
 
-// The new description for the duplicated procedure (optional).
+// The new description for the duplicated process (optional).
 func (r ApiDuplicateProcedureRequest) Description(description string) ApiDuplicateProcedureRequest {
 	r.description = &description
 	return r
@@ -446,12 +458,12 @@ func (r ApiDuplicateProcedureRequest) Execute() (*GetProcedureById200Response, *
 }
 
 /*
-DuplicateProcedure Duplicate an existing Procedure
+DuplicateProcedure Duplicate an existing Process
 
-Create a new procedure by duplicating an existing one, with optional modifications.
+Create a new process by duplicating an existing one, with optional modifications.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the procedure to duplicate.
+	@param id The ID of the process to duplicate.
 	@return ApiDuplicateProcedureRequest
 */
 func (a *ProceduresAPIService) DuplicateProcedure(ctx context.Context, id int32) ApiDuplicateProcedureRequest {
@@ -574,12 +586,12 @@ func (r ApiGetProcedureByIdRequest) Execute() (*GetProcedureById200Response, *ht
 }
 
 /*
-GetProcedureById Get a Procedure (Process)
+GetProcedureById Get a Process or Run
 
-Retrieve a procedure by its ID.
+Retrieve a process or run by its ID.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the requested procedure.
+	@param id The ID of the requested process or run.
 	@return ApiGetProcedureByIdRequest
 */
 func (a *ProceduresAPIService) GetProcedureById(ctx context.Context, id int32) ApiGetProcedureByIdRequest {
@@ -684,17 +696,41 @@ func (a *ProceduresAPIService) GetProcedureByIdExecute(r ApiGetProcedureByIdRequ
 type ApiGetProceduresRequest struct {
 	ctx               context.Context
 	ApiService        *ProceduresAPIService
+	type_             *string
+	processScope      *string
+	parentProcessId   *int32
 	name              *string
 	companyId         *int32
+	slug              *string
+	createdAt         *string
+	updatedAt         *string
+	archived          *string
 	page              *int32
 	pageSize          *int32
-	slug              *string
 	globalTemplate    *string
 	companyTemplate   *int32
 	parentProcedureId *int32
 }
 
-// Filter by the name of the procedure.
+// Filter by type: &#39;process&#39; (templates only), &#39;run&#39; (active instances only), or &#39;all&#39; (default - returns both)
+func (r ApiGetProceduresRequest) Type_(type_ string) ApiGetProceduresRequest {
+	r.type_ = &type_
+	return r
+}
+
+// Filter processes by scope: &#39;global&#39; (available to all companies) or &#39;company&#39; (company-specific). Only applies when filtering processes.
+func (r ApiGetProceduresRequest) ProcessScope(processScope string) ApiGetProceduresRequest {
+	r.processScope = &processScope
+	return r
+}
+
+// Filter runs by their parent process ID. Returns all runs created from the specified process.
+func (r ApiGetProceduresRequest) ParentProcessId(parentProcessId int32) ApiGetProceduresRequest {
+	r.parentProcessId = &parentProcessId
+	return r
+}
+
+// Filter by the name of the process or run (case-insensitive exact match).
 func (r ApiGetProceduresRequest) Name(name string) ApiGetProceduresRequest {
 	r.name = &name
 	return r
@@ -706,37 +742,55 @@ func (r ApiGetProceduresRequest) CompanyId(companyId int32) ApiGetProceduresRequ
 	return r
 }
 
+// Filter by the URL slug of the process or run.
+func (r ApiGetProceduresRequest) Slug(slug string) ApiGetProceduresRequest {
+	r.slug = &slug
+	return r
+}
+
+// Filter by creation date. Supports exact match (&#39;2024-01-15&#39;) or range (&#39;2024-01-01,2024-01-31&#39;).
+func (r ApiGetProceduresRequest) CreatedAt(createdAt string) ApiGetProceduresRequest {
+	r.createdAt = &createdAt
+	return r
+}
+
+// Filter by last update date. Supports exact match (&#39;2024-01-15&#39;) or range (&#39;2024-01-01,2024-01-31&#39;).
+func (r ApiGetProceduresRequest) UpdatedAt(updatedAt string) ApiGetProceduresRequest {
+	r.updatedAt = &updatedAt
+	return r
+}
+
+// Filter by archived status: &#39;true&#39; or &#39;1&#39; to show only archived processes/runs, &#39;false&#39; or &#39;0&#39; to show only non-archived (default). If not specified, only non-archived items are returned.
+func (r ApiGetProceduresRequest) Archived(archived string) ApiGetProceduresRequest {
+	r.archived = &archived
+	return r
+}
+
 // The current page of results.
 func (r ApiGetProceduresRequest) Page(page int32) ApiGetProceduresRequest {
 	r.page = &page
 	return r
 }
 
-// The number of results to return per page.
+// The number of results to return per page (default: 25, max: 1000).
 func (r ApiGetProceduresRequest) PageSize(pageSize int32) ApiGetProceduresRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-// Filter by the URL slug of the procedure.
-func (r ApiGetProceduresRequest) Slug(slug string) ApiGetProceduresRequest {
-	r.slug = &slug
-	return r
-}
-
-// Filter for global templates. &#39;true&#39; for global templates, &#39;false&#39; for company-specific procedures
+// **DEPRECATED** - Use &#39;process_scope&#39; instead. Filter for global templates: &#39;true&#39; for global templates, &#39;false&#39; for company-specific processes.
 func (r ApiGetProceduresRequest) GlobalTemplate(globalTemplate string) ApiGetProceduresRequest {
 	r.globalTemplate = &globalTemplate
 	return r
 }
 
-// Filter for company-specific templates. Provide the company ID to filter templates for that company
+// **DEPRECATED** - Use &#39;process_scope&#39; instead. Filter for company-specific templates by providing the company ID.
 func (r ApiGetProceduresRequest) CompanyTemplate(companyTemplate int32) ApiGetProceduresRequest {
 	r.companyTemplate = &companyTemplate
 	return r
 }
 
-// Filter for child procedures of a specific parent procedure
+// **DEPRECATED** - Use &#39;parent_process_id&#39; instead. Filter for runs of a specific parent process.
 func (r ApiGetProceduresRequest) ParentProcedureId(parentProcedureId int32) ApiGetProceduresRequest {
 	r.parentProcedureId = &parentProcedureId
 	return r
@@ -747,9 +801,20 @@ func (r ApiGetProceduresRequest) Execute() (*GetProcedures200Response, *http.Res
 }
 
 /*
-GetProcedures Get a list of Procedures (Processes)
+GetProcedures Get a list of Processes and Runs
 
-Retrieve a list of procedures filtered by the provided parameters.
+Retrieve a list of processes and runs.
+
+**Understanding the Types:**
+- **Process** (`run: false`): A template. Can be global (company_id: null) or company-specific.
+- **Run** (`run: true`): An active instance created from a process via the `/kickoff` endpoint.
+
+**How to Create Each:**
+- **Global Template**: `POST /procedures` with `company_id: null`
+- **Company Process**: `POST /procedures` with `company_id: <id>`
+- **Run**: `POST /procedures/{id}/kickoff` on a company process
+
+Use the `type` parameter to filter between processes and runs.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetProceduresRequest
@@ -783,20 +848,38 @@ func (a *ProceduresAPIService) GetProceduresExecute(r ApiGetProceduresRequest) (
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.type_ != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "", "")
+	}
+	if r.processScope != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "process_scope", r.processScope, "", "")
+	}
+	if r.parentProcessId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "parent_process_id", r.parentProcessId, "", "")
+	}
 	if r.name != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "", "")
 	}
 	if r.companyId != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "company_id", r.companyId, "", "")
 	}
+	if r.slug != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "slug", r.slug, "", "")
+	}
+	if r.createdAt != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at", r.createdAt, "", "")
+	}
+	if r.updatedAt != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "updated_at", r.updatedAt, "", "")
+	}
+	if r.archived != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "archived", r.archived, "", "")
+	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "", "")
-	}
-	if r.slug != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "slug", r.slug, "", "")
 	}
 	if r.globalTemplate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "global_template", r.globalTemplate, "", "")
@@ -883,13 +966,13 @@ type ApiKickoffProcedureByIdRequest struct {
 	name       *string
 }
 
-// The ID of the asset to attach the process to (optional).
+// The ID of the asset to attach the run to (optional).
 func (r ApiKickoffProcedureByIdRequest) AssetId(assetId int32) ApiKickoffProcedureByIdRequest {
 	r.assetId = &assetId
 	return r
 }
 
-// The new name for the procedure (optional).
+// The new name for the run (optional).
 func (r ApiKickoffProcedureByIdRequest) Name(name string) ApiKickoffProcedureByIdRequest {
 	r.name = &name
 	return r
@@ -900,12 +983,12 @@ func (r ApiKickoffProcedureByIdRequest) Execute() (*DeleteProcedureTask200Respon
 }
 
 /*
-KickoffProcedureById Kickoff a Procedure (Process)
+KickoffProcedureById Create a Run from a Process
 
-Start a process from a company process. Optionally, attach the process to an asset by providing an asset ID, or change the process name by passing a new name.
+Creates an active run (instance) from a process template. This clones the process and all its tasks, creating a new run with `run: true`. Optionally attach the run to an asset or customize the name. Note: Cannot kickoff global process templates - they must first be copied to a company.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the requested procedure.
+	@param id The ID of the requested process.
 	@return ApiKickoffProcedureByIdRequest
 */
 func (a *ProceduresAPIService) KickoffProcedureById(ctx context.Context, id int32) ApiKickoffProcedureByIdRequest {
@@ -1030,12 +1113,16 @@ func (r ApiUpdateProcedureRequest) Execute() (*GetProcedureById200Response, *htt
 }
 
 /*
-UpdateProcedure Update an existing Procedure
+UpdateProcedure Update an existing Process or Run
 
-Edit the name, description, and template status of an existing procedure.
+Updates mutable fields on a **process** or **run**. `company_id` is not accepted on update—use `POST /procedures/{id}/create_from_template` or `POST /procedures/{id}/duplicate` to place a process under a company.
+
+**Processes** (`run: false`): You can update `name`, `description`, and `archived`. The `archived` flag applies only to **company** processes (not global processes or runs).
+
+**Runs** (`run: true`): Use this endpoint mainly to change the run **`name`**. The run’s description is copied from the parent process at kickoff and is not editable in the web app; `archived` is ignored for runs. Prefer sending only `name` when updating a run.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the procedure to update.
+	@param id The ID of the process or run to update.
 	@return ApiUpdateProcedureRequest
 */
 func (a *ProceduresAPIService) UpdateProcedure(ctx context.Context, id int32) ApiUpdateProcedureRequest {

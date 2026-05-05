@@ -134,6 +134,7 @@ type ApiGetFoldersRequest struct {
 	name       *string
 	companyId  *int64
 	inCompany  *bool
+	folderType *string
 	page       *int32
 	pageSize   *int32
 }
@@ -153,6 +154,12 @@ func (r ApiGetFoldersRequest) CompanyId(companyId int64) ApiGetFoldersRequest {
 // When true, only returns company-specific KB articles
 func (r ApiGetFoldersRequest) InCompany(inCompany bool) ApiGetFoldersRequest {
 	r.inCompany = &inCompany
+	return r
+}
+
+// Filter folders by type - &#39;article&#39; or &#39;photo&#39;
+func (r ApiGetFoldersRequest) FolderType(folderType string) ApiGetFoldersRequest {
+	r.folderType = &folderType
 	return r
 }
 
@@ -215,6 +222,9 @@ func (a *FoldersAPIService) GetFoldersExecute(r ApiGetFoldersRequest) (*GetFolde
 	}
 	if r.inCompany != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "in_company", r.inCompany, "", "")
+	}
+	if r.folderType != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "folder_type", r.folderType, "", "")
 	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
@@ -537,10 +547,10 @@ type ApiPutFoldersIdRequest struct {
 	ctx        context.Context
 	ApiService *FoldersAPIService
 	id         int64
-	folder     *PostFoldersRequest
+	folder     *PutFoldersIdRequest
 }
 
-func (r ApiPutFoldersIdRequest) Folder(folder PostFoldersRequest) ApiPutFoldersIdRequest {
+func (r ApiPutFoldersIdRequest) Folder(folder PutFoldersIdRequest) ApiPutFoldersIdRequest {
 	r.folder = &folder
 	return r
 }
@@ -552,7 +562,7 @@ func (r ApiPutFoldersIdRequest) Execute() (*PostFolders201Response, *http.Respon
 /*
 PutFoldersId Update a folder
 
-Update an existing folder with the provided information.
+Update an existing folder with the provided information. Note: The folder_type field cannot be changed after creation and will result in a validation error if a different value is provided.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the folder to update

@@ -14,11 +14,11 @@ import (
 	"encoding/json"
 )
 
-// checks if the PostFoldersRequestFolder type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PostFoldersRequestFolder{}
+// checks if the PutFoldersIdRequestFolder type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PutFoldersIdRequestFolder{}
 
-// PostFoldersRequestFolder struct for PostFoldersRequestFolder
-type PostFoldersRequestFolder struct {
+// PutFoldersIdRequestFolder struct for PutFoldersIdRequestFolder
+type PutFoldersIdRequestFolder struct {
 	// Name of the folder
 	Name *string `json:"name,omitempty"`
 	// Icon for the folder
@@ -29,32 +29,32 @@ type PostFoldersRequestFolder struct {
 	ParentFolderId *int64 `json:"parent_folder_id,omitempty"`
 	// ID of the associated company (optional)
 	CompanyId *int64 `json:"company_id,omitempty"`
-	// Type of folder - 'article' or 'photo' (optional, defaults to 'article'). Can only be set during creation.
+	// Type of folder - 'article' or 'photo' (optional)
 	FolderType           *string `json:"folder_type,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PostFoldersRequestFolder PostFoldersRequestFolder
+type _PutFoldersIdRequestFolder PutFoldersIdRequestFolder
 
-// NewPostFoldersRequestFolder instantiates a new PostFoldersRequestFolder object
+// NewPutFoldersIdRequestFolder instantiates a new PutFoldersIdRequestFolder object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostFoldersRequestFolder() *PostFoldersRequestFolder {
-	this := PostFoldersRequestFolder{}
+func NewPutFoldersIdRequestFolder() *PutFoldersIdRequestFolder {
+	this := PutFoldersIdRequestFolder{}
 	return &this
 }
 
-// NewPostFoldersRequestFolderWithDefaults instantiates a new PostFoldersRequestFolder object
+// NewPutFoldersIdRequestFolderWithDefaults instantiates a new PutFoldersIdRequestFolder object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostFoldersRequestFolderWithDefaults() *PostFoldersRequestFolder {
-	this := PostFoldersRequestFolder{}
+func NewPutFoldersIdRequestFolderWithDefaults() *PutFoldersIdRequestFolder {
+	this := PutFoldersIdRequestFolder{}
 	return &this
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
-func (o *PostFoldersRequestFolder) GetName() string {
+func (o *PutFoldersIdRequestFolder) GetName() string {
 	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
@@ -64,7 +64,7 @@ func (o *PostFoldersRequestFolder) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostFoldersRequestFolder) GetNameOk() (*string, bool) {
+func (o *PutFoldersIdRequestFolder) GetNameOk() (*string, bool) {
 	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
@@ -72,7 +72,7 @@ func (o *PostFoldersRequestFolder) GetNameOk() (*string, bool) {
 }
 
 // HasName returns a boolean if a field has been set.
-func (o *PostFoldersRequestFolder) HasName() bool {
+func (o *PutFoldersIdRequestFolder) HasName() bool {
 	if o != nil && !IsNil(o.Name) {
 		return true
 	}
@@ -81,12 +81,12 @@ func (o *PostFoldersRequestFolder) HasName() bool {
 }
 
 // SetName gets a reference to the given string and assigns it to the Name field.
-func (o *PostFoldersRequestFolder) SetName(v string) {
+func (o *PutFoldersIdRequestFolder) SetName(v string) {
 	o.Name = &v
 }
 
 // GetIcon returns the Icon field value if set, zero value otherwise.
-func (o *PostFoldersRequestFolder) GetIcon() string {
+func (o *PutFoldersIdRequestFolder) GetIcon() string {
 	if o == nil || IsNil(o.Icon) {
 		var ret string
 		return ret
@@ -96,7 +96,7 @@ func (o *PostFoldersRequestFolder) GetIcon() string {
 
 // GetIconOk returns a tuple with the Icon field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostFoldersRequestFolder) GetIconOk() (*string, bool) {
+func (o *PutFoldersIdRequestFolder) GetIconOk() (*string, bool) {
 	if o == nil || IsNil(o.Icon) {
 		return nil, false
 	}
@@ -104,7 +104,7 @@ func (o *PostFoldersRequestFolder) GetIconOk() (*string, bool) {
 }
 
 // HasIcon returns a boolean if a field has been set.
-func (o *PostFoldersRequestFolder) HasIcon() bool {
+func (o *PutFoldersIdRequestFolder) HasIcon() bool {
 	if o != nil && !IsNil(o.Icon) {
 		return true
 	}
@@ -113,12 +113,12 @@ func (o *PostFoldersRequestFolder) HasIcon() bool {
 }
 
 // SetIcon gets a reference to the given string and assigns it to the Icon field.
-func (o *PostFoldersRequestFolder) SetIcon(v string) {
+func (o *PutFoldersIdRequestFolder) SetIcon(v string) {
 	o.Icon = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
-func (o *PostFoldersRequestFolder) GetDescription() string {
+func (o *PutFoldersIdRequestFolder) GetDescription() string {
 	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
@@ -128,7 +128,7 @@ func (o *PostFoldersRequestFolder) GetDescription() string {
 
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostFoldersRequestFolder) GetDescriptionOk() (*string, bool) {
+func (o *PutFoldersIdRequestFolder) GetDescriptionOk() (*string, bool) {
 	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
@@ -136,7 +136,7 @@ func (o *PostFoldersRequestFolder) GetDescriptionOk() (*string, bool) {
 }
 
 // HasDescription returns a boolean if a field has been set.
-func (o *PostFoldersRequestFolder) HasDescription() bool {
+func (o *PutFoldersIdRequestFolder) HasDescription() bool {
 	if o != nil && !IsNil(o.Description) {
 		return true
 	}
@@ -145,12 +145,12 @@ func (o *PostFoldersRequestFolder) HasDescription() bool {
 }
 
 // SetDescription gets a reference to the given string and assigns it to the Description field.
-func (o *PostFoldersRequestFolder) SetDescription(v string) {
+func (o *PutFoldersIdRequestFolder) SetDescription(v string) {
 	o.Description = &v
 }
 
 // GetParentFolderId returns the ParentFolderId field value if set, zero value otherwise.
-func (o *PostFoldersRequestFolder) GetParentFolderId() int64 {
+func (o *PutFoldersIdRequestFolder) GetParentFolderId() int64 {
 	if o == nil || IsNil(o.ParentFolderId) {
 		var ret int64
 		return ret
@@ -160,7 +160,7 @@ func (o *PostFoldersRequestFolder) GetParentFolderId() int64 {
 
 // GetParentFolderIdOk returns a tuple with the ParentFolderId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostFoldersRequestFolder) GetParentFolderIdOk() (*int64, bool) {
+func (o *PutFoldersIdRequestFolder) GetParentFolderIdOk() (*int64, bool) {
 	if o == nil || IsNil(o.ParentFolderId) {
 		return nil, false
 	}
@@ -168,7 +168,7 @@ func (o *PostFoldersRequestFolder) GetParentFolderIdOk() (*int64, bool) {
 }
 
 // HasParentFolderId returns a boolean if a field has been set.
-func (o *PostFoldersRequestFolder) HasParentFolderId() bool {
+func (o *PutFoldersIdRequestFolder) HasParentFolderId() bool {
 	if o != nil && !IsNil(o.ParentFolderId) {
 		return true
 	}
@@ -177,12 +177,12 @@ func (o *PostFoldersRequestFolder) HasParentFolderId() bool {
 }
 
 // SetParentFolderId gets a reference to the given int64 and assigns it to the ParentFolderId field.
-func (o *PostFoldersRequestFolder) SetParentFolderId(v int64) {
+func (o *PutFoldersIdRequestFolder) SetParentFolderId(v int64) {
 	o.ParentFolderId = &v
 }
 
 // GetCompanyId returns the CompanyId field value if set, zero value otherwise.
-func (o *PostFoldersRequestFolder) GetCompanyId() int64 {
+func (o *PutFoldersIdRequestFolder) GetCompanyId() int64 {
 	if o == nil || IsNil(o.CompanyId) {
 		var ret int64
 		return ret
@@ -192,7 +192,7 @@ func (o *PostFoldersRequestFolder) GetCompanyId() int64 {
 
 // GetCompanyIdOk returns a tuple with the CompanyId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostFoldersRequestFolder) GetCompanyIdOk() (*int64, bool) {
+func (o *PutFoldersIdRequestFolder) GetCompanyIdOk() (*int64, bool) {
 	if o == nil || IsNil(o.CompanyId) {
 		return nil, false
 	}
@@ -200,7 +200,7 @@ func (o *PostFoldersRequestFolder) GetCompanyIdOk() (*int64, bool) {
 }
 
 // HasCompanyId returns a boolean if a field has been set.
-func (o *PostFoldersRequestFolder) HasCompanyId() bool {
+func (o *PutFoldersIdRequestFolder) HasCompanyId() bool {
 	if o != nil && !IsNil(o.CompanyId) {
 		return true
 	}
@@ -209,12 +209,12 @@ func (o *PostFoldersRequestFolder) HasCompanyId() bool {
 }
 
 // SetCompanyId gets a reference to the given int64 and assigns it to the CompanyId field.
-func (o *PostFoldersRequestFolder) SetCompanyId(v int64) {
+func (o *PutFoldersIdRequestFolder) SetCompanyId(v int64) {
 	o.CompanyId = &v
 }
 
 // GetFolderType returns the FolderType field value if set, zero value otherwise.
-func (o *PostFoldersRequestFolder) GetFolderType() string {
+func (o *PutFoldersIdRequestFolder) GetFolderType() string {
 	if o == nil || IsNil(o.FolderType) {
 		var ret string
 		return ret
@@ -224,7 +224,7 @@ func (o *PostFoldersRequestFolder) GetFolderType() string {
 
 // GetFolderTypeOk returns a tuple with the FolderType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostFoldersRequestFolder) GetFolderTypeOk() (*string, bool) {
+func (o *PutFoldersIdRequestFolder) GetFolderTypeOk() (*string, bool) {
 	if o == nil || IsNil(o.FolderType) {
 		return nil, false
 	}
@@ -232,7 +232,7 @@ func (o *PostFoldersRequestFolder) GetFolderTypeOk() (*string, bool) {
 }
 
 // HasFolderType returns a boolean if a field has been set.
-func (o *PostFoldersRequestFolder) HasFolderType() bool {
+func (o *PutFoldersIdRequestFolder) HasFolderType() bool {
 	if o != nil && !IsNil(o.FolderType) {
 		return true
 	}
@@ -241,11 +241,11 @@ func (o *PostFoldersRequestFolder) HasFolderType() bool {
 }
 
 // SetFolderType gets a reference to the given string and assigns it to the FolderType field.
-func (o *PostFoldersRequestFolder) SetFolderType(v string) {
+func (o *PutFoldersIdRequestFolder) SetFolderType(v string) {
 	o.FolderType = &v
 }
 
-func (o PostFoldersRequestFolder) MarshalJSON() ([]byte, error) {
+func (o PutFoldersIdRequestFolder) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -253,7 +253,7 @@ func (o PostFoldersRequestFolder) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PostFoldersRequestFolder) ToMap() (map[string]interface{}, error) {
+func (o PutFoldersIdRequestFolder) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
@@ -281,16 +281,16 @@ func (o PostFoldersRequestFolder) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PostFoldersRequestFolder) UnmarshalJSON(data []byte) (err error) {
-	varPostFoldersRequestFolder := _PostFoldersRequestFolder{}
+func (o *PutFoldersIdRequestFolder) UnmarshalJSON(data []byte) (err error) {
+	varPutFoldersIdRequestFolder := _PutFoldersIdRequestFolder{}
 
-	err = json.Unmarshal(data, &varPostFoldersRequestFolder)
+	err = json.Unmarshal(data, &varPutFoldersIdRequestFolder)
 
 	if err != nil {
 		return err
 	}
 
-	*o = PostFoldersRequestFolder(varPostFoldersRequestFolder)
+	*o = PutFoldersIdRequestFolder(varPutFoldersIdRequestFolder)
 
 	additionalProperties := make(map[string]interface{})
 
@@ -307,38 +307,38 @@ func (o *PostFoldersRequestFolder) UnmarshalJSON(data []byte) (err error) {
 	return err
 }
 
-type NullablePostFoldersRequestFolder struct {
-	value *PostFoldersRequestFolder
+type NullablePutFoldersIdRequestFolder struct {
+	value *PutFoldersIdRequestFolder
 	isSet bool
 }
 
-func (v NullablePostFoldersRequestFolder) Get() *PostFoldersRequestFolder {
+func (v NullablePutFoldersIdRequestFolder) Get() *PutFoldersIdRequestFolder {
 	return v.value
 }
 
-func (v *NullablePostFoldersRequestFolder) Set(val *PostFoldersRequestFolder) {
+func (v *NullablePutFoldersIdRequestFolder) Set(val *PutFoldersIdRequestFolder) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostFoldersRequestFolder) IsSet() bool {
+func (v NullablePutFoldersIdRequestFolder) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostFoldersRequestFolder) Unset() {
+func (v *NullablePutFoldersIdRequestFolder) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostFoldersRequestFolder(val *PostFoldersRequestFolder) *NullablePostFoldersRequestFolder {
-	return &NullablePostFoldersRequestFolder{value: val, isSet: true}
+func NewNullablePutFoldersIdRequestFolder(val *PutFoldersIdRequestFolder) *NullablePutFoldersIdRequestFolder {
+	return &NullablePutFoldersIdRequestFolder{value: val, isSet: true}
 }
 
-func (v NullablePostFoldersRequestFolder) MarshalJSON() ([]byte, error) {
+func (v NullablePutFoldersIdRequestFolder) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostFoldersRequestFolder) UnmarshalJSON(src []byte) error {
+func (v *NullablePutFoldersIdRequestFolder) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the Procedure type satisfies the MappedNullable interface at compile time
@@ -19,39 +20,47 @@ var _ MappedNullable = &Procedure{}
 
 // Procedure struct for Procedure
 type Procedure struct {
-	// The unique identifier of the procedure.
+	// The unique identifier of the process or run.
 	Id *int32 `json:"id,omitempty"`
-	// The URL-friendly unique identifier of the procedure.
+	// The URL-friendly unique identifier of the process or run.
 	Slug *string `json:"slug,omitempty"`
-	// The name of the procedure.
+	// The name of the process or run.
 	Name *string `json:"name,omitempty"`
-	// A brief description of the procedure. Can Be null.
+	// A brief description of the process or run. Can Be null.
 	Description *string `json:"description,omitempty"`
-	// The total number of tasks in the procedure.
+	// The total number of tasks in the process or run.
 	Total *int32 `json:"total,omitempty"`
-	// The number of completed tasks in the procedure.
+	// The number of completed tasks in the process or run.
 	Completed *int32 `json:"completed,omitempty"`
-	// The URL for accessing the procedure.
+	// The URL for accessing the process or run.
 	Url *string `json:"url,omitempty"`
-	// The type of object the procedure represents.
+	// The type of object (always 'Process').
 	ObjectType *string `json:"object_type,omitempty"`
-	// The unique identifier of the company this procedure belongs to.
+	// The unique identifier of the company this process or run belongs to.
 	CompanyId *int64 `json:"company_id,omitempty"`
 	// The name of the associated company.
 	CompanyName *string `json:"company_name,omitempty"`
-	// The completion percentage of the procedure.
+	// The completion percentage of the process or run.
 	CompletionPercentage *string `json:"completion_percentage,omitempty"`
-	// The date and time when the procedure was created.
-	CreatedAt *string `json:"created_at,omitempty"`
-	// The date and time when the procedure was last updated.
-	UpdatedAt *string `json:"updated_at,omitempty"`
-	// The parent procedure, if any. Can Be null.
+	// The date and time when the process or run was created.
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// The date and time when the process or run was last updated.
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	// The parent process, if any. Can Be null.
 	ParentProcedure *string `json:"parent_procedure,omitempty"`
+	// Indicates if this is a run (true) or a process (false). Runs are active instances of a process.
+	Run *bool `json:"run,omitempty"`
+	// The ID of the parent process (for runs only). Null for processes.
+	ParentProcessId *int32 `json:"parent_process_id,omitempty"`
+	// The scope of the process: 'global' (available to all companies) or 'company' (company-specific). Null for runs.
+	ProcessType *string `json:"process_type,omitempty"`
+	// The current status of the process or run: 'Not Started', 'In Progress', 'Completed', or 'Cancelled'.
+	Status *string `json:"status,omitempty"`
 	// The associated asset, if any. Can Be null.
 	Asset *string `json:"asset,omitempty"`
-	// The URL for sharing the procedure.
+	// The URL for sharing the process or run.
 	ShareUrl *string `json:"share_url,omitempty"`
-	// A list of attributes for the tasks associated with the procedure.
+	// A list of attributes for the tasks associated with the process or run.
 	ProcedureTasksAttributes []map[string]interface{} `json:"procedure_tasks_attributes,omitempty"`
 	AdditionalProperties     map[string]interface{}
 }
@@ -428,9 +437,9 @@ func (o *Procedure) SetCompletionPercentage(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Procedure) GetCreatedAt() string {
+func (o *Procedure) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -438,7 +447,7 @@ func (o *Procedure) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Procedure) GetCreatedAtOk() (*string, bool) {
+func (o *Procedure) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -454,15 +463,15 @@ func (o *Procedure) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *Procedure) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *Procedure) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Procedure) GetUpdatedAt() string {
+func (o *Procedure) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -470,7 +479,7 @@ func (o *Procedure) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Procedure) GetUpdatedAtOk() (*string, bool) {
+func (o *Procedure) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -486,8 +495,8 @@ func (o *Procedure) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *Procedure) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *Procedure) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
@@ -521,6 +530,134 @@ func (o *Procedure) HasParentProcedure() bool {
 // SetParentProcedure gets a reference to the given string and assigns it to the ParentProcedure field.
 func (o *Procedure) SetParentProcedure(v string) {
 	o.ParentProcedure = &v
+}
+
+// GetRun returns the Run field value if set, zero value otherwise.
+func (o *Procedure) GetRun() bool {
+	if o == nil || IsNil(o.Run) {
+		var ret bool
+		return ret
+	}
+	return *o.Run
+}
+
+// GetRunOk returns a tuple with the Run field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Procedure) GetRunOk() (*bool, bool) {
+	if o == nil || IsNil(o.Run) {
+		return nil, false
+	}
+	return o.Run, true
+}
+
+// HasRun returns a boolean if a field has been set.
+func (o *Procedure) HasRun() bool {
+	if o != nil && !IsNil(o.Run) {
+		return true
+	}
+
+	return false
+}
+
+// SetRun gets a reference to the given bool and assigns it to the Run field.
+func (o *Procedure) SetRun(v bool) {
+	o.Run = &v
+}
+
+// GetParentProcessId returns the ParentProcessId field value if set, zero value otherwise.
+func (o *Procedure) GetParentProcessId() int32 {
+	if o == nil || IsNil(o.ParentProcessId) {
+		var ret int32
+		return ret
+	}
+	return *o.ParentProcessId
+}
+
+// GetParentProcessIdOk returns a tuple with the ParentProcessId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Procedure) GetParentProcessIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.ParentProcessId) {
+		return nil, false
+	}
+	return o.ParentProcessId, true
+}
+
+// HasParentProcessId returns a boolean if a field has been set.
+func (o *Procedure) HasParentProcessId() bool {
+	if o != nil && !IsNil(o.ParentProcessId) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentProcessId gets a reference to the given int32 and assigns it to the ParentProcessId field.
+func (o *Procedure) SetParentProcessId(v int32) {
+	o.ParentProcessId = &v
+}
+
+// GetProcessType returns the ProcessType field value if set, zero value otherwise.
+func (o *Procedure) GetProcessType() string {
+	if o == nil || IsNil(o.ProcessType) {
+		var ret string
+		return ret
+	}
+	return *o.ProcessType
+}
+
+// GetProcessTypeOk returns a tuple with the ProcessType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Procedure) GetProcessTypeOk() (*string, bool) {
+	if o == nil || IsNil(o.ProcessType) {
+		return nil, false
+	}
+	return o.ProcessType, true
+}
+
+// HasProcessType returns a boolean if a field has been set.
+func (o *Procedure) HasProcessType() bool {
+	if o != nil && !IsNil(o.ProcessType) {
+		return true
+	}
+
+	return false
+}
+
+// SetProcessType gets a reference to the given string and assigns it to the ProcessType field.
+func (o *Procedure) SetProcessType(v string) {
+	o.ProcessType = &v
+}
+
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *Procedure) GetStatus() string {
+	if o == nil || IsNil(o.Status) {
+		var ret string
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Procedure) GetStatusOk() (*string, bool) {
+	if o == nil || IsNil(o.Status) {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *Procedure) HasStatus() bool {
+	if o != nil && !IsNil(o.Status) {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given string and assigns it to the Status field.
+func (o *Procedure) SetStatus(v string) {
+	o.Status = &v
 }
 
 // GetAsset returns the Asset field value if set, zero value otherwise.
@@ -671,6 +808,18 @@ func (o Procedure) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParentProcedure) {
 		toSerialize["parent_procedure"] = o.ParentProcedure
 	}
+	if !IsNil(o.Run) {
+		toSerialize["run"] = o.Run
+	}
+	if !IsNil(o.ParentProcessId) {
+		toSerialize["parent_process_id"] = o.ParentProcessId
+	}
+	if !IsNil(o.ProcessType) {
+		toSerialize["process_type"] = o.ProcessType
+	}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
 	if !IsNil(o.Asset) {
 		toSerialize["asset"] = o.Asset
 	}
@@ -716,6 +865,10 @@ func (o *Procedure) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
 		delete(additionalProperties, "parent_procedure")
+		delete(additionalProperties, "run")
+		delete(additionalProperties, "parent_process_id")
+		delete(additionalProperties, "process_type")
+		delete(additionalProperties, "status")
 		delete(additionalProperties, "asset")
 		delete(additionalProperties, "share_url")
 		delete(additionalProperties, "procedure_tasks_attributes")

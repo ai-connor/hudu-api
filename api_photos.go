@@ -16,425 +16,81 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
-// ProcedureTasksAPIService ProcedureTasksAPI service
-type ProcedureTasksAPIService service
+// PhotosAPIService PhotosAPI service
+type PhotosAPIService service
 
-type ApiCreateProcedureTaskRequest struct {
+type ApiCreatePhotoRequest struct {
 	ctx           context.Context
-	ApiService    *ProcedureTasksAPIService
-	procedureTask *CreateProcedureTaskRequest
+	ApiService    *PhotosAPIService
+	file          *os.File
+	caption       *string
+	companyId     *int32
+	photoableType *string
+	photoableId   *int32
+	folderId      *int32
+	pinned        *bool
 }
 
-// Task object to be created on a process
-func (r ApiCreateProcedureTaskRequest) ProcedureTask(procedureTask CreateProcedureTaskRequest) ApiCreateProcedureTaskRequest {
-	r.procedureTask = &procedureTask
+// The image file to upload
+func (r ApiCreatePhotoRequest) File(file *os.File) ApiCreatePhotoRequest {
+	r.file = file
 	return r
 }
 
-func (r ApiCreateProcedureTaskRequest) Execute() (*CreateProcedureTask201Response, *http.Response, error) {
-	return r.ApiService.CreateProcedureTaskExecute(r)
-}
-
-/*
-CreateProcedureTask Create a new Task on a Process
-
-Create a new task on a **process (template) only**. Tasks cannot be added to runs.
-
-**Important:** When you kick off a process to create a run via `/procedures/{id}/kickoff`, all tasks are automatically cloned to the new run. You cannot add additional tasks to a run after it's created.
-
-**Note:** Run-only fields (`assigned_users`, `due_date`, `priority`) are **rejected with a 422** if included. Use the UPDATE endpoint on run tasks to set these. Completion fields (`completed`, `completed_at`, `user_id`, `completion_notes`) are silently ignored if sent—use the application UI to mark tasks complete.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateProcedureTaskRequest
-*/
-func (a *ProcedureTasksAPIService) CreateProcedureTask(ctx context.Context) ApiCreateProcedureTaskRequest {
-	return ApiCreateProcedureTaskRequest{
-		ApiService: a,
-		ctx:        ctx,
-	}
-}
-
-// Execute executes the request
-//
-//	@return CreateProcedureTask201Response
-func (a *ProcedureTasksAPIService) CreateProcedureTaskExecute(r ApiCreateProcedureTaskRequest) (*CreateProcedureTask201Response, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *CreateProcedureTask201Response
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProcedureTasksAPIService.CreateProcedureTask")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/procedure_tasks"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.procedureTask == nil {
-		return localVarReturnValue, nil, reportError("procedureTask is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.procedureTask
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["APIKeyHeader"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["x-api-key"] = key
-			}
-		}
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiDeleteProcedureTaskRequest struct {
-	ctx        context.Context
-	ApiService *ProcedureTasksAPIService
-	id         int32
-}
-
-func (r ApiDeleteProcedureTaskRequest) Execute() (*DeleteProcedureTask200Response, *http.Response, error) {
-	return r.ApiService.DeleteProcedureTaskExecute(r)
-}
-
-/*
-DeleteProcedureTask Delete a Task from a Process
-
-Remove a task by its ID from a **process (template) only**. Tasks cannot be deleted from runs.
-
-**Important:**
-- Tasks can ONLY be deleted from processes
-- Deleting a task from a process will not affect tasks on runs that were already created
-- Run tasks are fixed once the run is created
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the procedure task to delete.
-	@return ApiDeleteProcedureTaskRequest
-*/
-func (a *ProcedureTasksAPIService) DeleteProcedureTask(ctx context.Context, id int32) ApiDeleteProcedureTaskRequest {
-	return ApiDeleteProcedureTaskRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-//
-//	@return DeleteProcedureTask200Response
-func (a *ProcedureTasksAPIService) DeleteProcedureTaskExecute(r ApiDeleteProcedureTaskRequest) (*DeleteProcedureTask200Response, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodDelete
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *DeleteProcedureTask200Response
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProcedureTasksAPIService.DeleteProcedureTask")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/procedure_tasks/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["APIKeyHeader"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["x-api-key"] = key
-			}
-		}
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiGetProcedureTaskByIdRequest struct {
-	ctx        context.Context
-	ApiService *ProcedureTasksAPIService
-	id         int32
-}
-
-func (r ApiGetProcedureTaskByIdRequest) Execute() (*CreateProcedureTask201Response, *http.Response, error) {
-	return r.ApiService.GetProcedureTaskByIdExecute(r)
-}
-
-/*
-GetProcedureTaskById Get a Task by ID
-
-Retrieve a specific task by its ID from any process or run.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the procedure task to retrieve.
-	@return ApiGetProcedureTaskByIdRequest
-*/
-func (a *ProcedureTasksAPIService) GetProcedureTaskById(ctx context.Context, id int32) ApiGetProcedureTaskByIdRequest {
-	return ApiGetProcedureTaskByIdRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-//
-//	@return CreateProcedureTask201Response
-func (a *ProcedureTasksAPIService) GetProcedureTaskByIdExecute(r ApiGetProcedureTaskByIdRequest) (*CreateProcedureTask201Response, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *CreateProcedureTask201Response
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProcedureTasksAPIService.GetProcedureTaskById")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/procedure_tasks/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["APIKeyHeader"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["x-api-key"] = key
-			}
-		}
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiGetProcedureTasksRequest struct {
-	ctx         context.Context
-	ApiService  *ProcedureTasksAPIService
-	procedureId *int32
-	name        *string
-	companyId   *int32
-}
-
-// Filter by the process or run ID. Returns all tasks for that process/run.
-func (r ApiGetProcedureTasksRequest) ProcedureId(procedureId int32) ApiGetProcedureTasksRequest {
-	r.procedureId = &procedureId
+// Caption/title for the photo
+func (r ApiCreatePhotoRequest) Caption(caption string) ApiCreatePhotoRequest {
+	r.caption = &caption
 	return r
 }
 
-// Filter by the name of the task.
-func (r ApiGetProcedureTasksRequest) Name(name string) ApiGetProcedureTasksRequest {
-	r.name = &name
-	return r
-}
-
-// Filter by the company ID.
-func (r ApiGetProcedureTasksRequest) CompanyId(companyId int32) ApiGetProcedureTasksRequest {
+// ID of the company this photo belongs to
+func (r ApiCreatePhotoRequest) CompanyId(companyId int32) ApiCreatePhotoRequest {
 	r.companyId = &companyId
 	return r
 }
 
-func (r ApiGetProcedureTasksRequest) Execute() (*GetProcedureTasks200Response, *http.Response, error) {
-	return r.ApiService.GetProcedureTasksExecute(r)
+// Type of record to attach the photo to (Company, Asset, Article, etc.)
+func (r ApiCreatePhotoRequest) PhotoableType(photoableType string) ApiCreatePhotoRequest {
+	r.photoableType = &photoableType
+	return r
+}
+
+// ID of the record to attach the photo to
+func (r ApiCreatePhotoRequest) PhotoableId(photoableId int32) ApiCreatePhotoRequest {
+	r.photoableId = &photoableId
+	return r
+}
+
+// ID of the folder to place the photo in
+func (r ApiCreatePhotoRequest) FolderId(folderId int32) ApiCreatePhotoRequest {
+	r.folderId = &folderId
+	return r
+}
+
+// Whether the photo should be pinned
+func (r ApiCreatePhotoRequest) Pinned(pinned bool) ApiCreatePhotoRequest {
+	r.pinned = &pinned
+	return r
+}
+
+func (r ApiCreatePhotoRequest) Execute() (*CreatePhoto201Response, *http.Response, error) {
+	return r.ApiService.CreatePhotoExecute(r)
 }
 
 /*
-GetProcedureTasks Get a list of Process/Run Tasks
+CreatePhoto Create a new Photo
 
-Retrieve a list of tasks from processes or runs. Filter by process/run ID, task name, or company ID.
-
-**Note:** Tasks belong to either a process (template) or a run (active instance). When a run is created via `/kickoff`, all tasks are automatically cloned from the parent process. New tasks can only be added to processes, not runs.
+Uploads and creates a new photo. The photo can be attached to a photoable record (Company, Asset, Article, etc.) or created standalone.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetProcedureTasksRequest
+	@return ApiCreatePhotoRequest
 */
-func (a *ProcedureTasksAPIService) GetProcedureTasks(ctx context.Context) ApiGetProcedureTasksRequest {
-	return ApiGetProcedureTasksRequest{
+func (a *PhotosAPIService) CreatePhoto(ctx context.Context) ApiCreatePhotoRequest {
+	return ApiCreatePhotoRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -442,34 +98,318 @@ func (a *ProcedureTasksAPIService) GetProcedureTasks(ctx context.Context) ApiGet
 
 // Execute executes the request
 //
-//	@return GetProcedureTasks200Response
-func (a *ProcedureTasksAPIService) GetProcedureTasksExecute(r ApiGetProcedureTasksRequest) (*GetProcedureTasks200Response, *http.Response, error) {
+//	@return CreatePhoto201Response
+func (a *PhotosAPIService) CreatePhotoExecute(r ApiCreatePhotoRequest) (*CreatePhoto201Response, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
+		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *GetProcedureTasks200Response
+		localVarReturnValue *CreatePhoto201Response
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProcedureTasksAPIService.GetProcedureTasks")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PhotosAPIService.CreatePhoto")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/procedure_tasks"
+	localVarPath := localBasePath + "/photos"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.file == nil {
+		return localVarReturnValue, nil, reportError("file is required and must be specified")
+	}
+	if r.caption == nil {
+		return localVarReturnValue, nil, reportError("caption is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"multipart/form-data"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"*/*"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName string
+	var fileLocalVarFileBytes []byte
+
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
+
+	if fileLocalVarFile != nil {
+		fbs, _ := io.ReadAll(fileLocalVarFile)
+
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		fileLocalVarFile.Close()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
+	}
+	parameterAddToHeaderOrQuery(localVarFormParams, "caption", r.caption, "", "")
+	if r.companyId != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "company_id", r.companyId, "", "")
+	}
+	if r.photoableType != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "photoable_type", r.photoableType, "", "")
+	}
+	if r.photoableId != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "photoable_id", r.photoableId, "", "")
+	}
+	if r.folderId != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "folder_id", r.folderId, "", "")
+	}
+	if r.pinned != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "pinned", r.pinned, "", "")
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
+			var v CreatePhoto422Response
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiDeletePhotoRequest struct {
+	ctx        context.Context
+	ApiService *PhotosAPIService
+	id         int32
+}
+
+func (r ApiDeletePhotoRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeletePhotoExecute(r)
+}
+
+/*
+DeletePhoto Delete a Photo
+
+Permanently deletes a photo. This action is irreversible and requires an API key with destructive action permissions.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the Photo to delete
+	@return ApiDeletePhotoRequest
+*/
+func (a *PhotosAPIService) DeletePhoto(ctx context.Context, id int32) ApiDeletePhotoRequest {
+	return ApiDeletePhotoRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+func (a *PhotosAPIService) DeletePhotoExecute(r ApiDeletePhotoRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PhotosAPIService.DeletePhoto")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/photos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if r.procedureId != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "procedure_id", r.procedureId, "", "")
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
 	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "", "")
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"*/*"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	if r.companyId != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "company_id", r.companyId, "", "")
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
+			var v CreatePhoto422Response
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiGetPhotoRequest struct {
+	ctx        context.Context
+	ApiService *PhotosAPIService
+	id         int32
+	download   *bool
+}
+
+// If true, downloads the photo file instead of returning JSON metadata
+func (r ApiGetPhotoRequest) Download(download bool) ApiGetPhotoRequest {
+	r.download = &download
+	return r
+}
+
+func (r ApiGetPhotoRequest) Execute() (*CreatePhoto201Response, *http.Response, error) {
+	return r.ApiService.GetPhotoExecute(r)
+}
+
+/*
+GetPhoto Get a specific Photo
+
+Returns a single photo by ID, including its archive status. Optionally download the photo file by setting download=true.
+
+**CORS Configuration for Browser Testing**: If you experience CORS errors or "Failed to fetch" when testing the download endpoint in browser-based tools (e.g., Swagger UI), you need to configure CORS on your cloud storage bucket (DigitalOcean Spaces/S3) with: (1) Origin: `https://your-domain.com`, (2) Allowed Methods: `GET`, `HEAD`, (3) Allowed Headers: `*`
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the Photo to retrieve
+	@return ApiGetPhotoRequest
+*/
+func (a *PhotosAPIService) GetPhoto(ctx context.Context, id int32) ApiGetPhotoRequest {
+	return ApiGetPhotoRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+//
+//	@return CreatePhoto201Response
+func (a *PhotosAPIService) GetPhotoExecute(r ApiGetPhotoRequest) (*CreatePhoto201Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreatePhoto201Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PhotosAPIService.GetPhoto")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/photos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.download != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "download", r.download, "", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -481,7 +421,7 @@ func (a *ProcedureTasksAPIService) GetProcedureTasksExecute(r ApiGetProcedureTas
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"*/*"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -539,74 +479,144 @@ func (a *ProcedureTasksAPIService) GetProcedureTasksExecute(r ApiGetProcedureTas
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateProcedureTaskRequest struct {
+type ApiGetPhotosRequest struct {
 	ctx           context.Context
-	ApiService    *ProcedureTasksAPIService
-	id            int32
-	procedureTask *UpdateProcedureTaskRequest
+	ApiService    *PhotosAPIService
+	companyId     *int32
+	photoableType *string
+	photoableId   *int32
+	folderId      *int32
+	archived      *bool
+	createdAt     *string
+	updatedAt     *string
+	page          *int32
+	pageSize      *int32
 }
 
-// Task object with updated attributes
-func (r ApiUpdateProcedureTaskRequest) ProcedureTask(procedureTask UpdateProcedureTaskRequest) ApiUpdateProcedureTaskRequest {
-	r.procedureTask = &procedureTask
+// Filter by company ID
+func (r ApiGetPhotosRequest) CompanyId(companyId int32) ApiGetPhotosRequest {
+	r.companyId = &companyId
 	return r
 }
 
-func (r ApiUpdateProcedureTaskRequest) Execute() (*CreateProcedureTask201Response, *http.Response, error) {
-	return r.ApiService.UpdateProcedureTaskExecute(r)
+// Filter by photoable type (Company, Asset, Article, etc.)
+func (r ApiGetPhotosRequest) PhotoableType(photoableType string) ApiGetPhotosRequest {
+	r.photoableType = &photoableType
+	return r
+}
+
+// Filter by photoable record ID
+func (r ApiGetPhotosRequest) PhotoableId(photoableId int32) ApiGetPhotosRequest {
+	r.photoableId = &photoableId
+	return r
+}
+
+// Filter by folder ID
+func (r ApiGetPhotosRequest) FolderId(folderId int32) ApiGetPhotosRequest {
+	r.folderId = &folderId
+	return r
+}
+
+// Filter by archived status. true &#x3D; only archived, false &#x3D; only non-archived. If omitted, defaults to non-archived only.
+func (r ApiGetPhotosRequest) Archived(archived bool) ApiGetPhotosRequest {
+	r.archived = &archived
+	return r
+}
+
+// Filter by creation date (YYYY-MM-DD or start,end for range)
+func (r ApiGetPhotosRequest) CreatedAt(createdAt string) ApiGetPhotosRequest {
+	r.createdAt = &createdAt
+	return r
+}
+
+// Filter by update date (YYYY-MM-DD or start,end for range)
+func (r ApiGetPhotosRequest) UpdatedAt(updatedAt string) ApiGetPhotosRequest {
+	r.updatedAt = &updatedAt
+	return r
+}
+
+// Page number for pagination
+func (r ApiGetPhotosRequest) Page(page int32) ApiGetPhotosRequest {
+	r.page = &page
+	return r
+}
+
+// Number of results per page (1-1000, default: 25)
+func (r ApiGetPhotosRequest) PageSize(pageSize int32) ApiGetPhotosRequest {
+	r.pageSize = &pageSize
+	return r
+}
+
+func (r ApiGetPhotosRequest) Execute() (*GetPhotos200Response, *http.Response, error) {
+	return r.ApiService.GetPhotosExecute(r)
 }
 
 /*
-UpdateProcedureTask Update a Task
+GetPhotos Get a list of Photos
 
-Update an existing task with specified attributes.
-
-**Important Restrictions:**
-- **Process Tasks (Templates)**: Can update structural fields only: name, description, position, optional, parent_task_id. Run-only fields (`assigned_users`, `due_date`, `priority`) are **rejected with a 422**.
-- **Run Tasks (Active Work)**: Can ONLY update: `assigned_users`, `due_date`, `priority`. Structural fields (name, description, position, optional, parent_task_id) are **rejected with a 422**.
-
-**Note:** Completion fields (`completed`, `completed_at`, `user_id`, `completion_notes`) are silently ignored if sent—use the application UI to mark tasks complete.
+Returns a list of photos. By default, returns only non-archived photos. Use the archived parameter to filter by archive status.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The ID of the procedure task to update.
-	@return ApiUpdateProcedureTaskRequest
+	@return ApiGetPhotosRequest
 */
-func (a *ProcedureTasksAPIService) UpdateProcedureTask(ctx context.Context, id int32) ApiUpdateProcedureTaskRequest {
-	return ApiUpdateProcedureTaskRequest{
+func (a *PhotosAPIService) GetPhotos(ctx context.Context) ApiGetPhotosRequest {
+	return ApiGetPhotosRequest{
 		ApiService: a,
 		ctx:        ctx,
-		id:         id,
 	}
 }
 
 // Execute executes the request
 //
-//	@return CreateProcedureTask201Response
-func (a *ProcedureTasksAPIService) UpdateProcedureTaskExecute(r ApiUpdateProcedureTaskRequest) (*CreateProcedureTask201Response, *http.Response, error) {
+//	@return GetPhotos200Response
+func (a *PhotosAPIService) GetPhotosExecute(r ApiGetPhotosRequest) (*GetPhotos200Response, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
+		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *CreateProcedureTask201Response
+		localVarReturnValue *GetPhotos200Response
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProcedureTasksAPIService.UpdateProcedureTask")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PhotosAPIService.GetPhotos")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/procedure_tasks/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath := localBasePath + "/photos"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.procedureTask == nil {
-		return localVarReturnValue, nil, reportError("procedureTask is required and must be specified")
-	}
 
+	if r.companyId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "company_id", r.companyId, "", "")
+	}
+	if r.photoableType != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "photoable_type", r.photoableType, "", "")
+	}
+	if r.photoableId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "photoable_id", r.photoableId, "", "")
+	}
+	if r.folderId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "folder_id", r.folderId, "", "")
+	}
+	if r.archived != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "archived", r.archived, "", "")
+	}
+	if r.createdAt != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_at", r.createdAt, "", "")
+	}
+	if r.updatedAt != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "updated_at", r.updatedAt, "", "")
+	}
+	if r.page != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "", "")
+	}
+	if r.pageSize != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "", "")
+	}
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -615,15 +625,13 @@ func (a *ProcedureTasksAPIService) UpdateProcedureTaskExecute(r ApiUpdateProcedu
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"*/*"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	// body params
-	localVarPostBody = r.procedureTask
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -659,6 +667,146 @@ func (a *ProcedureTasksAPIService) UpdateProcedureTaskExecute(r ApiUpdateProcedu
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdatePhotoRequest struct {
+	ctx        context.Context
+	ApiService *PhotosAPIService
+	id         int32
+	photo      *UpdatePhotoRequest
+}
+
+// Photo attributes. Must be wrapped in a &#x60;photo&#x60; key. Include only the attributes you want to update. Example: {\&quot;photo\&quot;: {\&quot;caption\&quot;: \&quot;New caption\&quot;, \&quot;pinned\&quot;: true}}
+func (r ApiUpdatePhotoRequest) Photo(photo UpdatePhotoRequest) ApiUpdatePhotoRequest {
+	r.photo = &photo
+	return r
+}
+
+func (r ApiUpdatePhotoRequest) Execute() (*CreatePhoto201Response, *http.Response, error) {
+	return r.ApiService.UpdatePhotoExecute(r)
+}
+
+/*
+UpdatePhoto Update a Photo
+
+Updates a photo's metadata. The request body must be wrapped in a `photo` key. Editable attributes: caption, folder_id, pinned, archived, photoable_type, photoable_id. Note: company_id is derived from photoable and cannot be set directly—change photoable_type and photoable_id to update the company. To archive/unarchive, set the archived field to true/false.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the Photo to update
+	@return ApiUpdatePhotoRequest
+*/
+func (a *PhotosAPIService) UpdatePhoto(ctx context.Context, id int32) ApiUpdatePhotoRequest {
+	return ApiUpdatePhotoRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+//
+//	@return CreatePhoto201Response
+func (a *PhotosAPIService) UpdatePhotoExecute(r ApiUpdatePhotoRequest) (*CreatePhoto201Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreatePhoto201Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PhotosAPIService.UpdatePhoto")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/photos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.photo == nil {
+		return localVarReturnValue, nil, reportError("photo is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"*/*"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.photo
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
+			var v CreatePhoto422Response
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

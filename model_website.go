@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the Website type satisfies the MappedNullable interface at compile time
@@ -38,9 +39,9 @@ type Website struct {
 	// The monitoring status of the website (e.g., 'up', 'down')
 	MonitoringStatus *string `json:"monitoring_status,omitempty"`
 	// The timestamp when the website was last refreshed
-	RefreshedAt *string `json:"refreshed_at,omitempty"`
+	RefreshedAt *time.Time `json:"refreshed_at,omitempty"`
 	// The timestamp when the website was last monitored
-	MonitoredAt *string `json:"monitored_at,omitempty"`
+	MonitoredAt *time.Time `json:"monitored_at,omitempty"`
 	// HTTP headers associated with the website (optional)
 	Headers map[string]interface{} `json:"headers,omitempty"`
 	// Indicates whether the monitoring of the website is paused
@@ -54,7 +55,7 @@ type Website struct {
 	// The ID of the associated company
 	CompanyId *int32 `json:"company_id,omitempty"`
 	// The timestamp when the website was discarded (optional)
-	DiscardedAt *string `json:"discarded_at,omitempty"`
+	DiscardedAt *time.Time `json:"discarded_at,omitempty"`
 	// Indicates whether SSL checks are disabled for the website
 	DisableSsl *bool `json:"disable_ssl,omitempty"`
 	// Indicates whether WHOIS checks are disabled for the website
@@ -390,9 +391,9 @@ func (o *Website) SetMonitoringStatus(v string) {
 }
 
 // GetRefreshedAt returns the RefreshedAt field value if set, zero value otherwise.
-func (o *Website) GetRefreshedAt() string {
+func (o *Website) GetRefreshedAt() time.Time {
 	if o == nil || IsNil(o.RefreshedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.RefreshedAt
@@ -400,7 +401,7 @@ func (o *Website) GetRefreshedAt() string {
 
 // GetRefreshedAtOk returns a tuple with the RefreshedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Website) GetRefreshedAtOk() (*string, bool) {
+func (o *Website) GetRefreshedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.RefreshedAt) {
 		return nil, false
 	}
@@ -416,15 +417,15 @@ func (o *Website) HasRefreshedAt() bool {
 	return false
 }
 
-// SetRefreshedAt gets a reference to the given string and assigns it to the RefreshedAt field.
-func (o *Website) SetRefreshedAt(v string) {
+// SetRefreshedAt gets a reference to the given time.Time and assigns it to the RefreshedAt field.
+func (o *Website) SetRefreshedAt(v time.Time) {
 	o.RefreshedAt = &v
 }
 
 // GetMonitoredAt returns the MonitoredAt field value if set, zero value otherwise.
-func (o *Website) GetMonitoredAt() string {
+func (o *Website) GetMonitoredAt() time.Time {
 	if o == nil || IsNil(o.MonitoredAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.MonitoredAt
@@ -432,7 +433,7 @@ func (o *Website) GetMonitoredAt() string {
 
 // GetMonitoredAtOk returns a tuple with the MonitoredAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Website) GetMonitoredAtOk() (*string, bool) {
+func (o *Website) GetMonitoredAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.MonitoredAt) {
 		return nil, false
 	}
@@ -448,8 +449,8 @@ func (o *Website) HasMonitoredAt() bool {
 	return false
 }
 
-// SetMonitoredAt gets a reference to the given string and assigns it to the MonitoredAt field.
-func (o *Website) SetMonitoredAt(v string) {
+// SetMonitoredAt gets a reference to the given time.Time and assigns it to the MonitoredAt field.
+func (o *Website) SetMonitoredAt(v time.Time) {
 	o.MonitoredAt = &v
 }
 
@@ -646,9 +647,9 @@ func (o *Website) SetCompanyId(v int32) {
 }
 
 // GetDiscardedAt returns the DiscardedAt field value if set, zero value otherwise.
-func (o *Website) GetDiscardedAt() string {
+func (o *Website) GetDiscardedAt() time.Time {
 	if o == nil || IsNil(o.DiscardedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.DiscardedAt
@@ -656,7 +657,7 @@ func (o *Website) GetDiscardedAt() string {
 
 // GetDiscardedAtOk returns a tuple with the DiscardedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Website) GetDiscardedAtOk() (*string, bool) {
+func (o *Website) GetDiscardedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.DiscardedAt) {
 		return nil, false
 	}
@@ -672,8 +673,8 @@ func (o *Website) HasDiscardedAt() bool {
 	return false
 }
 
-// SetDiscardedAt gets a reference to the given string and assigns it to the DiscardedAt field.
-func (o *Website) SetDiscardedAt(v string) {
+// SetDiscardedAt gets a reference to the given time.Time and assigns it to the DiscardedAt field.
+func (o *Website) SetDiscardedAt(v time.Time) {
 	o.DiscardedAt = &v
 }
 

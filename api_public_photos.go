@@ -184,6 +184,136 @@ func (a *PublicPhotosAPIService) CreatePublicPhotoExecute(r ApiCreatePublicPhoto
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetPublicPhotoRequest struct {
+	ctx        context.Context
+	ApiService *PublicPhotosAPIService
+	id         int64
+	download   *bool
+}
+
+// Set to true to download the file instead of returning metadata
+func (r ApiGetPublicPhotoRequest) Download(download bool) ApiGetPublicPhotoRequest {
+	r.download = &download
+	return r
+}
+
+func (r ApiGetPublicPhotoRequest) Execute() (*GetPublicPhoto200Response, *http.Response, error) {
+	return r.ApiService.GetPublicPhotoExecute(r)
+}
+
+/*
+GetPublicPhoto Get public photo details or download public photo file
+
+Get public photo metadata or download the actual photo file. Use the 'download' parameter to download the file. **Note**: The response will include a slug-based ID for improved security, but the request accepts numeric IDs.
+
+**CORS Configuration for Browser Testing**: If you experience CORS errors or "Failed to fetch" when testing the download endpoint in browser-based tools (e.g., Swagger UI), you need to configure CORS on your cloud storage bucket (DigitalOcean Spaces/S3) with: (1) Origin: `https://your-domain.com`, (2) Allowed Methods: `GET`, `HEAD`, (3) Allowed Headers: `*`
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Public Photo numeric ID
+	@return ApiGetPublicPhotoRequest
+*/
+func (a *PublicPhotosAPIService) GetPublicPhoto(ctx context.Context, id int64) ApiGetPublicPhotoRequest {
+	return ApiGetPublicPhotoRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+//
+//	@return GetPublicPhoto200Response
+func (a *PublicPhotosAPIService) GetPublicPhotoExecute(r ApiGetPublicPhotoRequest) (*GetPublicPhoto200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetPublicPhoto200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PublicPhotosAPIService.GetPublicPhoto")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/public_photos/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.download != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "download", r.download, "", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "image/jpeg", "image/png", "image/gif", "image/webp", "application/octet-stream"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["APIKeyHeader"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["x-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiGetPublicPhotosRequest struct {
 	ctx        context.Context
 	ApiService *PublicPhotosAPIService

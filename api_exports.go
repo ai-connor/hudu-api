@@ -44,6 +44,8 @@ GetExport Get export details or download export file
 
 Get export metadata or download the actual export file (PDF or CSV). Use the 'download' parameter to download the file. Files are only available for 24 hours after creation.
 
+**Swagger UI / Large File Downloads**: When testing downloads in Swagger UI (or similar browser-based tools), using download=true may cause the browser to freeze or become unresponsive for larger PDFs, as the entire file is buffered in memory. For large exports, call this endpoint without download=true to get the metadata, then open the download_url from the response directly in your browser.
+
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id Export ID
 	@return ApiGetExportRequest

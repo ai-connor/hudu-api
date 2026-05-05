@@ -14,49 +14,49 @@ import (
 	"encoding/json"
 )
 
-// checks if the PublicPhoto type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PublicPhoto{}
+// checks if the GetPublicPhoto200Response type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GetPublicPhoto200Response{}
 
-// PublicPhoto A public photo associated with a record. **Important**: As of the latest API version, the `id` field now returns a slug (unique string identifier) instead of a numeric ID for improved security and URL structure. The original numeric ID is available in the `numeric_id` field for backward compatibility.
-type PublicPhoto struct {
-	// The unique slug identifier of the public photo (e.g., 'a1b2c3d4e5f6'). This is used in URLs and API calls. **Changed**: Previously this was a numeric ID, now it's a slug for improved security.
+// GetPublicPhoto200Response struct for GetPublicPhoto200Response
+type GetPublicPhoto200Response struct {
+	// The unique slug identifier of the public photo
 	Id *string `json:"id,omitempty"`
-	// The original numeric database ID of the public photo. **New field**: Added for backward compatibility. Use this if you need the original numeric identifier.
+	// The original numeric database ID of the public photo
 	NumericId *int32 `json:"numeric_id,omitempty"`
-	// The URL of the public photo using the slug-based path (e.g., '/public_photo/a1b2c3d4e5f6').
+	// The URL of the public photo using the slug-based path
 	Url *string `json:"url,omitempty"`
-	// The type of record the public photo is associated with (e.g., Article).
+	// The type of record the public photo is associated with
 	RecordType *string `json:"record_type,omitempty"`
-	// The ID of the record the public photo is associated with.
+	// The ID of the record the public photo is associated with
 	RecordId *int32 `json:"record_id,omitempty"`
-	// The original filename of the photo.
+	// Original filename of the photo
 	FileName *string `json:"file_name,omitempty"`
-	// The size of the photo file in bytes.
+	// Size of the photo file in bytes
 	FileSize             *int32 `json:"file_size,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _PublicPhoto PublicPhoto
+type _GetPublicPhoto200Response GetPublicPhoto200Response
 
-// NewPublicPhoto instantiates a new PublicPhoto object
+// NewGetPublicPhoto200Response instantiates a new GetPublicPhoto200Response object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPublicPhoto() *PublicPhoto {
-	this := PublicPhoto{}
+func NewGetPublicPhoto200Response() *GetPublicPhoto200Response {
+	this := GetPublicPhoto200Response{}
 	return &this
 }
 
-// NewPublicPhotoWithDefaults instantiates a new PublicPhoto object
+// NewGetPublicPhoto200ResponseWithDefaults instantiates a new GetPublicPhoto200Response object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPublicPhotoWithDefaults() *PublicPhoto {
-	this := PublicPhoto{}
+func NewGetPublicPhoto200ResponseWithDefaults() *GetPublicPhoto200Response {
+	this := GetPublicPhoto200Response{}
 	return &this
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
-func (o *PublicPhoto) GetId() string {
+func (o *GetPublicPhoto200Response) GetId() string {
 	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
@@ -66,7 +66,7 @@ func (o *PublicPhoto) GetId() string {
 
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetIdOk() (*string, bool) {
+func (o *GetPublicPhoto200Response) GetIdOk() (*string, bool) {
 	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
@@ -74,7 +74,7 @@ func (o *PublicPhoto) GetIdOk() (*string, bool) {
 }
 
 // HasId returns a boolean if a field has been set.
-func (o *PublicPhoto) HasId() bool {
+func (o *GetPublicPhoto200Response) HasId() bool {
 	if o != nil && !IsNil(o.Id) {
 		return true
 	}
@@ -83,12 +83,12 @@ func (o *PublicPhoto) HasId() bool {
 }
 
 // SetId gets a reference to the given string and assigns it to the Id field.
-func (o *PublicPhoto) SetId(v string) {
+func (o *GetPublicPhoto200Response) SetId(v string) {
 	o.Id = &v
 }
 
 // GetNumericId returns the NumericId field value if set, zero value otherwise.
-func (o *PublicPhoto) GetNumericId() int32 {
+func (o *GetPublicPhoto200Response) GetNumericId() int32 {
 	if o == nil || IsNil(o.NumericId) {
 		var ret int32
 		return ret
@@ -98,7 +98,7 @@ func (o *PublicPhoto) GetNumericId() int32 {
 
 // GetNumericIdOk returns a tuple with the NumericId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetNumericIdOk() (*int32, bool) {
+func (o *GetPublicPhoto200Response) GetNumericIdOk() (*int32, bool) {
 	if o == nil || IsNil(o.NumericId) {
 		return nil, false
 	}
@@ -106,7 +106,7 @@ func (o *PublicPhoto) GetNumericIdOk() (*int32, bool) {
 }
 
 // HasNumericId returns a boolean if a field has been set.
-func (o *PublicPhoto) HasNumericId() bool {
+func (o *GetPublicPhoto200Response) HasNumericId() bool {
 	if o != nil && !IsNil(o.NumericId) {
 		return true
 	}
@@ -115,12 +115,12 @@ func (o *PublicPhoto) HasNumericId() bool {
 }
 
 // SetNumericId gets a reference to the given int32 and assigns it to the NumericId field.
-func (o *PublicPhoto) SetNumericId(v int32) {
+func (o *GetPublicPhoto200Response) SetNumericId(v int32) {
 	o.NumericId = &v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
-func (o *PublicPhoto) GetUrl() string {
+func (o *GetPublicPhoto200Response) GetUrl() string {
 	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
@@ -130,7 +130,7 @@ func (o *PublicPhoto) GetUrl() string {
 
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetUrlOk() (*string, bool) {
+func (o *GetPublicPhoto200Response) GetUrlOk() (*string, bool) {
 	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
@@ -138,7 +138,7 @@ func (o *PublicPhoto) GetUrlOk() (*string, bool) {
 }
 
 // HasUrl returns a boolean if a field has been set.
-func (o *PublicPhoto) HasUrl() bool {
+func (o *GetPublicPhoto200Response) HasUrl() bool {
 	if o != nil && !IsNil(o.Url) {
 		return true
 	}
@@ -147,12 +147,12 @@ func (o *PublicPhoto) HasUrl() bool {
 }
 
 // SetUrl gets a reference to the given string and assigns it to the Url field.
-func (o *PublicPhoto) SetUrl(v string) {
+func (o *GetPublicPhoto200Response) SetUrl(v string) {
 	o.Url = &v
 }
 
 // GetRecordType returns the RecordType field value if set, zero value otherwise.
-func (o *PublicPhoto) GetRecordType() string {
+func (o *GetPublicPhoto200Response) GetRecordType() string {
 	if o == nil || IsNil(o.RecordType) {
 		var ret string
 		return ret
@@ -162,7 +162,7 @@ func (o *PublicPhoto) GetRecordType() string {
 
 // GetRecordTypeOk returns a tuple with the RecordType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetRecordTypeOk() (*string, bool) {
+func (o *GetPublicPhoto200Response) GetRecordTypeOk() (*string, bool) {
 	if o == nil || IsNil(o.RecordType) {
 		return nil, false
 	}
@@ -170,7 +170,7 @@ func (o *PublicPhoto) GetRecordTypeOk() (*string, bool) {
 }
 
 // HasRecordType returns a boolean if a field has been set.
-func (o *PublicPhoto) HasRecordType() bool {
+func (o *GetPublicPhoto200Response) HasRecordType() bool {
 	if o != nil && !IsNil(o.RecordType) {
 		return true
 	}
@@ -179,12 +179,12 @@ func (o *PublicPhoto) HasRecordType() bool {
 }
 
 // SetRecordType gets a reference to the given string and assigns it to the RecordType field.
-func (o *PublicPhoto) SetRecordType(v string) {
+func (o *GetPublicPhoto200Response) SetRecordType(v string) {
 	o.RecordType = &v
 }
 
 // GetRecordId returns the RecordId field value if set, zero value otherwise.
-func (o *PublicPhoto) GetRecordId() int32 {
+func (o *GetPublicPhoto200Response) GetRecordId() int32 {
 	if o == nil || IsNil(o.RecordId) {
 		var ret int32
 		return ret
@@ -194,7 +194,7 @@ func (o *PublicPhoto) GetRecordId() int32 {
 
 // GetRecordIdOk returns a tuple with the RecordId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetRecordIdOk() (*int32, bool) {
+func (o *GetPublicPhoto200Response) GetRecordIdOk() (*int32, bool) {
 	if o == nil || IsNil(o.RecordId) {
 		return nil, false
 	}
@@ -202,7 +202,7 @@ func (o *PublicPhoto) GetRecordIdOk() (*int32, bool) {
 }
 
 // HasRecordId returns a boolean if a field has been set.
-func (o *PublicPhoto) HasRecordId() bool {
+func (o *GetPublicPhoto200Response) HasRecordId() bool {
 	if o != nil && !IsNil(o.RecordId) {
 		return true
 	}
@@ -211,12 +211,12 @@ func (o *PublicPhoto) HasRecordId() bool {
 }
 
 // SetRecordId gets a reference to the given int32 and assigns it to the RecordId field.
-func (o *PublicPhoto) SetRecordId(v int32) {
+func (o *GetPublicPhoto200Response) SetRecordId(v int32) {
 	o.RecordId = &v
 }
 
 // GetFileName returns the FileName field value if set, zero value otherwise.
-func (o *PublicPhoto) GetFileName() string {
+func (o *GetPublicPhoto200Response) GetFileName() string {
 	if o == nil || IsNil(o.FileName) {
 		var ret string
 		return ret
@@ -226,7 +226,7 @@ func (o *PublicPhoto) GetFileName() string {
 
 // GetFileNameOk returns a tuple with the FileName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetFileNameOk() (*string, bool) {
+func (o *GetPublicPhoto200Response) GetFileNameOk() (*string, bool) {
 	if o == nil || IsNil(o.FileName) {
 		return nil, false
 	}
@@ -234,7 +234,7 @@ func (o *PublicPhoto) GetFileNameOk() (*string, bool) {
 }
 
 // HasFileName returns a boolean if a field has been set.
-func (o *PublicPhoto) HasFileName() bool {
+func (o *GetPublicPhoto200Response) HasFileName() bool {
 	if o != nil && !IsNil(o.FileName) {
 		return true
 	}
@@ -243,12 +243,12 @@ func (o *PublicPhoto) HasFileName() bool {
 }
 
 // SetFileName gets a reference to the given string and assigns it to the FileName field.
-func (o *PublicPhoto) SetFileName(v string) {
+func (o *GetPublicPhoto200Response) SetFileName(v string) {
 	o.FileName = &v
 }
 
 // GetFileSize returns the FileSize field value if set, zero value otherwise.
-func (o *PublicPhoto) GetFileSize() int32 {
+func (o *GetPublicPhoto200Response) GetFileSize() int32 {
 	if o == nil || IsNil(o.FileSize) {
 		var ret int32
 		return ret
@@ -258,7 +258,7 @@ func (o *PublicPhoto) GetFileSize() int32 {
 
 // GetFileSizeOk returns a tuple with the FileSize field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublicPhoto) GetFileSizeOk() (*int32, bool) {
+func (o *GetPublicPhoto200Response) GetFileSizeOk() (*int32, bool) {
 	if o == nil || IsNil(o.FileSize) {
 		return nil, false
 	}
@@ -266,7 +266,7 @@ func (o *PublicPhoto) GetFileSizeOk() (*int32, bool) {
 }
 
 // HasFileSize returns a boolean if a field has been set.
-func (o *PublicPhoto) HasFileSize() bool {
+func (o *GetPublicPhoto200Response) HasFileSize() bool {
 	if o != nil && !IsNil(o.FileSize) {
 		return true
 	}
@@ -275,11 +275,11 @@ func (o *PublicPhoto) HasFileSize() bool {
 }
 
 // SetFileSize gets a reference to the given int32 and assigns it to the FileSize field.
-func (o *PublicPhoto) SetFileSize(v int32) {
+func (o *GetPublicPhoto200Response) SetFileSize(v int32) {
 	o.FileSize = &v
 }
 
-func (o PublicPhoto) MarshalJSON() ([]byte, error) {
+func (o GetPublicPhoto200Response) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -287,7 +287,7 @@ func (o PublicPhoto) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PublicPhoto) ToMap() (map[string]interface{}, error) {
+func (o GetPublicPhoto200Response) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
@@ -318,16 +318,16 @@ func (o PublicPhoto) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *PublicPhoto) UnmarshalJSON(data []byte) (err error) {
-	varPublicPhoto := _PublicPhoto{}
+func (o *GetPublicPhoto200Response) UnmarshalJSON(data []byte) (err error) {
+	varGetPublicPhoto200Response := _GetPublicPhoto200Response{}
 
-	err = json.Unmarshal(data, &varPublicPhoto)
+	err = json.Unmarshal(data, &varGetPublicPhoto200Response)
 
 	if err != nil {
 		return err
 	}
 
-	*o = PublicPhoto(varPublicPhoto)
+	*o = GetPublicPhoto200Response(varGetPublicPhoto200Response)
 
 	additionalProperties := make(map[string]interface{})
 
@@ -345,38 +345,38 @@ func (o *PublicPhoto) UnmarshalJSON(data []byte) (err error) {
 	return err
 }
 
-type NullablePublicPhoto struct {
-	value *PublicPhoto
+type NullableGetPublicPhoto200Response struct {
+	value *GetPublicPhoto200Response
 	isSet bool
 }
 
-func (v NullablePublicPhoto) Get() *PublicPhoto {
+func (v NullableGetPublicPhoto200Response) Get() *GetPublicPhoto200Response {
 	return v.value
 }
 
-func (v *NullablePublicPhoto) Set(val *PublicPhoto) {
+func (v *NullableGetPublicPhoto200Response) Set(val *GetPublicPhoto200Response) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePublicPhoto) IsSet() bool {
+func (v NullableGetPublicPhoto200Response) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePublicPhoto) Unset() {
+func (v *NullableGetPublicPhoto200Response) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePublicPhoto(val *PublicPhoto) *NullablePublicPhoto {
-	return &NullablePublicPhoto{value: val, isSet: true}
+func NewNullableGetPublicPhoto200Response(val *GetPublicPhoto200Response) *NullableGetPublicPhoto200Response {
+	return &NullableGetPublicPhoto200Response{value: val, isSet: true}
 }
 
-func (v NullablePublicPhoto) MarshalJSON() ([]byte, error) {
+func (v NullableGetPublicPhoto200Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePublicPhoto) UnmarshalJSON(src []byte) error {
+func (v *NullableGetPublicPhoto200Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -13,6 +13,7 @@ package huduapi
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // checks if the Folder type satisfies the MappedNullable interface at compile time
@@ -32,10 +33,12 @@ type Folder struct {
 	Name string `json:"name"`
 	// The ID of the parent folder, if any. Can be null.
 	ParentFolderId *int64 `json:"parent_folder_id,omitempty"`
+	// The type of folder - 'article' for article folders or 'photo' for photo folders. This field is immutable after creation.
+	FolderType *string `json:"folder_type,omitempty"`
 	// The timestamp of folder creation
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The timestamp of the last folder update
-	UpdatedAt            *string `json:"updated_at,omitempty"`
+	UpdatedAt            *time.Time `json:"updated_at,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -236,10 +239,42 @@ func (o *Folder) SetParentFolderId(v int64) {
 	o.ParentFolderId = &v
 }
 
-// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Folder) GetCreatedAt() string {
-	if o == nil || IsNil(o.CreatedAt) {
+// GetFolderType returns the FolderType field value if set, zero value otherwise.
+func (o *Folder) GetFolderType() string {
+	if o == nil || IsNil(o.FolderType) {
 		var ret string
+		return ret
+	}
+	return *o.FolderType
+}
+
+// GetFolderTypeOk returns a tuple with the FolderType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Folder) GetFolderTypeOk() (*string, bool) {
+	if o == nil || IsNil(o.FolderType) {
+		return nil, false
+	}
+	return o.FolderType, true
+}
+
+// HasFolderType returns a boolean if a field has been set.
+func (o *Folder) HasFolderType() bool {
+	if o != nil && !IsNil(o.FolderType) {
+		return true
+	}
+
+	return false
+}
+
+// SetFolderType gets a reference to the given string and assigns it to the FolderType field.
+func (o *Folder) SetFolderType(v string) {
+	o.FolderType = &v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *Folder) GetCreatedAt() time.Time {
+	if o == nil || IsNil(o.CreatedAt) {
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -247,7 +282,7 @@ func (o *Folder) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Folder) GetCreatedAtOk() (*string, bool) {
+func (o *Folder) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -263,15 +298,15 @@ func (o *Folder) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *Folder) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *Folder) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Folder) GetUpdatedAt() string {
+func (o *Folder) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -279,7 +314,7 @@ func (o *Folder) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Folder) GetUpdatedAtOk() (*string, bool) {
+func (o *Folder) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -295,8 +330,8 @@ func (o *Folder) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *Folder) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *Folder) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
@@ -323,6 +358,9 @@ func (o Folder) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	if !IsNil(o.ParentFolderId) {
 		toSerialize["parent_folder_id"] = o.ParentFolderId
+	}
+	if !IsNil(o.FolderType) {
+		toSerialize["folder_type"] = o.FolderType
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
@@ -380,6 +418,7 @@ func (o *Folder) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "description")
 		delete(additionalProperties, "name")
 		delete(additionalProperties, "parent_folder_id")
+		delete(additionalProperties, "folder_type")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
 		o.AdditionalProperties = additionalProperties

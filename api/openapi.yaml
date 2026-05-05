@@ -269,7 +269,7 @@ paths:
         description: Article object that needs to be added to the store
         required: true
       responses:
-        "201":
+        "200":
           content:
             '*/*':
               schema:
@@ -1810,9 +1810,10 @@ paths:
       x-codegen-request-body-name: export
   /exports/{id}:
     get:
-      description: Get export metadata or download the actual export file (PDF or
-        CSV). Use the 'download' parameter to download the file. Files are only available
-        for 24 hours after creation.
+      description: |-
+        Get export metadata or download the actual export file (PDF or CSV). Use the 'download' parameter to download the file. Files are only available for 24 hours after creation.
+
+        **Swagger UI / Large File Downloads**: When testing downloads in Swagger UI (or similar browser-based tools), using download=true may cause the browser to freeze or become unresponsive for larger PDFs, as the entire file is buffered in memory. For large exports, call this endpoint without download=true to get the metadata, then open the download_url from the response directly in your browser.
       operationId: get_export
       parameters:
       - description: Export ID
@@ -2252,6 +2253,14 @@ paths:
         name: in_company
         schema:
           type: boolean
+      - description: Filter folders by type - 'article' or 'photo'
+        in: query
+        name: folder_type
+        schema:
+          enum:
+          - article
+          - photo
+          type: string
       - description: The current page of results to retrieve
         in: query
         name: page
@@ -2362,7 +2371,9 @@ paths:
       tags:
       - Folders
     put:
-      description: Update an existing folder with the provided information.
+      description: "Update an existing folder with the provided information. Note:\
+        \ The folder_type field cannot be changed after creation and will result in\
+        \ a validation error if a different value is provided."
       operationId: put_folders_id
       parameters:
       - description: ID of the folder to update
@@ -2376,7 +2387,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/post_folders_request"
+              $ref: "#/components/schemas/put_folders_id_request"
         required: true
       responses:
         "200":
@@ -3455,13 +3466,225 @@ paths:
       tags:
       - Password Folders
       x-codegen-request-body-name: password_folder
+  /photos:
+    get:
+      description: "Returns a list of photos. By default, returns only non-archived\
+        \ photos. Use the archived parameter to filter by archive status."
+      operationId: get_photos
+      parameters:
+      - description: Filter by company ID
+        in: query
+        name: company_id
+        schema:
+          type: integer
+      - description: "Filter by photoable type (Company, Asset, Article, etc.)"
+        in: query
+        name: photoable_type
+        schema:
+          type: string
+      - description: Filter by photoable record ID
+        in: query
+        name: photoable_id
+        schema:
+          type: integer
+      - description: Filter by folder ID
+        in: query
+        name: folder_id
+        schema:
+          type: integer
+      - description: "Filter by archived status. true = only archived, false = only\
+          \ non-archived. If omitted, defaults to non-archived only."
+        in: query
+        name: archived
+        schema:
+          type: boolean
+      - description: "Filter by creation date (YYYY-MM-DD or start,end for range)"
+        in: query
+        name: created_at
+        schema:
+          type: string
+      - description: "Filter by update date (YYYY-MM-DD or start,end for range)"
+        in: query
+        name: updated_at
+        schema:
+          type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        schema:
+          type: integer
+      - description: "Number of results per page (1-1000, default: 25)"
+        in: query
+        name: page_size
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/get_photos_200_response"
+          description: Successful operation
+        "401":
+          content: {}
+          description: Unauthorized
+      summary: Get a list of Photos
+      tags:
+      - Photos
+    post:
+      description: "Uploads and creates a new photo. The photo can be attached to\
+        \ a photoable record (Company, Asset, Article, etc.) or created standalone."
+      operationId: create_photo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/create_photo_request"
+        required: true
+      responses:
+        "201":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_photo_201_response"
+          description: Photo created successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Photoable record not found
+        "422":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_photo_422_response"
+          description: Validation failed
+      summary: Create a new Photo
+      tags:
+      - Photos
+  /photos/{id}:
+    delete:
+      description: Permanently deletes a photo. This action is irreversible and requires
+        an API key with destructive action permissions.
+      operationId: delete_photo
+      parameters:
+      - description: ID of the Photo to delete
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "204":
+          content: {}
+          description: Photo deleted successfully (no content returned)
+        "401":
+          content: {}
+          description: "Unauthorized - missing or invalid API key, or API key lacks\
+            \ destructive action permissions"
+        "404":
+          content: {}
+          description: Photo not found
+        "422":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_photo_422_response"
+          description: Unable to delete photo
+      summary: Delete a Photo
+      tags:
+      - Photos
+    get:
+      description: |-
+        Returns a single photo by ID, including its archive status. Optionally download the photo file by setting download=true.
+
+        **CORS Configuration for Browser Testing**: If you experience CORS errors or "Failed to fetch" when testing the download endpoint in browser-based tools (e.g., Swagger UI), you need to configure CORS on your cloud storage bucket (DigitalOcean Spaces/S3) with: (1) Origin: `https://your-domain.com`, (2) Allowed Methods: `GET`, `HEAD`, (3) Allowed Headers: `*`
+      operationId: get_photo
+      parameters:
+      - description: ID of the Photo to retrieve
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      - description: "If true, downloads the photo file instead of returning JSON\
+          \ metadata"
+        in: query
+        name: download
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_photo_201_response"
+          description: Successful operation
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Photo not found
+      summary: Get a specific Photo
+      tags:
+      - Photos
+    put:
+      description: "Updates a photo's metadata. The request body must be wrapped in\
+        \ a `photo` key. Editable attributes: caption, folder_id, pinned, archived,\
+        \ photoable_type, photoable_id. Note: company_id is derived from photoable\
+        \ and cannot be set directly—change photoable_type and photoable_id to update\
+        \ the company. To archive/unarchive, set the archived field to true/false."
+      operationId: update_photo
+      parameters:
+      - description: ID of the Photo to update
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_photo_request"
+        description: "Photo attributes. Must be wrapped in a `photo` key. Include\
+          \ only the attributes you want to update. Example: {\"photo\": {\"caption\"\
+          : \"New caption\", \"pinned\": true}}"
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_photo_201_response"
+          description: Photo updated successfully
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Photo not found
+        "422":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/create_photo_422_response"
+          description: Validation failed
+      summary: Update a Photo
+      tags:
+      - Photos
+      x-codegen-request-body-name: photo
   /procedure_tasks:
     get:
-      description: "Retrieve a list of procedure tasks filtered by procedure ID, name,\
-        \ or company ID."
+      description: |-
+        Retrieve a list of tasks from processes or runs. Filter by process/run ID, task name, or company ID.
+
+        **Note:** Tasks belong to either a process (template) or a run (active instance). When a run is created via `/kickoff`, all tasks are automatically cloned from the parent process. New tasks can only be added to processes, not runs.
       operationId: getProcedureTasks
       parameters:
-      - description: Filter by the procedure ID.
+      - description: Filter by the process or run ID. Returns all tasks for that process/run.
         in: query
         name: procedure_id
         schema:
@@ -3482,22 +3705,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProcedureTasks_200_response"
-          description: A list of procedure tasks
+          description: A list of tasks from processes and runs
         "401":
           content: {}
           description: Unauthorized
-      summary: Get a list of Procedure Tasks
+      summary: Get a list of Process/Run Tasks
       tags:
       - Procedure Tasks
     post:
-      description: Create a new task with specified attributes.
+      description: |-
+        Create a new task on a **process (template) only**. Tasks cannot be added to runs.
+
+        **Important:** When you kick off a process to create a run via `/procedures/{id}/kickoff`, all tasks are automatically cloned to the new run. You cannot add additional tasks to a run after it's created.
+
+        **Note:** Run-only fields (`assigned_users`, `due_date`, `priority`) are **rejected with a 422** if included. Use the UPDATE endpoint on run tasks to set these. Completion fields (`completed`, `completed_at`, `user_id`, `completion_notes`) are silently ignored if sent—use the application UI to mark tasks complete.
       operationId: createProcedureTask
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/createProcedureTask_request"
-        description: Procedure Task object to be created
+        description: Task object to be created on a process
         required: true
       responses:
         "201":
@@ -3505,17 +3733,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/createProcedureTask_201_response"
-          description: Procedure Task created successfully
+          description: Task created successfully
+        "404":
+          content: {}
+          description: Process not found
         "422":
           content: {}
-          description: Unprocessable Entity
-      summary: Create a new Procedure Task
+          description: "Unprocessable Entity - Cannot add tasks to runs, run-only\
+            \ fields rejected on process tasks, or validation failed"
+      summary: Create a new Task on a Process
       tags:
       - Procedure Tasks
       x-codegen-request-body-name: procedure_task
   /procedure_tasks/{id}:
     delete:
-      description: Remove a procedure task by its ID.
+      description: |-
+        Remove a task by its ID from a **process (template) only**. Tasks cannot be deleted from runs.
+
+        **Important:**
+        - Tasks can ONLY be deleted from processes
+        - Deleting a task from a process will not affect tasks on runs that were already created
+        - Run tasks are fixed once the run is created
       operationId: deleteProcedureTask
       parameters:
       - description: The ID of the procedure task to delete.
@@ -3530,18 +3768,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/deleteProcedureTask_200_response"
-          description: Procedure Task successfully deleted
+          description: Task successfully deleted from process
         "404":
           content: {}
           description: Procedure Task not found
         "422":
           content: {}
-          description: Unprocessable Entity
-      summary: Delete a Procedure Task
+          description: "Unprocessable Entity - Cannot delete tasks from runs, or deletion\
+            \ failed"
+      summary: Delete a Task from a Process
       tags:
       - Procedure Tasks
     get:
-      description: Retrieve a specific procedure task by its ID.
+      description: Retrieve a specific task by its ID from any process or run.
       operationId: getProcedureTaskById
       parameters:
       - description: The ID of the procedure task to retrieve.
@@ -3556,18 +3795,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/createProcedureTask_201_response"
-          description: The requested procedure task
+          description: The requested task
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
-          description: Procedure task not found
-      summary: Get a Procedure Task by ID
+          description: Task not found
+      summary: Get a Task by ID
       tags:
       - Procedure Tasks
     put:
-      description: Update an existing task with specified attributes.
+      description: |-
+        Update an existing task with specified attributes.
+
+        **Important Restrictions:**
+        - **Process Tasks (Templates)**: Can update structural fields only: name, description, position, optional, parent_task_id. Run-only fields (`assigned_users`, `due_date`, `priority`) are **rejected with a 422**.
+        - **Run Tasks (Active Work)**: Can ONLY update: `assigned_users`, `due_date`, `priority`. Structural fields (name, description, position, optional, parent_task_id) are **rejected with a 422**.
+
+        **Note:** Completion fields (`completed`, `completed_at`, `user_id`, `completion_notes`) are silently ignored if sent—use the application UI to mark tasks complete.
       operationId: updateProcedureTask
       parameters:
       - description: The ID of the procedure task to update.
@@ -3581,7 +3827,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/updateProcedureTask_request"
-        description: Procedure Task object with updated attributes
+        description: Task object with updated attributes
         required: true
       responses:
         "200":
@@ -3589,23 +3835,62 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/createProcedureTask_201_response"
-          description: Procedure Task updated successfully
+          description: Task updated successfully
         "404":
           content: {}
           description: Procedure Task not found
         "422":
           content: {}
-          description: Unprocessable Entity
-      summary: Update a Procedure Task
+          description: "Unprocessable Entity - Run-only fields rejected on process\
+            \ tasks, or structural fields rejected on run tasks"
+      summary: Update a Task
       tags:
       - Procedure Tasks
       x-codegen-request-body-name: procedure_task
   /procedures:
     get:
-      description: Retrieve a list of procedures filtered by the provided parameters.
+      description: |-
+        Retrieve a list of processes and runs.
+
+        **Understanding the Types:**
+        - **Process** (`run: false`): A template. Can be global (company_id: null) or company-specific.
+        - **Run** (`run: true`): An active instance created from a process via the `/kickoff` endpoint.
+
+        **How to Create Each:**
+        - **Global Template**: `POST /procedures` with `company_id: null`
+        - **Company Process**: `POST /procedures` with `company_id: <id>`
+        - **Run**: `POST /procedures/{id}/kickoff` on a company process
+
+        Use the `type` parameter to filter between processes and runs.
       operationId: getProcedures
       parameters:
-      - description: Filter by the name of the procedure.
+      - description: "Filter by type: 'process' (templates only), 'run' (active instances\
+          \ only), or 'all' (default - returns both)"
+        in: query
+        name: type
+        schema:
+          enum:
+          - process
+          - run
+          - all
+          type: string
+      - description: "Filter processes by scope: 'global' (available to all companies)\
+          \ or 'company' (company-specific). Only applies when filtering processes."
+        in: query
+        name: process_scope
+        schema:
+          enum:
+          - global
+          - company
+          type: string
+      - description: Filter runs by their parent process ID. Returns all runs created
+          from the specified process.
+        in: query
+        name: parent_process_id
+        schema:
+          type: integer
+      - description: Filter by the name of the process or run (case-insensitive exact
+          match).
         in: query
         name: name
         schema:
@@ -3615,23 +3900,48 @@ paths:
         name: company_id
         schema:
           type: integer
+      - description: Filter by the URL slug of the process or run.
+        in: query
+        name: slug
+        schema:
+          type: string
+      - description: "Filter by creation date. Supports exact match ('2024-01-15')\
+          \ or range ('2024-01-01,2024-01-31')."
+        in: query
+        name: created_at
+        schema:
+          type: string
+      - description: "Filter by last update date. Supports exact match ('2024-01-15')\
+          \ or range ('2024-01-01,2024-01-31')."
+        in: query
+        name: updated_at
+        schema:
+          type: string
+      - description: "Filter by archived status: 'true' or '1' to show only archived\
+          \ processes/runs, 'false' or '0' to show only non-archived (default). If\
+          \ not specified, only non-archived items are returned."
+        in: query
+        name: archived
+        schema:
+          enum:
+          - "true"
+          - "false"
+          - "1"
+          - "0"
+          type: string
       - description: The current page of results.
         in: query
         name: page
         schema:
           type: integer
-      - description: The number of results to return per page.
+      - description: "The number of results to return per page (default: 25, max:\
+          \ 1000)."
         in: query
         name: page_size
         schema:
           type: integer
-      - description: Filter by the URL slug of the procedure.
-        in: query
-        name: slug
-        schema:
-          type: string
-      - description: "Filter for global templates. 'true' for global templates, 'false'\
-          \ for company-specific procedures"
+      - description: "**DEPRECATED** - Use 'process_scope' instead. Filter for global\
+          \ templates: 'true' for global templates, 'false' for company-specific processes."
         in: query
         name: global_template
         schema:
@@ -3639,13 +3949,14 @@ paths:
           - "true"
           - "false"
           type: string
-      - description: Filter for company-specific templates. Provide the company ID
-          to filter templates for that company
+      - description: '**DEPRECATED** - Use ''process_scope'' instead. Filter for company-specific
+          templates by providing the company ID.'
         in: query
         name: company_template
         schema:
           type: integer
-      - description: Filter for child procedures of a specific parent procedure
+      - description: '**DEPRECATED** - Use ''parent_process_id'' instead. Filter for
+          runs of a specific parent process.'
         in: query
         name: parent_procedure_id
         schema:
@@ -3656,25 +3967,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProcedures_200_response"
-          description: A list of procedures
+          description: A list of processes and runs
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
           description: Not Found
-      summary: Get a list of Procedures (Processes)
+      summary: Get a list of Processes and Runs
       tags:
       - Procedures
     post:
-      description: Create a new procedure without any tasks
+      description: |-
+        Creates a new process template without any tasks. This endpoint creates **processes only** - you cannot create runs (active instances) with this endpoint. Use the `/kickoff` endpoint to create runs from processes.
+
+        **Process Types:**
+        - **Global Template** (`company_id: null`): Available to all companies as a template. Cannot be kicked off directly - must first be copied to a company.
+        - **Company Process** (`company_id: <id>`): A company-specific process that can be kicked off to create runs.
+
+        **Note:** Runs cannot be created via POST. Use `POST /procedures/{id}/kickoff` to create runs from processes.
       operationId: createProcedure
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/createProcedure_request"
-        description: Procedure attributes
+        description: Process attributes
         required: true
       responses:
         "201":
@@ -3692,16 +4010,16 @@ paths:
         "422":
           content: {}
           description: Unprocessable Entity
-      summary: Create a new Procedure (Process)
+      summary: Create a new Process (Template)
       tags:
       - Procedures
       x-codegen-request-body-name: body
   /procedures/{id}:
     delete:
-      description: Remove a procedure by its ID.
+      description: Remove a process or run by its ID.
       operationId: deleteProcedure
       parameters:
-      - description: The ID of the procedure to delete.
+      - description: The ID of the process or run to delete.
         in: path
         name: id
         required: true
@@ -3713,24 +4031,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/deleteProcedureTask_200_response"
-          description: Procedure successfully deleted
+          description: Process or run successfully deleted
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
-          description: Procedure not found
+          description: Process or run not found
         "422":
           content: {}
           description: Unprocessable Entity
-      summary: Delete a Procedure
+      summary: Delete a Process or Run
       tags:
       - Procedures
     get:
-      description: Retrieve a procedure by its ID.
+      description: Retrieve a process or run by its ID.
       operationId: getProcedureById
       parameters:
-      - description: The ID of the requested procedure.
+      - description: The ID of the requested process or run.
         in: path
         name: id
         required: true
@@ -3742,22 +4060,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProcedureById_200_response"
-          description: The requested procedure
+          description: The requested process or run
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
-          description: Procedure not found
-      summary: Get a Procedure (Process)
+          description: Process or run not found
+      summary: Get a Process or Run
       tags:
       - Procedures
     put:
-      description: "Edit the name, description, and template status of an existing\
-        \ procedure."
+      description: |-
+        Updates mutable fields on a **process** or **run**. `company_id` is not accepted on update—use `POST /procedures/{id}/create_from_template` or `POST /procedures/{id}/duplicate` to place a process under a company.
+
+        **Processes** (`run: false`): You can update `name`, `description`, and `archived`. The `archived` flag applies only to **company** processes (not global processes or runs).
+
+        **Runs** (`run: true`): Use this endpoint mainly to change the run **`name`**. The run’s description is copied from the parent process at kickoff and is not editable in the web app; `archived` is ignored for runs. Prefer sending only `name` when updating a run.
       operationId: updateProcedure
       parameters:
-      - description: The ID of the procedure to update.
+      - description: The ID of the process or run to update.
         in: path
         name: id
         required: true
@@ -3775,45 +4097,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProcedureById_200_response"
-          description: Procedure successfully updated
+          description: Process or run successfully updated
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
-          description: Procedure not found
+          description: Process or run not found
         "422":
           content: {}
           description: Unprocessable Entity
-      summary: Update an existing Procedure
+      summary: Update an existing Process or Run
       tags:
       - Procedures
       x-codegen-request-body-name: body
   /procedures/{id}/create_from_template:
     post:
-      description: "Create a new procedure instance from an existing template. If\
-        \ company_id is not provided, it creates a global template; otherwise, it\
-        \ creates a company-specific template."
+      description: |-
+        Creates a new process by copying from an existing **global template**. This is how you make global templates available to specific companies.
+
+        **The source must be a global template** (`company_id: null`).
+
+        **The result depends on the `company_id` parameter:**
+        - If `company_id` is **not provided**: Creates another global template (copy of the original)
+        - If `company_id` is **provided**: Creates a company-specific process that can be kicked off to create runs
       operationId: createProcedureFromTemplate
       parameters:
-      - description: The ID of the template procedure to duplicate.
+      - description: "The ID of the **global template** to copy from. Must be a process\
+          \ with `company_id: null`."
         in: path
         name: id
         required: true
         schema:
           type: integer
-      - description: "The ID of the company for the new procedure. If not provided,\
-          \ a global template will be created."
+      - description: "The ID of the company for the new process. If provided, creates\
+          \ a **company process**. If not provided, creates a **global template**\
+          \ (copy of the source)."
         in: query
         name: company_id
         schema:
           type: integer
-      - description: The new name for the procedure.
+      - description: The new name for the process.
         in: query
         name: name
         schema:
           type: string
-      - description: The new description for the procedure.
+      - description: The new description for the process.
         in: query
         name: description
         schema:
@@ -3824,43 +4153,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProcedureById_200_response"
-          description: Procedure successfully created from template
+          description: Process successfully created from template
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
-          description: Template not found
+          description: Process template not found
         "422":
           content: {}
           description: Unprocessable Entity
-      summary: Create a Procedure from Template
+      summary: Create a Process from a Global Template
       tags:
       - Procedures
   /procedures/{id}/duplicate:
     post:
-      description: "Create a new procedure by duplicating an existing one, with optional\
+      description: "Create a new process by duplicating an existing one, with optional\
         \ modifications."
       operationId: duplicateProcedure
       parameters:
-      - description: The ID of the procedure to duplicate.
+      - description: The ID of the process to duplicate.
         in: path
         name: id
         required: true
         schema:
           type: integer
-      - description: The ID of the company for the new duplicated procedure.
+      - description: The ID of the company for the new duplicated process.
         in: query
         name: company_id
         required: true
         schema:
           type: integer
-      - description: The new name for the duplicated procedure (optional).
+      - description: The new name for the duplicated process (optional).
         in: query
         name: name
         schema:
           type: string
-      - description: The new description for the duplicated procedure (optional).
+      - description: The new description for the duplicated process (optional).
         in: query
         name: description
         schema:
@@ -3871,38 +4200,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProcedureById_200_response"
-          description: Procedure successfully duplicated
+          description: Process successfully duplicated
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
-          description: Original procedure not found
+          description: Original process not found
         "422":
           content: {}
           description: Unprocessable Entity
-      summary: Duplicate an existing Procedure
+      summary: Duplicate an existing Process
       tags:
       - Procedures
   /procedures/{id}/kickoff:
     post:
-      description: "Start a process from a company process. Optionally, attach the\
-        \ process to an asset by providing an asset ID, or change the process name\
-        \ by passing a new name."
+      description: "Creates an active run (instance) from a process template. This\
+        \ clones the process and all its tasks, creating a new run with `run: true`.\
+        \ Optionally attach the run to an asset or customize the name. Note: Cannot\
+        \ kickoff global process templates - they must first be copied to a company."
       operationId: kickoffProcedureById
       parameters:
-      - description: The ID of the requested procedure.
+      - description: The ID of the requested process.
         in: path
         name: id
         required: true
         schema:
           type: integer
-      - description: The ID of the asset to attach the process to (optional).
+      - description: The ID of the asset to attach the run to (optional).
         in: query
         name: asset_id
         schema:
           type: integer
-      - description: The new name for the procedure (optional).
+      - description: The new name for the run (optional).
         in: query
         name: name
         schema:
@@ -3913,14 +4243,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/deleteProcedureTask_200_response"
-          description: Procedure Task successfully deleted
+          description: Run successfully created
         "404":
           content: {}
-          description: Procedure Task not found
+          description: Process not found
         "422":
           content: {}
           description: Unprocessable Entity
-      summary: Kickoff a Procedure (Process)
+      summary: Create a Run from a Process
       tags:
       - Procedures
   /public_photos:
@@ -3989,6 +4319,69 @@ paths:
       tags:
       - Public Photos
   /public_photos/{id}:
+    get:
+      description: |-
+        Get public photo metadata or download the actual photo file. Use the 'download' parameter to download the file. **Note**: The response will include a slug-based ID for improved security, but the request accepts numeric IDs.
+
+        **CORS Configuration for Browser Testing**: If you experience CORS errors or "Failed to fetch" when testing the download endpoint in browser-based tools (e.g., Swagger UI), you need to configure CORS on your cloud storage bucket (DigitalOcean Spaces/S3) with: (1) Origin: `https://your-domain.com`, (2) Allowed Methods: `GET`, `HEAD`, (3) Allowed Headers: `*`
+      operationId: get_public_photo
+      parameters:
+      - description: Public Photo numeric ID
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Set to true to download the file instead of returning metadata
+        in: query
+        name: download
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/get_public_photo_200_response"
+            image/jpeg:
+              schema:
+                $ref: "#/components/schemas/get_public_photo_200_response"
+            image/png:
+              schema:
+                $ref: "#/components/schemas/get_public_photo_200_response"
+            image/gif:
+              schema:
+                $ref: "#/components/schemas/get_public_photo_200_response"
+            image/webp:
+              schema:
+                $ref: "#/components/schemas/get_public_photo_200_response"
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/get_public_photo_200_response"
+          description: Photo details retrieved successfully (when download=false)
+            or file downloaded successfully (when download=true)
+          headers:
+            Content-Disposition:
+              description: Attachment header with filename (only when download=true)
+              schema:
+                type: string
+            Content-Type:
+              description: MIME type of the photo file (only when download=true)
+              schema:
+                type: string
+        "302":
+          content: {}
+          description: "Redirect to file URL (for cloud storage, when download=true)"
+        "401":
+          content: {}
+          description: Unauthorized
+        "404":
+          content: {}
+          description: Photo not found or file not available
+      summary: Get public photo details or download public photo file
+      tags:
+      - Public Photos
     put:
       description: "Update the associated record type and ID for a specific public\
         \ photo. **Backward Compatibility**: This endpoint still accepts numeric IDs\
@@ -4487,6 +4880,17 @@ paths:
   /uploads:
     get:
       operationId: get_uploads
+      parameters:
+      - description: Page number for pagination
+        in: query
+        name: page
+        schema:
+          type: integer
+      - description: "Number of results per page (1-1000, default: 25)"
+        in: query
+        name: page_size
+        schema:
+          type: integer
       responses:
         "200":
           content:
@@ -4553,6 +4957,10 @@ paths:
       tags:
       - Uploads
     get:
+      description: |-
+        Returns upload metadata by default. Set download=true to download the file directly.
+
+        **CORS Configuration for Browser Testing**: If you experience CORS errors or "Failed to fetch" when testing the download endpoint in browser-based tools (e.g., Swagger UI), you need to configure CORS on your cloud storage bucket (DigitalOcean Spaces/S3) with: (1) Origin: `https://your-domain.com`, (2) Allowed Methods: `GET`, `HEAD`, (3) Allowed Headers: `*`
       operationId: get_uploads_id
       parameters:
       - description: ID of the requested upload
@@ -4561,20 +4969,29 @@ paths:
         required: true
         schema:
           type: integer
+      - description: Set to true to download the file instead of returning metadata
+        in: query
+        name: download
+        schema:
+          type: boolean
       responses:
         "200":
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/Upload"
-          description: Successful operation
+          description: "Upload metadata (when download is not set or false), or file\
+            \ content (when download=true and using local filesystem)"
+        "302":
+          content: {}
+          description: Redirect to file URL (when download=true and using cloud storage)
         "401":
           content: {}
           description: Unauthorized
         "404":
           content: {}
           description: Not Found
-      summary: Get a specific upload
+      summary: Get a specific upload or download the file
       tags:
       - Uploads
   /users:
@@ -5203,10 +5620,10 @@ components:
         company_id: 1
         object_type: object_type
         enable_sharing: true
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         content: content
         url: url
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         share_url: share_url
         draft: true
         name: name
@@ -5255,9 +5672,11 @@ components:
           type: integer
         created_at:
           description: The date and time when the article was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the article was last updated.
+          format: date-time
           type: string
         public_photos:
           description: A list of public photos.
@@ -5303,12 +5722,12 @@ components:
         company_id: 6.027456183070403
         object_type: object_type
         primary_mail: primary_mail
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         primary_manufacturer: primary_manufacturer
         asset_layout_id: 1.4658129805029452
         url: url
         archived: true
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         company_name: company_name
         name: name
         asset_type: asset_type
@@ -5319,11 +5738,11 @@ components:
         - id: 5.962133916683182
           label: label
           position: 5.637376656633329
-          value: value
+          value: true
         - id: 5.962133916683182
           label: label
           position: 5.637376656633329
-          value: value
+          value: true
         slug: slug
       properties:
         id:
@@ -5370,9 +5789,11 @@ components:
           type: string
         created_at:
           description: The date and time when the asset was created
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the asset was last updated
+          format: date-time
           type: string
         fields:
           description: A list of fields associated with the asset
@@ -5538,14 +5959,14 @@ components:
         password_folder_name: password_folder_name
         company_id: 1
         description: description
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         otp_secret: otp_secret
         url: url
         passwordable_type: passwordable_type
         password: password
         login_url: login_url
         password_type: password_type
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
         passwordable_id: 6
         id: 0
@@ -5596,9 +6017,11 @@ components:
           type: string
         created_at:
           description: Timestamp when the password was created
+          format: date-time
           type: string
         updated_at:
           description: Timestamp when the password was last updated
+          format: date-time
           type: string
         password_folder_id:
           description: "ID of the folder in which the password is stored, if any.\
@@ -5631,10 +6054,10 @@ components:
         notes: notes
         city: city
         knowledge_base_url: knowledge_base_url
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         archived: true
         passwords_url: passwords_url
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         nickname: nickname
         address_line_1: address_line_1
         country_name: country_name
@@ -5750,9 +6173,11 @@ components:
           type: string
         created_at:
           description: The date and time when the company was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the company was last updated.
+          format: date-time
           type: string
         integrations:
           description: A list of integrations associated with the company.
@@ -5810,12 +6235,12 @@ components:
       example:
         date: 2000-01-23
         company_id: 5.962133916683182
-        archived_at: archived_at
-        created_at: created_at
+        archived_at: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
         expirationable_type: expirationable_type
         expiration_type: expiration_type
         account_id: 1.4658129805029452
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         asset_field_id: 7.061401241503109
         expirationable_id: 6.027456183070403
         id: 0.8008281904610115
@@ -5852,12 +6277,15 @@ components:
         archived_at:
           description: The timestamp when the expiration was archived (if any). Can
             be null.
+          format: date-time
           type: string
         created_at:
           description: The timestamp when the expiration was created
+          format: date-time
           type: string
         updated_at:
           description: The timestamp when the expiration was last updated
+          format: date-time
           type: string
         expiration_type:
           description: "The type of expiration (e.g., domain)"
@@ -5878,9 +6306,9 @@ components:
     Flag:
       example:
         flagable_type: flagable_type
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         description: description
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         flag_type_id: 6
         flagable_id: 1
@@ -5907,17 +6335,19 @@ components:
           type: integer
         created_at:
           description: The date and time when the flag was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the flag was last updated.
+          format: date-time
           type: string
       type: object
     FlagType:
       example:
         color: Red
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         slug: slug
       properties:
@@ -5952,20 +6382,23 @@ components:
           type: string
         created_at:
           description: The date and time when the flag type was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the flag type was last updated.
+          format: date-time
           type: string
       type: object
     Folder:
       example:
+        folder_type: article
         company_id: 6
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         parent_folder_id: 1
         icon: icon
         name: name
         description: description
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
       properties:
         id:
@@ -5989,11 +6422,20 @@ components:
           description: "The ID of the parent folder, if any. Can be null."
           format: int64
           type: integer
+        folder_type:
+          description: The type of folder - 'article' for article folders or 'photo'
+            for photo folders. This field is immutable after creation.
+          enum:
+          - article
+          - photo
+          type: string
         created_at:
           description: The timestamp of folder creation
+          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last folder update
+          format: date-time
           type: string
       required:
       - id
@@ -6002,7 +6444,7 @@ components:
     Group:
       example:
         default: true
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         members:
         - last_name: last_name
           id: 1
@@ -6017,7 +6459,7 @@ components:
           slug: slug
           security_level: security_level
         name: name
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         member_count: 6
         slug: slug
@@ -6041,9 +6483,11 @@ components:
           type: boolean
         created_at:
           description: The timestamp when the group was created.
+          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last group update.
+          format: date-time
           type: string
         member_count:
           description: The number of members in the group (excludes admins and super
@@ -6216,9 +6660,9 @@ components:
       type: object
     List:
       example:
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         list_items:
         - name: name
@@ -6235,9 +6679,11 @@ components:
           type: string
         created_at:
           description: The date and time when the list was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the list was last updated.
+          format: date-time
           type: string
         list_items:
           description: The items belonging to this list.
@@ -6372,16 +6818,16 @@ components:
         notes: notes
         ancestry: ancestry
         company_id: 1
-        archived_at: archived_at
+        archived_at: 2000-01-23T04:56:07.000+00:00
         sync_identifier: sync_identifier
         status_list_item_id: 5
         description: description
         is_radar: true
         role_list_item_id: 2
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         location_id: 5
         url: url
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
         id: 0
         network_type: 6
@@ -6444,9 +6890,11 @@ components:
           type: integer
         created_at:
           description: The date and time when the network was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the network was last updated.
+          format: date-time
           type: string
         url:
           description: The URL to access this network in the web interface.
@@ -6454,19 +6902,20 @@ components:
         archived_at:
           description: The date and time when the network was archived. Null if not
             archived.
+          format: date-time
           type: string
       type: object
     Password_Folder:
       example:
         security: all_users
         company_id: 6
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
         description: description
         allowed_groups:
         - 1
         - 1
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         slug: slug
       properties:
@@ -6501,13 +6950,63 @@ components:
           type: array
         created_at:
           description: The timestamp of password folder creation
+          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last password folder update
+          format: date-time
+          type: string
+      type: object
+    Photo:
+      example:
+        archived: true
+        photoable_type: photoable_type
+        pinned: true
+        company_id: 6
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        photoable_id: 5
+        caption: caption
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        folder_id: 1
+      properties:
+        id:
+          description: Unique identifier for the photo
+          type: integer
+        company_id:
+          description: ID of the company this photo belongs to
+          type: integer
+        folder_id:
+          description: ID of the folder this photo is in (null if not in a folder)
+          type: integer
+        photoable_type:
+          description: "The type of record this photo is attached to (Company, Asset,\
+            \ Article, etc.)"
+          type: string
+        photoable_id:
+          description: The ID of the record this photo is attached to
+          type: integer
+        caption:
+          description: Caption/title of the photo
+          type: string
+        pinned:
+          description: Whether the photo is pinned
+          type: boolean
+        archived:
+          description: Whether the photo is archived (soft-deleted)
+          type: boolean
+        created_at:
+          description: When the photo was created
+          format: date-time
+          type: string
+        updated_at:
+          description: When the photo was last updated
+          format: date-time
           type: string
       type: object
     Procedure:
       example:
+        parent_process_id: 6
         completion_percentage: 0%
         company_id: 0
         object_type: Process
@@ -6517,6 +7016,7 @@ components:
         - "{}"
         description: description
         created_at: 2022-12-09T22:23:29.894Z
+        run: false
         completed: 0
         url: /processes/api-test-7cbe6a6458e9
         total: 0
@@ -6524,43 +7024,45 @@ components:
         share_url: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
         company_name: test TWO
         name: API TEST
+        process_type: company
         id: 1
         asset: asset
         slug: api-test-7cbe6a6458e9
+        status: Not Started
       properties:
         id:
-          description: The unique identifier of the procedure.
+          description: The unique identifier of the process or run.
           example: 1
           type: integer
         slug:
-          description: The URL-friendly unique identifier of the procedure.
+          description: The URL-friendly unique identifier of the process or run.
           example: api-test-7cbe6a6458e9
           type: string
         name:
-          description: The name of the procedure.
+          description: The name of the process or run.
           example: API TEST
           type: string
         description:
-          description: A brief description of the procedure. Can Be null.
+          description: A brief description of the process or run. Can Be null.
           type: string
         total:
-          description: The total number of tasks in the procedure.
+          description: The total number of tasks in the process or run.
           example: 0
           type: integer
         completed:
-          description: The number of completed tasks in the procedure.
+          description: The number of completed tasks in the process or run.
           example: 0
           type: integer
         url:
-          description: The URL for accessing the procedure.
+          description: The URL for accessing the process or run.
           example: /processes/api-test-7cbe6a6458e9
           type: string
         object_type:
-          description: The type of object the procedure represents.
+          description: The type of object (always 'Process').
           example: Process
           type: string
         company_id:
-          description: The unique identifier of the company this procedure belongs
+          description: The unique identifier of the company this process or run belongs
             to.
           format: int64
           type: integer
@@ -6569,29 +7071,58 @@ components:
           example: test TWO
           type: string
         completion_percentage:
-          description: The completion percentage of the procedure.
+          description: The completion percentage of the process or run.
           example: 0%
           type: string
         created_at:
-          description: The date and time when the procedure was created.
+          description: The date and time when the process or run was created.
           example: 2022-12-09T22:23:29.894Z
+          format: date-time
           type: string
         updated_at:
-          description: The date and time when the procedure was last updated.
+          description: The date and time when the process or run was last updated.
           example: 2022-12-09T22:23:29.894Z
+          format: date-time
           type: string
         parent_procedure:
-          description: "The parent procedure, if any. Can Be null."
+          description: "The parent process, if any. Can Be null."
+          type: string
+        run:
+          description: Indicates if this is a run (true) or a process (false). Runs
+            are active instances of a process.
+          example: false
+          type: boolean
+        parent_process_id:
+          description: The ID of the parent process (for runs only). Null for processes.
+          type: integer
+        process_type:
+          description: "The scope of the process: 'global' (available to all companies)\
+            \ or 'company' (company-specific). Null for runs."
+          enum:
+          - global
+          - company
+          example: company
+          type: string
+        status:
+          description: "The current status of the process or run: 'Not Started', 'In\
+            \ Progress', 'Completed', or 'Cancelled'."
+          enum:
+          - Not Started
+          - In Progress
+          - Completed
+          - Cancelled
+          example: Not Started
           type: string
         asset:
           description: "The associated asset, if any. Can Be null."
           type: string
         share_url:
-          description: The URL for sharing the procedure.
+          description: The URL for sharing the process or run.
           example: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
           type: string
         procedure_tasks_attributes:
-          description: A list of attributes for the tasks associated with the procedure.
+          description: A list of attributes for the tasks associated with the process
+            or run.
           items:
             properties: {}
             type: object
@@ -6599,15 +7130,35 @@ components:
       type: object
     ProcedureTask:
       example:
-        completed_at: completed_at
-        updated_at: updated_at
-        user_id: 6
-        procedure_id: 1
-        name: name
-        created_at: created_at
+        first_assigned_user_initials: first_assigned_user_initials
+        parent_task_id: 7
+        user_name: user_name
+        procedure_id: 2
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        completed_date: completed_date
+        updated_at: 2000-01-23T04:56:07.000+00:00
         id: 0
+        completion_notes: completion_notes
+        subtask_count: 3
+        due_date: 2000-01-23
+        first_assigned_user_name: first_assigned_user_name
+        optional: true
         completed: true
+        assigned_users:
+        - 5
+        - 5
         priority: unsure
+        subtask_ids:
+        - 9
+        - 9
+        formatted_due_date: formatted_due_date
+        url: url
+        has_subtasks: true
+        user_id: 1
+        name: name
+        first_assigned_user_id: 5
+        position: 6
       properties:
         id:
           description: The unique ID of the procedure task.
@@ -6616,6 +7167,12 @@ components:
         name:
           description: The name of the procedure task.
           type: string
+        description:
+          description: The description of the task (base64 encoded).
+          type: string
+        position:
+          description: The position of the task in the procedure.
+          type: integer
         priority:
           description: The priority level of the task.
           enum:
@@ -6628,22 +7185,73 @@ components:
         completed:
           description: Indicates whether the task is completed.
           type: boolean
-        completed_at:
-          description: The date and time when the task was completed.
+        completed_date:
+          description: Formatted date and time when the task was completed.
+          type: string
+        completion_notes:
+          description: Notes about the completion of the task.
+          type: string
+        due_date:
+          description: The due date for the task.
+          format: date
+          type: string
+        formatted_due_date:
+          description: Formatted due date string.
           type: string
         user_id:
-          description: "The ID of the user assigned to the task, if any."
+          description: "The ID of the user who completed the task, if any."
           format: int64
           type: integer
+        user_name:
+          description: The name of the user who completed the task.
+          type: string
+        assigned_users:
+          description: Array of user IDs assigned to this task.
+          items:
+            type: integer
+          type: array
+        first_assigned_user_id:
+          description: The ID of the first assigned user.
+          type: integer
+        first_assigned_user_name:
+          description: The name of the first assigned user.
+          type: string
+        first_assigned_user_initials:
+          description: The initials of the first assigned user.
+          type: string
         procedure_id:
-          description: The ID of the procedure this task belongs to.
+          description: The ID of the procedure (process or run) this task belongs
+            to.
           format: int64
           type: integer
+        optional:
+          description: Whether the task is optional. Optional tasks don't need to
+            be completed for the procedure to be considered complete.
+          type: boolean
+        parent_task_id:
+          description: "The ID of the parent task if this is a subtask, null otherwise."
+          type: integer
+        subtask_ids:
+          description: Array of IDs of subtasks belonging to this task.
+          items:
+            type: integer
+          type: array
+        subtask_count:
+          description: The number of subtasks this task has.
+          type: integer
+        has_subtasks:
+          description: Whether this task has any subtasks.
+          type: boolean
+        url:
+          description: The URL to view this task in the application.
+          type: string
         created_at:
           description: The date and time when the task was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the task was last updated.
+          format: date-time
           type: string
       required:
       - id
@@ -6659,9 +7267,11 @@ components:
       example:
         record_id: 6
         numeric_id: 0
+        file_name: file_name
         id: id
         url: https://openapi-generator.tech
         record_type: record_type
+        file_size: 1
       properties:
         id:
           description: "The unique slug identifier of the public photo (e.g., 'a1b2c3d4e5f6').\
@@ -6685,18 +7295,24 @@ components:
         record_id:
           description: The ID of the record the public photo is associated with.
           type: integer
+        file_name:
+          description: The original filename of the photo.
+          type: string
+        file_size:
+          description: The size of the photo file in bytes.
+          type: integer
       type: object
     RackStorage:
       example:
-        updated_at: updated_at
-        discarded_at: discarded_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        discarded_at: 2000-01-23T04:56:07.000+00:00
         company_id: 7
         starting_unit: 5
         max_wattage: 1
         name: name
         width: 2
         description: description
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         location_id: 6
         height: 5
@@ -6733,13 +7349,16 @@ components:
           type: integer
         created_at:
           description: The date and time when the rack storage was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the rack storage was last updated.
+          format: date-time
           type: string
         discarded_at:
           description: The date and time when the rack storage was discarded. Can
             Be null.
+          format: date-time
           type: string
         company_id:
           description: The unique ID of the company.
@@ -6876,12 +7495,12 @@ components:
       example:
         ext: ext
         size: size
-        archived_at: archived_at
+        archived_at: 2000-01-23T04:56:07.000+00:00
         uploadable_id: 6
         mime: mime
         name: name
         id: 0
-        created_date: created_date
+        created_date: 2000-01-23T04:56:07.000+00:00
         uploadable_type: uploadable_type
         url: url
       properties:
@@ -6905,9 +7524,11 @@ components:
           type: string
         created_date:
           description: Date when the file was uploaded
+          format: date-time
           type: string
         archived_at:
           description: Date when the file was archived. Null if the file is not archived.
+          format: date-time
           type: string
         uploadable_id:
           description: ID of the object the file is associated with
@@ -6932,14 +7553,14 @@ components:
         score_90_days: 2
         last_sign_in_ip: last_sign_in_ip
         last_name: last_name
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         sign_in_count: 6
         time_zone: time_zone
         security_level: security_level
         currently_signed_in: true
         archived: true
-        last_sign_in_at: last_sign_in_at
-        updated_at: updated_at
+        last_sign_in_at: 2000-01-23T04:56:07.000+00:00
+        updated_at: 2000-01-23T04:56:07.000+00:00
         portal_member_company_id: 1
         accepted_invite: true
         phone_number: phone_number
@@ -6989,15 +7610,18 @@ components:
           type: boolean
         last_sign_in_at:
           description: Timestamp of the last sign-in.
+          format: date-time
           type: string
         last_sign_in_ip:
           description: IP address from the last sign-in.
           type: string
         created_at:
           description: The timestamp when the user was created.
+          format: date-time
           type: string
         updated_at:
           description: The timestamp of the last user update.
+          format: date-time
           type: string
         archived:
           description: Indicates if the user is archived (discarded).
@@ -7026,13 +7650,13 @@ components:
         vlan_id: 6
         notes: notes
         company_id: 1
-        archived_at: archived_at
+        archived_at: 2000-01-23T04:56:07.000+00:00
         status_list_item_id: 5
         description: description
         role_list_item_id: 2
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         url: url
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
         vlan_zone_id: 5
         id: 0
@@ -7077,12 +7701,15 @@ components:
           type: integer
         archived_at:
           description: The date and time when the VLAN was archived. Null if not archived.
+          format: date-time
           type: string
         created_at:
           description: The date and time when the VLAN was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the VLAN was last updated.
+          format: date-time
           type: string
         networks_count:
           description: Number of networks currently assigned to this VLAN.
@@ -7097,12 +7724,12 @@ components:
         \ or rack range)."
       example:
         company_id: 6
-        updated_at: updated_at
-        archived_at: archived_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        archived_at: 2000-01-23T04:56:07.000+00:00
         vlans_count: 1
         name: name
         description: description
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         slug: slug
         url: url
@@ -7132,12 +7759,15 @@ components:
         archived_at:
           description: The date and time when the VLAN Zone was archived. Null if
             not archived.
+          format: date-time
           type: string
         created_at:
           description: The date and time when the VLAN Zone was created.
+          format: date-time
           type: string
         updated_at:
           description: The date and time when the VLAN Zone was last updated.
+          format: date-time
           type: string
         vlans_count:
           description: Number of VLANs currently assigned to this zone
@@ -7156,8 +7786,8 @@ components:
         icon: icon
         sent_notifications: true
         enable_dmarc_tracking: true
-        refreshed_at: refreshed_at
-        discarded_at: discarded_at
+        refreshed_at: 2000-01-23T04:56:07.000+00:00
+        discarded_at: 2000-01-23T04:56:07.000+00:00
         asset_field_id: 5
         asset_type: asset_type
         disable_ssl: true
@@ -7173,7 +7803,7 @@ components:
         disable_whois: true
         url: url
         account_id: 5
-        monitored_at: monitored_at
+        monitored_at: 2000-01-23T04:56:07.000+00:00
         company_name: company_name
         name: name
         monitor_type: 1
@@ -7209,9 +7839,11 @@ components:
           type: string
         refreshed_at:
           description: The timestamp when the website was last refreshed
+          format: date-time
           type: string
         monitored_at:
           description: The timestamp when the website was last monitored
+          format: date-time
           type: string
         headers:
           description: HTTP headers associated with the website (optional)
@@ -7235,6 +7867,7 @@ components:
           type: integer
         discarded_at:
           description: The timestamp when the website was discarded (optional)
+          format: date-time
           type: string
         disable_ssl:
           description: Indicates whether SSL checks are disabled for the website
@@ -7291,10 +7924,10 @@ components:
         - company_id: 1
           object_type: object_type
           enable_sharing: true
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           content: content
           url: url
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           share_url: share_url
           draft: true
           name: name
@@ -7307,10 +7940,10 @@ components:
         - company_id: 1
           object_type: object_type
           enable_sharing: true
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           content: content
           url: url
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           share_url: share_url
           draft: true
           name: name
@@ -7358,10 +7991,10 @@ components:
           company_id: 1
           object_type: object_type
           enable_sharing: true
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           content: content
           url: url
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           share_url: share_url
           draft: true
           name: name
@@ -7737,14 +8370,14 @@ components:
         - password_folder_name: password_folder_name
           company_id: 1
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           otp_secret: otp_secret
           url: url
           passwordable_type: passwordable_type
           password: password
           login_url: login_url
           password_type: password_type
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           passwordable_id: 6
           id: 0
@@ -7754,14 +8387,14 @@ components:
         - password_folder_name: password_folder_name
           company_id: 1
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           otp_secret: otp_secret
           url: url
           passwordable_type: passwordable_type
           password: password
           login_url: login_url
           password_type: password_type
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           passwordable_id: 6
           id: 0
@@ -7815,14 +8448,14 @@ components:
           password_folder_name: password_folder_name
           company_id: 1
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           otp_secret: otp_secret
           url: url
           passwordable_type: passwordable_type
           password: password
           login_url: login_url
           password_type: password_type
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           passwordable_id: 6
           id: 0
@@ -7872,12 +8505,12 @@ components:
           company_id: 6.027456183070403
           object_type: object_type
           primary_mail: primary_mail
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           primary_manufacturer: primary_manufacturer
           asset_layout_id: 1.4658129805029452
           url: url
           archived: true
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           company_name: company_name
           name: name
           asset_type: asset_type
@@ -7888,11 +8521,11 @@ components:
           - id: 5.962133916683182
             label: label
             position: 5.637376656633329
-            value: value
+            value: true
           - id: 5.962133916683182
             label: label
             position: 5.637376656633329
-            value: value
+            value: true
           slug: slug
         - cards:
           - data: "{}"
@@ -7930,12 +8563,12 @@ components:
           company_id: 6.027456183070403
           object_type: object_type
           primary_mail: primary_mail
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           primary_manufacturer: primary_manufacturer
           asset_layout_id: 1.4658129805029452
           url: url
           archived: true
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           company_name: company_name
           name: name
           asset_type: asset_type
@@ -7946,11 +8579,11 @@ components:
           - id: 5.962133916683182
             label: label
             position: 5.637376656633329
-            value: value
+            value: true
           - id: 5.962133916683182
             label: label
             position: 5.637376656633329
-            value: value
+            value: true
           slug: slug
       properties:
         assets:
@@ -8068,10 +8701,10 @@ components:
           notes: notes
           city: city
           knowledge_base_url: knowledge_base_url
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           archived: true
           passwords_url: passwords_url
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           nickname: nickname
           address_line_1: address_line_1
           country_name: country_name
@@ -8113,10 +8746,10 @@ components:
           notes: notes
           city: city
           knowledge_base_url: knowledge_base_url
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           archived: true
           passwords_url: passwords_url
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           nickname: nickname
           address_line_1: address_line_1
           country_name: country_name
@@ -8215,10 +8848,10 @@ components:
           notes: notes
           city: city
           knowledge_base_url: knowledge_base_url
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           archived: true
           passwords_url: passwords_url
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           nickname: nickname
           address_line_1: address_line_1
           country_name: country_name
@@ -8275,10 +8908,10 @@ components:
       example:
         account_id: 6
         is_pdf: true
-        updated_at: updated_at
+        updated_at: 2000-01-23T04:56:07.000+00:00
         file_name: file_name
         download_url: download_url
-        created_at: created_at
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: 0
         file_size: 1
         status: started
@@ -8302,9 +8935,11 @@ components:
           type: boolean
         created_at:
           description: When the export was created
+          format: date-time
           type: string
         updated_at:
           description: When the export was last updated
+          format: date-time
           type: string
         download_url:
           description: URL to download the export file
@@ -8377,15 +9012,15 @@ components:
       example:
         flag_types:
         - color: Red
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           slug: slug
         - color: Red
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           slug: slug
       properties:
@@ -8435,9 +9070,9 @@ components:
       example:
         flag_type:
           color: Red
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           slug: slug
       properties:
@@ -8482,16 +9117,16 @@ components:
       example:
         flags:
         - flagable_type: flagable_type
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           flag_type_id: 6
           flagable_id: 1
         - flagable_type: flagable_type
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           flag_type_id: 6
           flagable_id: 1
@@ -8547,9 +9182,9 @@ components:
       example:
         flag:
           flagable_type: flagable_type
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           flag_type_id: 6
           flagable_id: 1
@@ -8596,21 +9231,23 @@ components:
     get_folders_200_response:
       example:
         folders:
-        - company_id: 6
-          updated_at: updated_at
+        - folder_type: article
+          company_id: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
           parent_folder_id: 1
           icon: icon
           name: name
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
-        - company_id: 6
-          updated_at: updated_at
+        - folder_type: article
+          company_id: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
           parent_folder_id: 1
           icon: icon
           name: name
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
       properties:
         folders:
@@ -8637,6 +9274,13 @@ components:
           description: ID of the associated company (optional)
           format: int64
           type: integer
+        folder_type:
+          description: "Type of folder - 'article' or 'photo' (optional, defaults\
+            \ to 'article'). Can only be set during creation."
+          enum:
+          - article
+          - photo
+          type: string
       type: object
     post_folders_request:
       properties:
@@ -8646,17 +9290,49 @@ components:
     post_folders_201_response:
       example:
         folder:
+          folder_type: article
           company_id: 6
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           parent_folder_id: 1
           icon: icon
           name: name
           description: description
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
       properties:
         folder:
           $ref: "#/components/schemas/Folder"
+      type: object
+    put_folders_id_request_folder:
+      properties:
+        name:
+          description: Name of the folder
+          type: string
+        icon:
+          description: Icon for the folder
+          type: string
+        description:
+          description: Description of the folder
+          type: string
+        parent_folder_id:
+          description: ID of the parent folder (optional)
+          format: int64
+          type: integer
+        company_id:
+          description: ID of the associated company (optional)
+          format: int64
+          type: integer
+        folder_type:
+          description: Type of folder - 'article' or 'photo' (optional)
+          enum:
+          - article
+          - photo
+          type: string
+      type: object
+    put_folders_id_request:
+      properties:
+        folder:
+          $ref: "#/components/schemas/put_folders_id_request_folder"
       type: object
     create_list_request_list_list_items_attributes_inner:
       properties:
@@ -9002,13 +9678,13 @@ components:
         password_folder:
           security: all_users
           company_id: 6
-          updated_at: updated_at
+          updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           description: description
           allowed_groups:
           - 1
           - 1
-          created_at: created_at
+          created_at: 2000-01-23T04:56:07.000+00:00
           id: 0
           slug: slug
       properties:
@@ -9046,27 +9722,192 @@ components:
             type: integer
           type: array
       type: object
+    get_photos_200_response:
+      example:
+        photos:
+        - archived: true
+          photoable_type: photoable_type
+          pinned: true
+          company_id: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          photoable_id: 5
+          caption: caption
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          folder_id: 1
+        - archived: true
+          photoable_type: photoable_type
+          pinned: true
+          company_id: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          photoable_id: 5
+          caption: caption
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          folder_id: 1
+      properties:
+        photos:
+          items:
+            $ref: "#/components/schemas/Photo"
+          type: array
+      type: object
+    create_photo_request:
+      properties:
+        file:
+          description: The image file to upload
+          format: binary
+          type: string
+        caption:
+          description: Caption/title for the photo
+          type: string
+        company_id:
+          description: ID of the company this photo belongs to
+          format: int32
+          type: integer
+        photoable_type:
+          description: "Type of record to attach the photo to (Company, Asset, Article,\
+            \ etc.)"
+          type: string
+        photoable_id:
+          description: ID of the record to attach the photo to
+          format: int32
+          type: integer
+        folder_id:
+          description: ID of the folder to place the photo in
+          format: int32
+          type: integer
+        pinned:
+          description: Whether the photo should be pinned
+          type: boolean
+      required:
+      - caption
+      - file
+      type: object
+    create_photo_201_response:
+      example:
+        photo:
+          archived: true
+          photoable_type: photoable_type
+          pinned: true
+          company_id: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          photoable_id: 5
+          caption: caption
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 0
+          folder_id: 1
+      properties:
+        photo:
+          $ref: "#/components/schemas/Photo"
+      type: object
+    create_photo_422_response:
+      example:
+        errors:
+        - errors
+        - errors
+      properties:
+        errors:
+          items:
+            type: string
+          type: array
+      type: object
+    update_photo_request_photo:
+      properties:
+        caption:
+          description: Caption/title of the photo
+          type: string
+        folder_id:
+          description: ID of the folder to move the photo to
+          type: integer
+        pinned:
+          description: Whether the photo is pinned
+          type: boolean
+        archived:
+          description: "Whether the photo is archived (soft-deleted). Set to true\
+            \ to archive, false to unarchive."
+          type: boolean
+        photoable_type:
+          description: "Type of record to attach the photo to (Company, Asset, Article,\
+            \ etc.)"
+          type: string
+        photoable_id:
+          description: ID of the record to attach the photo to
+          type: integer
+      type: object
+    update_photo_request:
+      example:
+        photo:
+          caption: New caption
+          folder_id: 1
+          pinned: true
+          archived: false
+          photoable_type: Asset
+          photoable_id: 1
+      properties:
+        photo:
+          $ref: "#/components/schemas/update_photo_request_photo"
+      type: object
     getProcedureTasks_200_response:
       example:
         procedure_tasks:
-        - completed_at: completed_at
-          updated_at: updated_at
-          user_id: 6
-          procedure_id: 1
-          name: name
-          created_at: created_at
+        - first_assigned_user_initials: first_assigned_user_initials
+          parent_task_id: 7
+          user_name: user_name
+          procedure_id: 2
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          completed_date: completed_date
+          updated_at: 2000-01-23T04:56:07.000+00:00
           id: 0
+          completion_notes: completion_notes
+          subtask_count: 3
+          due_date: 2000-01-23
+          first_assigned_user_name: first_assigned_user_name
+          optional: true
           completed: true
+          assigned_users:
+          - 5
+          - 5
           priority: unsure
-        - completed_at: completed_at
-          updated_at: updated_at
-          user_id: 6
-          procedure_id: 1
+          subtask_ids:
+          - 9
+          - 9
+          formatted_due_date: formatted_due_date
+          url: url
+          has_subtasks: true
+          user_id: 1
           name: name
-          created_at: created_at
+          first_assigned_user_id: 5
+          position: 6
+        - first_assigned_user_initials: first_assigned_user_initials
+          parent_task_id: 7
+          user_name: user_name
+          procedure_id: 2
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          completed_date: completed_date
+          updated_at: 2000-01-23T04:56:07.000+00:00
           id: 0
+          completion_notes: completion_notes
+          subtask_count: 3
+          due_date: 2000-01-23
+          first_assigned_user_name: first_assigned_user_name
+          optional: true
           completed: true
+          assigned_users:
+          - 5
+          - 5
           priority: unsure
+          subtask_ids:
+          - 9
+          - 9
+          formatted_due_date: formatted_due_date
+          url: url
+          has_subtasks: true
+          user_id: 1
+          name: name
+          first_assigned_user_id: 5
+          position: 6
       properties:
         procedure_tasks:
           items:
@@ -9077,50 +9918,64 @@ components:
       properties:
         name:
           description: The name of the task.
+          example: Complete security training
           type: string
         description:
           description: A detailed description of the task.
+          example: Employee must complete the online security awareness training module
           type: string
         procedure_id:
-          description: The ID of the procedure this task belongs to.
+          description: The ID of the **process** (template) to add this task to. **Must
+            be a process** - cannot be a run.
+          example: 123
           type: integer
         position:
-          description: The position of the task in the procedure.
+          description: The position of the task in the process.
+          example: 1
           type: integer
-        user_id:
-          description: The ID of the user assigned to the task.
+        optional:
+          description: Whether the task is optional. Optional tasks don't need to
+            be completed for the process/run to be considered complete.
+          example: false
+          type: boolean
+        parent_task_id:
+          description: The ID of the parent task if this is a subtask. Leave null
+            for top-level tasks. Subtasks cannot have their own subtasks (no nested
+            subtasks).
           type: integer
-        due_date:
-          description: The due date for the task.
-          format: date
-          type: string
-        priority:
-          description: The priority level of the task.
-          enum:
-          - unsure
-          - low
-          - normal
-          - high
-          - urgent
-          type: string
-        assigned_users:
-          description: An array of user IDs assigned to the task.
-          items:
-            type: integer
-          type: array
       type: object
     createProcedureTask_201_response:
       example:
         procedure_task:
-          completed_at: completed_at
-          updated_at: updated_at
-          user_id: 6
-          procedure_id: 1
-          name: name
-          created_at: created_at
+          first_assigned_user_initials: first_assigned_user_initials
+          parent_task_id: 7
+          user_name: user_name
+          procedure_id: 2
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          completed_date: completed_date
+          updated_at: 2000-01-23T04:56:07.000+00:00
           id: 0
+          completion_notes: completion_notes
+          subtask_count: 3
+          due_date: 2000-01-23
+          first_assigned_user_name: first_assigned_user_name
+          optional: true
           completed: true
+          assigned_users:
+          - 5
+          - 5
           priority: unsure
+          subtask_ids:
+          - 9
+          - 9
+          formatted_due_date: formatted_due_date
+          url: url
+          has_subtasks: true
+          user_id: 1
+          name: name
+          first_assigned_user_id: 5
+          position: 6
       properties:
         procedure_task:
           $ref: "#/components/schemas/ProcedureTask"
@@ -9128,41 +9983,63 @@ components:
     updateProcedureTask_request:
       properties:
         name:
-          description: The name of the task.
+          description: The name of the task. **Process tasks only** - cannot be changed
+            on run tasks.
+          example: Complete security training
           type: string
         description:
-          description: A detailed description of the task.
+          description: A detailed description of the task. **Process tasks only**
+            - cannot be changed on run tasks.
+          example: Updated task description
           type: string
-        completed:
-          description: "When true, marks the task as completed."
-          type: boolean
         procedure_id:
-          description: The ID of the procedure this task belongs to.
+          description: The ID of the process or run this task belongs to. **Process
+            tasks only** - can be changed to move tasks between processes. Cannot
+            be changed on run tasks.
           type: integer
         position:
-          description: The position of the task in the procedure.
-          type: integer
-        user_id:
-          description: The ID of the user assigned to the task.
+          description: The position of the task in the process. **Process tasks only**
+            - cannot be changed on run tasks.
+          example: 2
           type: integer
         due_date:
-          description: The due date for the task.
+          description: The due date for the task. **Run tasks only** - rejected on
+            process tasks.
+          example: 2026-02-15
           format: date
           type: string
         priority:
-          description: The priority level of the task.
+          description: The priority level of the task. **Run tasks only** - rejected
+            on process tasks.
           enum:
           - unsure
           - low
           - normal
           - high
           - urgent
+          example: high
           type: string
         assigned_users:
-          description: An array of user IDs assigned to the task.
+          description: An array of user IDs assigned to the task. **Run tasks only**
+            - rejected on process tasks.
+          example:
+          - 1
+          - 2
+          - 3
           items:
             type: integer
           type: array
+        optional:
+          description: Whether the task is optional. Optional tasks don't need to
+            be completed for the process/run to be considered complete. **Process
+            tasks only** - cannot be changed on run tasks.
+          example: false
+          type: boolean
+        parent_task_id:
+          description: The ID of the parent task if this is a subtask. Set to null
+            to make it a top-level task. Subtasks cannot have their own subtasks (no
+            nested subtasks). **Process tasks only** - cannot be changed on run tasks.
+          type: integer
       type: object
     deleteProcedureTask_200_response:
       example:
@@ -9174,73 +10051,7 @@ components:
     getProcedures_200_response:
       example:
         procedures:
-        - completion_percentage: 0%
-          company_id: 0
-          object_type: Process
-          parent_procedure: parent_procedure
-          procedure_tasks_attributes:
-          - "{}"
-          - "{}"
-          description: description
-          created_at: 2022-12-09T22:23:29.894Z
-          completed: 0
-          url: /processes/api-test-7cbe6a6458e9
-          total: 0
-          updated_at: 2022-12-09T22:23:29.894Z
-          share_url: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
-          company_name: test TWO
-          name: API TEST
-          id: 1
-          asset: asset
-          slug: api-test-7cbe6a6458e9
-        - completion_percentage: 0%
-          company_id: 0
-          object_type: Process
-          parent_procedure: parent_procedure
-          procedure_tasks_attributes:
-          - "{}"
-          - "{}"
-          description: description
-          created_at: 2022-12-09T22:23:29.894Z
-          completed: 0
-          url: /processes/api-test-7cbe6a6458e9
-          total: 0
-          updated_at: 2022-12-09T22:23:29.894Z
-          share_url: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
-          company_name: test TWO
-          name: API TEST
-          id: 1
-          asset: asset
-          slug: api-test-7cbe6a6458e9
-      properties:
-        procedures:
-          items:
-            $ref: "#/components/schemas/Procedure"
-          type: array
-      type: object
-    createProcedure_request:
-      properties:
-        name:
-          description: Name of the procedure
-          type: string
-        description:
-          description: Description of the procedure
-          type: string
-        company_id:
-          description: The ID of the company this procedure should be transferred
-            to. Set to null to make this a global template.
-          format: int64
-          type: integer
-        company_template:
-          description: "When true, sets both template and remove_completion_ability\
-            \ to true. When false, sets both to false."
-          type: boolean
-      required:
-      - name
-      type: object
-    getProcedureById_200_response:
-      example:
-        procedure:
+        - parent_process_id: 6
           completion_percentage: 0%
           company_id: 0
           object_type: Process
@@ -9250,6 +10061,7 @@ components:
           - "{}"
           description: description
           created_at: 2022-12-09T22:23:29.894Z
+          run: false
           completed: 0
           url: /processes/api-test-7cbe6a6458e9
           total: 0
@@ -9257,9 +10069,95 @@ components:
           share_url: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
           company_name: test TWO
           name: API TEST
+          process_type: company
           id: 1
           asset: asset
           slug: api-test-7cbe6a6458e9
+          status: Not Started
+        - parent_process_id: 6
+          completion_percentage: 0%
+          company_id: 0
+          object_type: Process
+          parent_procedure: parent_procedure
+          procedure_tasks_attributes:
+          - "{}"
+          - "{}"
+          description: description
+          created_at: 2022-12-09T22:23:29.894Z
+          run: false
+          completed: 0
+          url: /processes/api-test-7cbe6a6458e9
+          total: 0
+          updated_at: 2022-12-09T22:23:29.894Z
+          share_url: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
+          company_name: test TWO
+          name: API TEST
+          process_type: company
+          id: 1
+          asset: asset
+          slug: api-test-7cbe6a6458e9
+          status: Not Started
+      properties:
+        procedures:
+          items:
+            $ref: "#/components/schemas/Procedure"
+          type: array
+      type: object
+    createProcedure_request:
+      example:
+        name: Employee Onboarding
+        description: Standard onboarding checklist
+        company_id: 123
+      properties:
+        name:
+          description: Name of the process
+          example: Onboarding Checklist
+          type: string
+        description:
+          description: Description of the process
+          example: Standard onboarding process for new employees
+          type: string
+        company_id:
+          description: The ID of the company this process belongs to. Set to `null`
+            to create a **global template** (available to all companies). Set to a
+            company ID to create a **company process** (can be kicked off to create
+            runs).
+          example: 123
+          format: int64
+          type: integer
+        company_template:
+          description: "**DEPRECATED** - Legacy parameter. When true, sets both template\
+            \ and remove_completion_ability flags to true."
+          type: boolean
+      required:
+      - name
+      type: object
+    getProcedureById_200_response:
+      example:
+        procedure:
+          parent_process_id: 6
+          completion_percentage: 0%
+          company_id: 0
+          object_type: Process
+          parent_procedure: parent_procedure
+          procedure_tasks_attributes:
+          - "{}"
+          - "{}"
+          description: description
+          created_at: 2022-12-09T22:23:29.894Z
+          run: false
+          completed: 0
+          url: /processes/api-test-7cbe6a6458e9
+          total: 0
+          updated_at: 2022-12-09T22:23:29.894Z
+          share_url: http://localhost:3000/shared_process/S549vMc8b8PmWWMESwB6qTLC
+          company_name: test TWO
+          name: API TEST
+          process_type: company
+          id: 1
+          asset: asset
+          slug: api-test-7cbe6a6458e9
+          status: Not Started
       properties:
         procedure:
           $ref: "#/components/schemas/Procedure"
@@ -9267,23 +10165,17 @@ components:
     updateProcedure_request:
       properties:
         name:
-          description: The new name for the procedure.
+          description: The new name for the process or run.
           type: string
         description:
-          description: The new description for the procedure.
+          description: "For **processes**: the process description. **Runs** snapshot\
+            \ the parent process description at kickoff; that text is not editable\
+            \ in the product UI—avoid relying on changing this field for runs."
           type: string
-        company_template:
-          description: "When true, sets both template and remove_completion_ability\
-            \ to true. When false, sets both to false."
-          type: boolean
-        company_id:
-          description: The ID of the company this procedure should be transferred
-            to. Set to null to make this a global template.
-          format: int64
-          type: integer
         archived:
-          description: "When true, archives the procedure by setting discarded_at.\
-            \ When false, unarchives the procedure by clearing discarded_at."
+          description: "When true, archives the **company process**. When false, unarchives\
+            \ it. **Only company processes** are affected—global processes and **runs**\
+            \ cannot be archived via this parameter (runs follow the parent process)."
           type: boolean
       type: object
     getPublicPhotos_200_response:
@@ -9291,14 +10183,18 @@ components:
         public_photos:
         - record_id: 6
           numeric_id: 0
+          file_name: file_name
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
+          file_size: 1
         - record_id: 6
           numeric_id: 0
+          file_name: file_name
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
+          file_size: 1
       properties:
         public_photos:
           items:
@@ -9324,6 +10220,39 @@ components:
       - record_id
       - record_type
       type: object
+    get_public_photo_200_response:
+      example:
+        record_id: 6
+        numeric_id: 0
+        file_name: file_name
+        id: id
+        url: https://openapi-generator.tech
+        record_type: record_type
+        file_size: 1
+      properties:
+        id:
+          description: The unique slug identifier of the public photo
+          type: string
+        numeric_id:
+          description: The original numeric database ID of the public photo
+          type: integer
+        url:
+          description: The URL of the public photo using the slug-based path
+          format: uri
+          type: string
+        record_type:
+          description: The type of record the public photo is associated with
+          type: string
+        record_id:
+          description: The ID of the record the public photo is associated with
+          type: integer
+        file_name:
+          description: Original filename of the photo
+          type: string
+        file_size:
+          description: Size of the photo file in bytes
+          type: integer
+      type: object
     updatePublicPhoto_request:
       properties:
         record_type:
@@ -9343,9 +10272,11 @@ components:
         public_photo:
           record_id: 6
           numeric_id: 0
+          file_name: file_name
           id: id
           url: https://openapi-generator.tech
           record_type: record_type
+          file_size: 1
       properties:
         public_photo:
           $ref: "#/components/schemas/PublicPhoto"
@@ -9691,14 +10622,14 @@ components:
         id: 5.962133916683182
         label: label
         position: 5.637376656633329
-        value: value
+        value: true
       properties:
         id:
           description: The identifier of the field
           type: number
         value:
           description: The value stored in the field
-          type: string
+          type: boolean
         label:
           description: The label of the field
           type: string

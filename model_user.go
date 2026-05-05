@@ -12,6 +12,7 @@ package huduapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the User type satisfies the MappedNullable interface at compile time
@@ -44,13 +45,13 @@ type User struct {
 	// Indicates if the user is currently signed in.
 	CurrentlySignedIn *bool `json:"currently_signed_in,omitempty"`
 	// Timestamp of the last sign-in.
-	LastSignInAt *string `json:"last_sign_in_at,omitempty"`
+	LastSignInAt *time.Time `json:"last_sign_in_at,omitempty"`
 	// IP address from the last sign-in.
 	LastSignInIp *string `json:"last_sign_in_ip,omitempty"`
 	// The timestamp when the user was created.
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// The timestamp of the last user update.
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	// Indicates if the user is archived (discarded).
 	Archived *bool `json:"archived,omitempty"`
 	// The ID of the associated company, if the user is a portal member. Can Be null.
@@ -468,9 +469,9 @@ func (o *User) SetCurrentlySignedIn(v bool) {
 }
 
 // GetLastSignInAt returns the LastSignInAt field value if set, zero value otherwise.
-func (o *User) GetLastSignInAt() string {
+func (o *User) GetLastSignInAt() time.Time {
 	if o == nil || IsNil(o.LastSignInAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.LastSignInAt
@@ -478,7 +479,7 @@ func (o *User) GetLastSignInAt() string {
 
 // GetLastSignInAtOk returns a tuple with the LastSignInAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *User) GetLastSignInAtOk() (*string, bool) {
+func (o *User) GetLastSignInAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.LastSignInAt) {
 		return nil, false
 	}
@@ -494,8 +495,8 @@ func (o *User) HasLastSignInAt() bool {
 	return false
 }
 
-// SetLastSignInAt gets a reference to the given string and assigns it to the LastSignInAt field.
-func (o *User) SetLastSignInAt(v string) {
+// SetLastSignInAt gets a reference to the given time.Time and assigns it to the LastSignInAt field.
+func (o *User) SetLastSignInAt(v time.Time) {
 	o.LastSignInAt = &v
 }
 
@@ -532,9 +533,9 @@ func (o *User) SetLastSignInIp(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *User) GetCreatedAt() string {
+func (o *User) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -542,7 +543,7 @@ func (o *User) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *User) GetCreatedAtOk() (*string, bool) {
+func (o *User) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -558,15 +559,15 @@ func (o *User) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *User) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *User) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *User) GetUpdatedAt() string {
+func (o *User) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -574,7 +575,7 @@ func (o *User) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *User) GetUpdatedAtOk() (*string, bool) {
+func (o *User) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -590,8 +591,8 @@ func (o *User) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *User) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *User) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
