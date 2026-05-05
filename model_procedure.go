@@ -12,7 +12,6 @@ package huduapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the Procedure type satisfies the MappedNullable interface at compile time
@@ -43,9 +42,9 @@ type Procedure struct {
 	// The completion percentage of the process or run.
 	CompletionPercentage *string `json:"completion_percentage,omitempty"`
 	// The date and time when the process or run was created.
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The date and time when the process or run was last updated.
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// The parent process, if any. Can Be null.
 	ParentProcedure *string `json:"parent_procedure,omitempty"`
 	// Indicates if this is a run (true) or a process (false). Runs are active instances of a process.
@@ -437,9 +436,9 @@ func (o *Procedure) SetCompletionPercentage(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *Procedure) GetCreatedAt() time.Time {
+func (o *Procedure) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -447,7 +446,7 @@ func (o *Procedure) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Procedure) GetCreatedAtOk() (*time.Time, bool) {
+func (o *Procedure) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -463,15 +462,15 @@ func (o *Procedure) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *Procedure) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *Procedure) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *Procedure) GetUpdatedAt() time.Time {
+func (o *Procedure) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -479,7 +478,7 @@ func (o *Procedure) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Procedure) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *Procedure) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -495,8 +494,8 @@ func (o *Procedure) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *Procedure) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *Procedure) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

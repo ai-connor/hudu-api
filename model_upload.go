@@ -13,7 +13,6 @@ package huduapi
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 // checks if the Upload type satisfies the MappedNullable interface at compile time
@@ -34,9 +33,9 @@ type Upload struct {
 	// Size of the file
 	Size string `json:"size"`
 	// Date when the file was uploaded
-	CreatedDate time.Time `json:"created_date"`
+	CreatedDate string `json:"created_date"`
 	// Date when the file was archived. Null if the file is not archived.
-	ArchivedAt *time.Time `json:"archived_at,omitempty"`
+	ArchivedAt *string `json:"archived_at,omitempty"`
 	// ID of the object the file is associated with
 	UploadableId *int32 `json:"uploadable_id,omitempty"`
 	// Type of the object the file is associated with
@@ -50,7 +49,7 @@ type _Upload Upload
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUpload(id int32, url string, name string, ext string, mime string, size string, createdDate time.Time) *Upload {
+func NewUpload(id int32, url string, name string, ext string, mime string, size string, createdDate string) *Upload {
 	this := Upload{}
 	this.Id = id
 	this.Url = url
@@ -215,9 +214,9 @@ func (o *Upload) SetSize(v string) {
 }
 
 // GetCreatedDate returns the CreatedDate field value
-func (o *Upload) GetCreatedDate() time.Time {
+func (o *Upload) GetCreatedDate() string {
 	if o == nil {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 
@@ -226,7 +225,7 @@ func (o *Upload) GetCreatedDate() time.Time {
 
 // GetCreatedDateOk returns a tuple with the CreatedDate field value
 // and a boolean to check if the value has been set.
-func (o *Upload) GetCreatedDateOk() (*time.Time, bool) {
+func (o *Upload) GetCreatedDateOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -234,14 +233,14 @@ func (o *Upload) GetCreatedDateOk() (*time.Time, bool) {
 }
 
 // SetCreatedDate sets field value
-func (o *Upload) SetCreatedDate(v time.Time) {
+func (o *Upload) SetCreatedDate(v string) {
 	o.CreatedDate = v
 }
 
 // GetArchivedAt returns the ArchivedAt field value if set, zero value otherwise.
-func (o *Upload) GetArchivedAt() time.Time {
+func (o *Upload) GetArchivedAt() string {
 	if o == nil || IsNil(o.ArchivedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.ArchivedAt
@@ -249,7 +248,7 @@ func (o *Upload) GetArchivedAt() time.Time {
 
 // GetArchivedAtOk returns a tuple with the ArchivedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Upload) GetArchivedAtOk() (*time.Time, bool) {
+func (o *Upload) GetArchivedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.ArchivedAt) {
 		return nil, false
 	}
@@ -265,8 +264,8 @@ func (o *Upload) HasArchivedAt() bool {
 	return false
 }
 
-// SetArchivedAt gets a reference to the given time.Time and assigns it to the ArchivedAt field.
-func (o *Upload) SetArchivedAt(v time.Time) {
+// SetArchivedAt gets a reference to the given string and assigns it to the ArchivedAt field.
+func (o *Upload) SetArchivedAt(v string) {
 	o.ArchivedAt = &v
 }
 

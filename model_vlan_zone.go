@@ -12,7 +12,6 @@ package huduapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the VlanZone type satisfies the MappedNullable interface at compile time
@@ -33,11 +32,11 @@ type VlanZone struct {
 	// The identifier of the company that owns this VLAN Zone.
 	CompanyId *int64 `json:"company_id,omitempty"`
 	// The date and time when the VLAN Zone was archived. Null if not archived.
-	ArchivedAt *time.Time `json:"archived_at,omitempty"`
+	ArchivedAt *string `json:"archived_at,omitempty"`
 	// The date and time when the VLAN Zone was created.
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The date and time when the VLAN Zone was last updated.
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// Number of VLANs currently assigned to this zone
 	VlansCount *int64 `json:"vlans_count,omitempty"`
 	// Link to zone in the web UI
@@ -257,9 +256,9 @@ func (o *VlanZone) SetCompanyId(v int64) {
 }
 
 // GetArchivedAt returns the ArchivedAt field value if set, zero value otherwise.
-func (o *VlanZone) GetArchivedAt() time.Time {
+func (o *VlanZone) GetArchivedAt() string {
 	if o == nil || IsNil(o.ArchivedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.ArchivedAt
@@ -267,7 +266,7 @@ func (o *VlanZone) GetArchivedAt() time.Time {
 
 // GetArchivedAtOk returns a tuple with the ArchivedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *VlanZone) GetArchivedAtOk() (*time.Time, bool) {
+func (o *VlanZone) GetArchivedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.ArchivedAt) {
 		return nil, false
 	}
@@ -283,15 +282,15 @@ func (o *VlanZone) HasArchivedAt() bool {
 	return false
 }
 
-// SetArchivedAt gets a reference to the given time.Time and assigns it to the ArchivedAt field.
-func (o *VlanZone) SetArchivedAt(v time.Time) {
+// SetArchivedAt gets a reference to the given string and assigns it to the ArchivedAt field.
+func (o *VlanZone) SetArchivedAt(v string) {
 	o.ArchivedAt = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *VlanZone) GetCreatedAt() time.Time {
+func (o *VlanZone) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -299,7 +298,7 @@ func (o *VlanZone) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *VlanZone) GetCreatedAtOk() (*time.Time, bool) {
+func (o *VlanZone) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -315,15 +314,15 @@ func (o *VlanZone) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *VlanZone) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *VlanZone) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *VlanZone) GetUpdatedAt() time.Time {
+func (o *VlanZone) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -331,7 +330,7 @@ func (o *VlanZone) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *VlanZone) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *VlanZone) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -347,8 +346,8 @@ func (o *VlanZone) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *VlanZone) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *VlanZone) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

@@ -2798,12 +2798,12 @@
                                     },
                                     "created_at": {
                                         "type": "string",
-                                        "format": "date-time",
+                                        "format": "striong",
                                         "description": "When the export was created"
                                     },
                                     "updated_at": {
                                         "type": "string",
-                                        "format": "date-time",
+                                        "format": "striong",
                                         "description": "When the export was last updated"
                                     },
                                     "download_url": {
@@ -2983,12 +2983,12 @@
                                 },
                                 "created_at": {
                                     "type": "string",
-                                    "format": "date-time",
+                                    "format": "striong",
                                     "description": "When the export was created"
                                 },
                                 "updated_at": {
                                     "type": "string",
-                                    "format": "date-time",
+                                    "format": "striong",
                                     "description": "When the export was last updated"
                                 },
                                 "download_url": {
@@ -9230,12 +9230,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the article was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the article was last updated."
                 },
                 "public_photos": {
@@ -9308,12 +9308,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the asset was created"
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the asset was last updated"
                 },
                 "fields": {
@@ -9525,12 +9525,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "Timestamp when the password was created"
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "Timestamp when the password was last updated"
                 },
                 "password_folder_id": {
@@ -9663,12 +9663,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the company was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the company was last updated."
                 },
                 "integrations": {
@@ -9764,17 +9764,17 @@
                 },
                 "archived_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the expiration was archived (if any). Can be null."
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the expiration was created"
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the expiration was last updated"
                 },
                 "expiration_type": {
@@ -9824,12 +9824,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the flag was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the flag was last updated."
                 }
             }
@@ -9872,12 +9872,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the flag type was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the flag type was last updated."
                 }
             }
@@ -9922,12 +9922,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp of folder creation"
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp of the last folder update"
                 }
             },
@@ -9962,12 +9962,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the group was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp of the last group update."
                 },
                 "member_count": {
@@ -10149,12 +10149,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the list was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the list was last updated."
                 },
                 "list_items": {
@@ -10361,12 +10361,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the network was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the network was last updated."
                 },
                 "url": {
@@ -10375,7 +10375,7 @@
                 },
                 "archived_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the network was archived. Null if not archived."
                 }
             }
@@ -10423,12 +10423,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp of password folder creation"
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp of the last password folder update"
                 }
             }
@@ -10470,12 +10470,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "When the photo was created"
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "When the photo was last updated"
                 }
             }
@@ -10539,13 +10539,13 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "example": "2022-12-09T22:23:29.894Z",
                     "description": "The date and time when the process or run was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "example": "2022-12-09T22:23:29.894Z",
                     "description": "The date and time when the process or run was last updated."
                 },
@@ -10716,12 +10716,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the task was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the task was last updated."
                 }
             },
@@ -10809,17 +10809,17 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the rack storage was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the rack storage was last updated."
                 },
                 "discarded_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the rack storage was discarded. Can Be null."
                 },
                 "company_id": {
@@ -10986,12 +10986,12 @@
                 },
                 "created_date": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "string",
                     "description": "Date when the file was uploaded"
                 },
                 "archived_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "Date when the file was archived. Null if the file is not archived."
                 },
                 "uploadable_id": {
@@ -11069,7 +11069,7 @@
                 },
                 "last_sign_in_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "Timestamp of the last sign-in."
                 },
                 "last_sign_in_ip": {
@@ -11078,12 +11078,12 @@
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the user was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp of the last user update."
                 },
                 "archived": {
@@ -11164,17 +11164,17 @@
                 },
                 "archived_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the VLAN was archived. Null if not archived."
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the VLAN was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the VLAN was last updated."
                 },
                 "networks_count": {
@@ -11220,17 +11220,17 @@
                 },
                 "archived_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the VLAN Zone was archived. Null if not archived."
                 },
                 "created_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the VLAN Zone was created."
                 },
                 "updated_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The date and time when the VLAN Zone was last updated."
                 },
                 "vlans_count": {
@@ -11285,12 +11285,12 @@
                 },
                 "refreshed_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the website was last refreshed"
                 },
                 "monitored_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the website was last monitored"
                 },
                 "headers": {
@@ -11319,7 +11319,7 @@
                 },
                 "discarded_at": {
                     "type": "string",
-                    "format": "date-time",
+                    "format": "striong",
                     "description": "The timestamp when the website was discarded (optional)"
                 },
                 "disable_ssl": {

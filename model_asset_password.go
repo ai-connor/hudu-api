@@ -13,7 +13,6 @@ package huduapi
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 // checks if the AssetPassword type satisfies the MappedNullable interface at compile time
@@ -46,9 +45,9 @@ type AssetPassword struct {
 	// URL related to the password, if applicable
 	Url string `json:"url"`
 	// Timestamp when the password was created
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// Timestamp when the password was last updated
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	// ID of the folder in which the password is stored, if any. Can be null.
 	PasswordFolderId *int64 `json:"password_folder_id,omitempty"`
 	// Name of the folder in which the password is stored, if any. Can be null.
@@ -392,9 +391,9 @@ func (o *AssetPassword) SetUrl(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *AssetPassword) GetCreatedAt() time.Time {
+func (o *AssetPassword) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -402,7 +401,7 @@ func (o *AssetPassword) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AssetPassword) GetCreatedAtOk() (*time.Time, bool) {
+func (o *AssetPassword) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -418,15 +417,15 @@ func (o *AssetPassword) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *AssetPassword) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *AssetPassword) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *AssetPassword) GetUpdatedAt() time.Time {
+func (o *AssetPassword) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -434,7 +433,7 @@ func (o *AssetPassword) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AssetPassword) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *AssetPassword) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -450,8 +449,8 @@ func (o *AssetPassword) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *AssetPassword) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *AssetPassword) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 

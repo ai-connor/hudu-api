@@ -12,7 +12,6 @@ package huduapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the PasswordFolder type satisfies the MappedNullable interface at compile time
@@ -35,9 +34,9 @@ type PasswordFolder struct {
 	// Group IDs with access when security = specific
 	AllowedGroups []int64 `json:"allowed_groups,omitempty"`
 	// The timestamp of password folder creation
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 	// The timestamp of the last password folder update
-	UpdatedAt            *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt            *string `json:"updated_at,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -285,9 +284,9 @@ func (o *PasswordFolder) SetAllowedGroups(v []int64) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *PasswordFolder) GetCreatedAt() time.Time {
+func (o *PasswordFolder) GetCreatedAt() string {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.CreatedAt
@@ -295,7 +294,7 @@ func (o *PasswordFolder) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PasswordFolder) GetCreatedAtOk() (*time.Time, bool) {
+func (o *PasswordFolder) GetCreatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -311,15 +310,15 @@ func (o *PasswordFolder) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *PasswordFolder) SetCreatedAt(v time.Time) {
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *PasswordFolder) SetCreatedAt(v string) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *PasswordFolder) GetUpdatedAt() time.Time {
+func (o *PasswordFolder) GetUpdatedAt() string {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 	return *o.UpdatedAt
@@ -327,7 +326,7 @@ func (o *PasswordFolder) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PasswordFolder) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *PasswordFolder) GetUpdatedAtOk() (*string, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -343,8 +342,8 @@ func (o *PasswordFolder) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *PasswordFolder) SetUpdatedAt(v time.Time) {
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *PasswordFolder) SetUpdatedAt(v string) {
 	o.UpdatedAt = &v
 }
 
